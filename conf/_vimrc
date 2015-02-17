@@ -1,0 +1,67 @@
+call pathogen#infect()
+
+" set nocompatible
+
+syntax on
+filetype plugin indent on
+
+set history=100
+set showmatch
+set ruler
+set showcmd
+set number
+set scrolloff=7               " Keep more lines of context
+set sidescroll=1
+set sidescrolloff=7
+set title                     " Set xterm title
+set columns=110
+set autoindent  
+set fileformats=unix,dos
+set encoding=utf-8
+set hlsearch                  " highlight search
+set incsearch                 " incremental search
+set nobackup
+set noswapfile
+set nowrap                    " don't wrap lines
+set ignorecase                " ignore case when searching
+set smartcase                 " ignore case if search pattern is all
+
+autocmd FileType * set tabstop=2
+autocmd FileType * set shiftwidth=2
+autocmd FileType * set expandtab
+autocmd FileType * set smartindent
+
+colorscheme desert            " gui mode colorscheme
+
+" Map ctrl-movement keys to window switching
+map <C-Up>    <C-w><Up>
+map <C-Down>  <C-w><Down>
+map <C-Right> <C-w><Right>
+map <C-Left>  <C-w><Left>
+
+" Switch to alternate file
+map <C-Tab> :bnext<cr>
+map <C-S-Tab> :bprevious<cr>
+
+" Note: commands
+" ctrl-w-v    vertical split
+" ctrl-w-s    horizontal split
+" ctrl-w-w    cycle split buffers
+
+" 25jan2015: using nailgun - <C-X><C-O>
+" https://github.com/adragomir/javacomplete
+autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+autocmd Filetype java map <leader>b :call javacomplete#GoToDefinition()<CR>
+
+" 25jan2015: complete as you type: simple sub-set from site:
+" http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
+set completeopt=longest,menuone
+
+" 26jan2015: UltiSnips
+" https://github.com/sirver/ultisnips
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"

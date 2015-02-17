@@ -1,0 +1,97 @@
+# set to yes if you want tormo to be forked in the background
+background no
+
+cpu_avg_samples 2
+net_avg_samples 2
+
+out_to_console no
+
+# X font when Xft is disabled, you can pick one with program xfontsel
+#font 7x12
+#font *mintsmild.se*
+
+# Use Xft?
+use_xft yes
+
+# Xft font when Xft is enabled
+xftfont Bitstream Vera Sans Mono:size=8
+
+# Text alpha when using Xft
+xftalpha 0.8
+
+# mail spool
+mail_spool $MAIL
+
+# Update interval in seconds
+update_interval 1
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# MPD host/port
+mpd_host heaton
+mpd_port 6600
+
+# Minimum size of text area
+minimum_size 230 5
+maximum_width 230
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 8
+
+# border margins
+border_margin 4
+
+# border width
+border_width 1
+
+# Default colors and also border colors
+default_color white
+default_shade_color black
+default_outline_color black
+
+# Text alignment, other possible values are commented
+#alignment top_left
+#alignment top_right
+#alignment bottom_left
+alignment bottom_right
+
+# Gap between borders of screen and text
+gap_x 13
+gap_y 7
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer no
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+TEXT
+Node: $nodename/${addr wlan0} 
+Up  : $uptime
+$hr
+${color lightgrey}CPU:\
+ ${color}$cpu %\
+ ${alignr}${offset -10}$freq_g Ghz\
+ ${execi 8 sensors | grep 'CPU Temperature' | cut -c22-28 | sed '/^$/d'}
+${color grey}Fan: ${execi 8 sensors | grep 'CPU Fan Speed' | cut -c20-27 | sed '/^$/d'}
+${color grey}Mem: $mem/$memmax [$memperc%]
+${color grey}Swp: $swap/$swapmax [$swapperc%]
+${color grey}Net: ${upspeed wlan0} / ${downspeed wlan0}
+$hr
+${color grey}File systems:
+ / $color${fs_used /}/${fs_size /} 
