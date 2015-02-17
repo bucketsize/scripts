@@ -87,7 +87,8 @@ $hr
 ${color lightgrey}CPU:\
  ${color}$cpu %\
  ${alignr}${offset -10}$freq_g Ghz\
- ${execi 8 sensors | grep 'CPU Temperature' | cut -c22-28 | sed '/^$/d'}
+ #${execi 8 sensors | grep 'CPU Temperature' | cut -c22-28 | sed '/^$/d'} #AMD
+ ${execi 8 sensors | grep 'Core 0:' | cut -c16-22 | sed '/^$/d'} #intel
 ${color grey}Fan: ${execi 8 sensors | grep 'CPU Fan Speed' | cut -c20-27 | sed '/^$/d'}
 ${color grey}Mem: $mem/$memmax [$memperc%]
 ${color grey}Swp: $swap/$swapmax [$swapperc%]
