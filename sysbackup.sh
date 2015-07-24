@@ -30,7 +30,12 @@ START=$(date +%s)
 
 echo "going to backup ${1} -> ${2} at ${START}"
 
-rsync -aAXv --delete --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} "$1" "$2"
+# -a archive
+# -A preserve acls
+# -X preserve extended attributes
+# -v verbosity
+# --delete extraneous files from destination
+rsync -aAX --delete --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} "$1" "$2"
 
 
 # rdiff-backup
