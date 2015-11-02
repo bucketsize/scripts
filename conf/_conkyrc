@@ -35,8 +35,8 @@ mpd_host heaton
 mpd_port 6600
 
 # Minimum size of text area
-minimum_size 80 5
-maximum_width 80
+minimum_size 270 5
+maximum_width 270
 
 # Draw shades?
 draw_shades no
@@ -57,8 +57,8 @@ border_margin 4
 border_width 1
 
 # Default colors and also border colors
-default_color white
-default_shade_color black
+default_color grey
+default_shade_color red
 default_outline_color black
 
 # Text alignment, other possible values are commented
@@ -81,34 +81,58 @@ no_buffers yes
 uppercase no
 
 TEXT
-CPU: 
- #% ${cpu cpu0} 
- [${cpu cpu1}, ${cpu cpu2}]
-GHz: 
- $freq_g
-#${execi 8 sensors | grep 'CPU Temperature' | cut -c22-28 | sed '/^$/d'} #AMD
-#T ${execi 8 sensors | grep 'temp1:' | cut -c16-19 | sed '/^$/d'} #intel
-#[${execi 8 sensors | grep 'Core 0:' | cut -c16-19 | sed '/^$/d'} #intel
-#${execi 8 sensors | grep 'Core 1:' | cut -c16-19 | sed '/^$/d'}] #intel
-#${execi 8 sensors | grep 'CPU Fan Speed' | cut -c20-27 | sed '/^$/d'}
-T:
- ${acpitemp}
- ${acpifan}
-$hr
-Mem: 
- % $memperc 
- $memmax
-Swp: 
- % $swapperc 
- $swapmax
-$hr
-Disk:
- ${diskio_read}
- ${diskio_write}
-$hr 
-Net: 
- ${upspeed wlan0} 
- ${downspeed wlan0}
-#$hr
+${color #0077ff}CPU 
+ $color ${cpu cpu1}\
+ ${goto 37} ${cpu cpu2}\
+ ${goto 65} ${cpu cpu3}\
+ ${goto 92} ${cpu cpu4}
+ $color $freq_g GHz
+ $color ${execi 8 sensors | grep 'CPU Temperature' | cut -c22-26 | sed '/^$/d'} C #AMD
+# ${execi 8 sensors | grep 'temp1:' | cut -c16-19 | sed '/^$/d'} #intel
+# ${execi 8 sensors | grep 'CPU Fan Speed' | cut -c20-27 | sed '/^$/d'}
+# ${acpitemp}
+# ${acpifan}
+
+${color #0077ff}GPU
+ $color ${execi 1 aticonfig --adapter=0 --odgc | grep -i GPU | cut -c32-34 | sed '/^$/d'}\
+ ${goto 70} ${execi 1 aticonfig --adapter=0 --odgt | grep 'Temperature' | cut -c37-41} C
+${color #0077ff}Mem: 
+ $color $memperc %\
+ ${goto 70} $memmax
+${color #0077ff}Swp: 
+ $color $swapperc %\
+ ${goto 70} $swapmax
+${color #0077ff}Disk:
+ $color ${diskio_read}\
+ ${goto 70} ${diskio_write}
+${color #0077ff}Net: 
+ $color ${upspeed eth0}\
+ ${goto 70} ${downspeed eth0}
 #File systems:
 # / $color${fs_used /}/${fs_size /} 
+
+${color #0077ff}Top Processes:
+${color #0077ff}Name                PID   CPU%   MEM%
+$color ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+$color ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+$color ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${color #0077ff}Mem usage
+$color ${top_mem name 1} ${top_mem pid 1} ${top_mem cpu 1} ${top_mem mem 1}
+$color ${top_mem name 2} ${top_mem pid 2} ${top_mem cpu 2} ${top_mem mem 2}
+$color ${top_mem name 3} ${top_mem pid 3} ${top_mem cpu 3} ${top_mem mem 3}
+ 
+${color #0077ff}Port(s)${alignr}#Connections
+$color Inbound: ${tcp_portmon 1 32767 count}  Outbound: ${tcp_portmon 32768 61000 count}${alignr} ALL: ${tcp_portmon 1 65535 count}
+${color #0077ff}Inbound Connection ${alignr} Service/Port$color
+ ${tcp_portmon 1 32767 rhost 0} ${alignr} ${tcp_portmon 1 32767 lservice 0}
+ ${tcp_portmon 1 32767 rhost 1} ${alignr} ${tcp_portmon 1 32767 lservice 1}
+ ${tcp_portmon 1 32767 rhost 2} ${alignr} ${tcp_portmon 1 32767 lservice 2}
+ ${tcp_portmon 1 32767 rhost 3} ${alignr} ${tcp_portmon 1 32767 lservice 3}
+ ${tcp_portmon 1 32767 rhost 4} ${alignr} ${tcp_portmon 1 32767 lservice 4}
+${color #0077ff}Outbound Connection ${alignr} Service/Port$color
+ ${tcp_portmon 32768 61000 rhost 0} ${alignr} ${tcp_portmon 32768 61000 rservice 0}
+ ${tcp_portmon 32768 61000 rhost 1} ${alignr} ${tcp_portmon 32768 61000 rservice 1}
+ ${tcp_portmon 32768 61000 rhost 2} ${alignr} ${tcp_portmon 32768 61000 rservice 2}
+ ${tcp_portmon 32768 61000 rhost 3} ${alignr} ${tcp_portmon 32768 61000 rservice 3}
+ ${tcp_portmon 32768 61000 rhost 4} ${alignr} ${tcp_portmon 32768 61000 rservice 4}
+

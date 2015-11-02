@@ -1,15 +1,20 @@
 #!/bin/bash
 
-echo "scanning $1 ..."
+host=$1
+user=$2
+pass=$3
 
-shares=`smbclient -L //$1 -U jb%foobar | grep Disk | cut -d " " -f 1`
+echo "scanning $host for $user ..."
+
+shares=`smbclient -L //$1 -U $user%$pass | grep Disk | cut -d " " -f 1`
 
 echo "found shares:"
 echo $shares
 
 for i in $shares
-do 
-    echo "mounting //$1/$i -> /mnt/smbfs_$1/$i"
-    mkdir -p /mnt/smbfs_$1/$i
-    mount -t cifs //$1/$i /mnt/smbfs_$1/$i
+do
+    mkdir -p /mnt/smbfs_$host/$i
+    cmd="mount -t cifs //$host/$i /mnt/smbfs_$host/$i -o username=$user,password=$pass"
+    echo "issuing> $cmd"
+    `$cmd`
 done
