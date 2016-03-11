@@ -3,28 +3,7 @@
 if [ $# -lt 2 ]; then
     echo "No destination defined. Usage: $0 src destination" >&2
     exit 1
-elif [ $# -gt 2 ]; then
-    echo "Too many arguments. Usage: $0 src destination" >&2
-    exit 1
-elif [ ! -d "$2" ]; then
-   echo "Invalid path: $2" >&2
-   exit 1
-elif [ ! -w "$2" ]; then
-   echo "Directory not writable: $2" >&2
-   exit 1
 fi
-
-case "$2" in
-  "/mnt") ;;
-  "/mnt/"*) ;;
-  "/media") ;;
-  "/media/"*) ;;
-  "/run/media") ;;
-  "/run/media/"*) ;;
-  *) echo "Destination not allowed." >&2
-     exit 1
-     ;;
-esac
 
 START=$(date +%s)
 

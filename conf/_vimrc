@@ -1,9 +1,35 @@
-call pathogen#infect()
+"call pathogen#infect() "moved to vundle
 
-" set nocompatible
+"---------------------------------------------------------------
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+Plugin 'VundleVim/Vundle.vim' "managed
+Plugin 'https://github.com/scrooloose/nerdtree.git'
+Plugin 'https://github.com/scrooloose/nerdcommenter.git'
+Plugin 'https://github.com/scrooloose/syntastic.git'
+Plugin 'https://github.com/itchyny/lightline.vim.git'
+Plugin 'https://github.com/ctrlpvim/ctrlp.vim.git'
+Plugin 'https://github.com/fholgado/minibufexpl.vim.git'
+Plugin 'https://github.com/tpope/vim-surround.git'
+Plugin 'https://github.com/vim-scripts/AutoComplPop.git'
+Plugin 'https://github.com/SirVer/ultisnips.git'
+Plugin 'https://github.com/honza/vim-snippets.git'
+Plugin 'https://github.com/artur-shaik/vim-javacomplete2.git'
+Plugin 'https://github.com/bucketsize/vim-antr.git'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+"---------------------------------------------------------------
 
 syntax on
-filetype plugin indent on
 
 set history=100
 set showmatch
@@ -26,13 +52,16 @@ set nowrap                    " don't wrap lines
 set ignorecase                " ignore case when searching
 set smartcase                 " ignore case if search pattern is all
 
-autocmd FileType * set tabstop=2
-autocmd FileType * set shiftwidth=2
 autocmd FileType * set expandtab
 autocmd FileType * set smartindent
+autocmd FileType * set tabstop=2
+autocmd FileType * set shiftwidth=2
+autocmd FileType java set tabstop=4
+autocmd FileType java set shiftwidth=4
 
 colorscheme desert            " gui mode colorscheme
 
+"---------------------------------------------------------------
 " Map ctrl-movement keys to window switching
 map <C-Up>    <C-w><Up>
 map <C-Down>  <C-w><Down>
@@ -47,17 +76,48 @@ map <C-S-Tab> :bprevious<cr>
 " ctrl-w-v    vertical split
 " ctrl-w-s    horizontal split
 " ctrl-w-w    cycle split buffers
+"---------------------------------------------------------------
 
-" 25jan2015: using nailgun - <C-X><C-O>
-" https://github.com/adragomir/javacomplete
-autocmd Filetype java setlocal omnifunc=javacomplete#Complete
-autocmd Filetype java map <leader>b :call javacomplete#GoToDefinition()<CR>
-
-" 25jan2015: complete as you type: simple sub-set from site:
+"---------------------------------------------------------------
+" complete as you type
 " http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
 set completeopt=longest,menuone
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+"---------------------------------------------------------------
 
-" 26jan2015: UltiSnips
+"---------------------------------------------------------------
+"using nailgun - <C-X><C-O> 
+" https://github.com/paretje/javacomplete
+"let g:nailgun_port='2113'
+"let g:javacomplete_ng='ng-nailgun'
+"---------------------------------------------------------------
+
+"---------------------------------------------------------------
+"vim-antr 
+" autocmd Filetype java setlocal omnifunc=antr#ListSymbols
+"--------------------------------------------------------------- 
+
+"---------------------------------------------------------------
+"vim-JavaComplete2 
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+"autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
+" To enable inserting class imports with F4, add:
+nmap <F4> <Plug>(JavaComplete-Imports-Add)
+imap <F4> <Plug>(JavaComplete-Imports-Add)
+" To add all missing imports with F5:
+nmap <F5> <Plug>(JavaComplete-Imports-AddMissing)
+imap <F5> <Plug>(JavaComplete-Imports-AddMissing)
+" To remove all missing imports with F6:
+nmap <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+imap <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+"--------------------------------------------------------------- 
+
+
+"---------------------------------------------------------------
+" UltiSnips: needs vim-snippets to work 
 " https://github.com/sirver/ultisnips
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -65,3 +125,4 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+"--------------------------------------------------------------- 
