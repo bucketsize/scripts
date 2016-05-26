@@ -2,8 +2,8 @@
 
 require 'pp'
 
-def discover
-  `nmap -v -n -sP -PU161 192.168.2.1/24 | grep -E '([0-9]{1,3}[\.]){3}[0-9]{1,3}' > /tmp/o.nmap`
+def discover ip
+  `nmap -v -n -sP -PU161 #{ip} | grep -E '([0-9]{1,3}[\.]){3}[0-9]{1,3}' > /tmp/o.nmap`
   s=`cat /tmp/o.nmap`
   s.split('Nmap').each do |l|
     #puts 'line: '+l
@@ -16,13 +16,21 @@ def discover
   end
 end
 
-def deep_scan ip
+def deepscan ip
   s=`nmap -T5 -A #{ip}`
   puts s
 end
 
+def help
+  puts "net_scan help -  displayes this help"
+  puts "net_scan disc <ip> - discovers network"
+  puts "net_scan scan <ip> - deepscan the <ip>"
+end
+
 if ARGV.size < 1 
-  discover
-else
-  deep_scan ARGV[0]
+  help
+elsif ARGV[0] == 'disc'
+  discover ARGV[1]
+elsif ARGV[0] == 'scan'
+  deepscan ARGV[1]
 end
