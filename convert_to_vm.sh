@@ -4,13 +4,14 @@
 #-------------------------------------------------
 # Configure this as you require
 #-------------------------------------------------
-IMG_format="vdi"
-IMG_name="debian8_vbox"
+IMG_format=
+IMG_name="debian8_jessie"
 IMG_size=17
 IMG_resize=17
 
-LNX_image="vmlinuz-3.16.0-4-686-pae"
-LNX_initrd="initrd.img-3.16.0-4-686-pae"
+LNX_ver="3.16.0-4-586"
+LNX_image="vmlinuz-$LNX_ver"
+LNX_initrd="initrd.img-$LNX_ver"
 LNX_rootdev="/dev/sda" #works on qemu and virtualbox
 #-------------------------------------------------
 
@@ -19,7 +20,7 @@ WRKDIR="/media/domnic/tmp1"
 
 create_img(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
-  echo "image => $IMG"
+  echo "[I] image => $IMG"
   
   if [ -a "$IMG" ]; then
     echo "[W] [$IMG] already exists... skipped!"
@@ -28,15 +29,17 @@ create_img(){
     if [ "vdi" == "$IMG_format" ]; then
       #- create .vdi
       VBoxManage createhd --filename $IMG --size $(( IMG_size * 1024 ))
-      modprobe nbd
+      modprobe nbd max_parts=16
       qemu-nbd -c /dev/nbd0 $IMG
       sleep 1
+      parted -s /dev/nbd0 mklabel gpt 
       mkfs.ext4 /dev/nbd0
       sleep 1
       qemu-nbd -d /dev/nbd0
     else
       #- or create image on .raw disk
-      fallocate -l $IMG_size"G" $IMG
+      qemu-img create -f raw $IMG ${IMG_size}G
+      parted -s $IMG mklabel gpt 
       mkfs.ext4 -F $IMG
     fi
   fi
@@ -53,8 +56,10 @@ mount_img(){
     #- mount .vdi
     #vdfuse -a -f $IMG /mnt/vdi
     #mount -o loop /mnt/vdi/Partition1 $TMPDIR
-    modprobe nbd
+    modprobe nbd max_parts=16
+    sleep 1
     qemu-nbd -c /dev/nbd0 $IMG
+    sleep 1
     mount /dev/nbd0 $TMPDIR
   else
     #- mount image to tmpdir
@@ -63,12 +68,19 @@ mount_img(){
 }
 
 clone_img(){
-  echo "[I] clone => $TMPDIR"
+  dryRun=1
+  echo "[I] clone => $TMPDIR ($dryRun)"
   #- copy files
-  rsync -aAX --delete --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} /* "$TMPDIR"
+  if [ "1" == "$dryRun" ]; then
+    time rsync -aAX \
+      --info=progress2 \
+      --delete \
+      --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} \
+      /* "$TMPDIR"
+  fi
 
   #- install bootloader
-  extlinux --install $TMPDIR/boot
+  extlinux --install $TMPDIR/boot/syslinux
 
   #- update bootloader
   #-- qemu default: root=/dev/sda
@@ -115,10 +127,6 @@ to_vdi(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
   IMG_vdi="$WRKDIR/$IMG_name.vdi"
   echo "[I] converting $IMG => $IMG_vdi"
-  if [ "x" == "x$(which VBoxManage)" ]; then
-    echo "[I] VirtualBox::VBoxManage not installed, aborting!"
-    exit -1;
-  fi
 
   if [ -f $IMG_vdi ]; then
     echo "[W] already exists: $IMG_vdi"
@@ -136,8 +144,46 @@ resize_vdi(){
 
   #VBoxManage modifyhd <absolute path to file> --resize <size in MB>
   VBoxManage modifyhd $IMG_vdi --resize $IMG_resize
+
+  #TODO mount and resize fs
 }
 
+validate_tool(){
+  case $1 in
+    vbox)
+      if [ "x" == "x$(which VBoxManage)" ]; then
+        echo "[I] VirtualBox::VBoxManage not installed, aborting!"
+        exit -1;
+      fi 
+      ;;
+    qemu)
+      if [ "x" == "x$(which qemu-img)" ]; then
+        echo "[I] Qemu::qemu-img, qemu-ndb not installed, aborting!"
+        exit -1;
+      fi 
+      ;;
+    parted)
+      if [ "x" == "x$(which qemu-img)" ]; then
+        echo "[I] Gnu::parted not installed, aborting!"
+        exit -1;
+      fi 
+      ;;
+  esac
+}
+
+# main
+validate_tool "vbox"
+validate_tool "qemu"
+validate_tool "parted"
+
+case $2 in
+  vdi)
+    IMG_format=$2
+    ;;
+  *)
+    IMG_format=raw
+    ;;
+esac
 case $1 in
   create_img)
     create_img
@@ -157,6 +203,7 @@ case $1 in
   to_vdi)
     to_vdi
     ;;
+  # compound  
   update_img)
     mount_img
     clone_img
