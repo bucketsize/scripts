@@ -7,9 +7,8 @@
 IMG_format=
 IMG_name="debian8_jessie"
 IMG_size=17
-IMG_resize=17
 
-LNX_ver="3.16.0-4-586"
+LNX_ver=`uname -r`
 LNX_image="vmlinuz-$LNX_ver"
 LNX_initrd="initrd.img-$LNX_ver"
 LNX_rootdev="/dev/sda" #works on qemu and virtualbox
@@ -80,7 +79,15 @@ clone_img(){
   fi
 
   #- install bootloader
-  extlinux --install $TMPDIR/boot/syslinux
+  EXTDIR=$TMPDIR/boot/extlinux
+  if [ -d $TMPDIR/boot/syslinux ]; then
+    EXTDIR=$TMPDIR/boot/syslinux
+  elif [ -d $TMPDIR/boot/extlinux ]; then
+    EXTDIR=$TMPDIR/boot/extlinux
+  else 
+    mkdir -p $EXTDIR
+  fi
+  extlinux --install $EXTDIR 
 
   #- update bootloader
   #-- qemu default: root=/dev/sda
@@ -139,11 +146,12 @@ to_vdi(){
 }
 
 resize_vdi(){
+  RESIZE=$1
   IMG_vdi="$WRKDIR/$IMG_name.vdi"
-  echo "[I] resizing => $IMG_vdi"
+  echo "[I] resizing => $IMG_vdi => $RESIZE"
 
   #VBoxManage modifyhd <absolute path to file> --resize <size in MB>
-  VBoxManage modifyhd $IMG_vdi --resize $IMG_resize
+  VBoxManage modifyhd $IMG_vdi --resize $RESIZE
 
   #TODO mount and resize fs
 }
@@ -168,6 +176,12 @@ validate_tool(){
         exit -1;
       fi 
       ;;
+    extlinux)
+      if [ "x" == "x$(which extlinux)" ]; then
+        echo "[I] Syslinux::syslinux, extlinux not installed, aborting!"
+        exit -1;
+      fi 
+      ;;
   esac
 }
 
@@ -175,6 +189,7 @@ validate_tool(){
 validate_tool "vbox"
 validate_tool "qemu"
 validate_tool "parted"
+validate_tool "extlinux"
 
 case $2 in
   vdi)
@@ -216,7 +231,7 @@ case $1 in
     unmount_img
     ;;
   resize_vdi)
-    resize_vdi
+    resize_vdi $2
     ;;
   *)
     echo "[?] unknown command."
