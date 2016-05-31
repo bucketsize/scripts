@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rsync_cmd(){
+rsync1_cmd(){
   # -a archive
   # -A preserve acls
   # -X preserve extended attributes
@@ -14,7 +14,7 @@ rsync_cmd(){
     --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} \
     "$1" "$2"
 }
-rsync_cmd2(){
+rsync2_cmd(){
   RSYNC="ionice -c3 rsync"
   RSYNC_ARGS="-vrltD --delete --stats --human-readable"
   RSYNC_ARGS="$RSYNC_ARGS --exclude={\"/dev/*\",\"/proc/*\",\"/sys/*\",\"/tmp/*\",\"/run/*\",\"/mnt/*\",\"/media/*\",\"/lost+found\",\"/home/*\"}"
@@ -26,54 +26,68 @@ rsync_cmd2(){
 
   ${RSYNC} ${RSYNC_ARGS} ${SOURCES} ${TARGET} | pv -l -e -p -s "$TODO"
 }
+fresh_install(){
+  backup=$1
+  blockDev=$2
+  source ./create_parts.sh 
+  dpart ${blockDev}
 
-install_fresh(){
+  #guess created partitions
+  for i in `ls ${blockDev}*`; do
+    echo "$i"
+  done
+}
+disk_mount(){
+  root=$1
+  boot=$2
+  tmpd=$3
+
+  mkdir -p $tmpd
+  mount $root $tmpd
+
+  if [ "x" != "x$boot" ]; then
+    mkdir -p $tmpd/boot
+    mount $boot $tmpd/boot
+  fi
+}
+disk_umount(){
+  root=$1
+  boot=$2
+  tmpd=$3
+
+  umount $boot 
+  umount $root
+}
+part_install(){
   backup=$1
   rootDev=$2
   bootDev=$3 #optional
-  
-  echo "[I] installing ${backup} => boot:${bootDev} => root:${rootDev}"
-  mkdir -p /mnt/tmp_root
-  mount $rootDev /mnt/tmp_root
 
-  if [ "x" != "x$bootDev" ]; then
-    mkdir -p /mnt/tmp_root/boot
-    mount $bootDev /mnt/tmp_root/boot
-  fi
- 
-  rsync_cmd $backup /mnt/tmp_root
+  echo "[I] installing ${backup} => boot:${bootDev} => root:${rootDev}"
+
+  rsync1_cmd $backup /mnt/tmp_root
 
   install_extlinux `uname -r` ${rootDev} ${bootDev} /mnt/tmp_root
 }
-
-install_extlinux(){
+extlinux_install(){
   LNX_ver=$1
   LNX_hdd=$2
   LNX_rootdev=$3
   LNX_bootdev=$4 #TODO include in fstab
   LTMPDIR=$5
-  
+
   LNX_image=vmlinux-$LNX_ver
   LNX_initrd=initrd.img-$LNX_ver
-
-  #-- remove invalid entries from $TMPDIR/etc/fstab
-  cat > $LTMPDIR/etc/fstab <<- EOM
-$LNX_rootdev   /   ext4   defaults   0   1 
-EOM
-  cat $LTMPDIR/etc/fstab 
-  
-  #-- let X detect video automatically
-  mv /etc/X11/xorg.conf $LTMPDIR/etc/X11/xorg.conf_disabled
 
   #- update bootloader config
   #-- qemu default: root=/dev/sda
   cat > $EXTDIR/extlinux.conf <<- EOM
-DEFAULT $LNX_image
-LABEL   $LNX_image
-SAY     Booting - $LNX_image
-LINUX   /boot/$LNX_image
-INITRD  /boot/$LNX_initrd
-APPEND  root=$LNX_rootdev rw
+  DEFAULT $LNX_image
+  LABEL   $LNX_image
+  SAY     Booting - $LNX_image
+  LINUX   /boot/$LNX_image
+  INITRD  /boot/$LNX_initrd
+  APPEND  root=$LNX_rootdev rw
 EOM
   cat $EXTDIR/extlinux.conf
 
@@ -89,13 +103,25 @@ EOM
   extlinux --install $EXTDIR 
 
   MBR_bin=
-  for $i in `find /usr/lib -name mbr.bin`; do 
+  for i in `find /usr/lib -name mbr.bin`; do 
     #take the first one
     MBR_bin=$i
     break;
   done
+  echo "[I] extlinux => $MBR_bin"
   dd if=${MBR_bin} conv=notrunc bs=440 count=1 of=${LNX_hdd}
+}
 
+cleanup_oldconfigs(){
+  LTMPDIR=$1
+  #-- remove invalid entries from $TMPDIR/etc/fstab
+  cat > $LTMPDIR/etc/fstab <<- EOM
+  $LNX_rootdev   /   ext4   defaults   0   1 
+EOM
+  cat $LTMPDIR/etc/fstab 
+
+  #-- let X detect video automatically
+  mv /etc/X11/xorg.conf $LTMPDIR/etc/X11/xorg.conf_disabled
 }
 
 validate(){
@@ -108,10 +134,10 @@ validate(){
 echo "[I] ${1} ${2} => ${3}"
 case $1 in 
   install)
-    install_fresh $2 $3 $4 $5
+    part_install $2 $3 $4 $5
     ;;
   backup)
-    rsyn_cmd $2 $3
+    rsync1_cmd $2 $3
     ;;
   *)
     echo "[E] unknown command."
