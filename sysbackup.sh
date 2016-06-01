@@ -1,5 +1,33 @@
 #!/bin/bash
 
+source ./validations.sh 
+
+dpart(){
+  pdev=$1
+  echo "[I] creating partitions on [$pdev] for fresh isntall" 
+  validate parted ${pdev}
+  parted -s ${pdev} mklabel msdos
+  parted -a optimal --script ${pdev} \
+    unit MiB \
+    mkpart primary ext2 0% 2% \
+    mkpart extended 2% 100% \
+    mkpart logical ext4 2% 100% \
+    set 1 boot on \
+    print \
+    quit
+}
+dformat(){
+  echo "[I] formatting partitions on [$pdev] for fresh isntall" 
+  pdev=$1
+
+  ls -l ${pdev}p1
+  ls -l ${pdev}p5
+
+  validate parted $pdev
+  mkfs -t ext2 -F ${pdev}p1
+  mkfs -t ext4 -F ${pdev}p5
+}
+
 rsync1_cmd(){
   # -a archive
   # -A preserve acls
@@ -69,27 +97,44 @@ part_install(){
 
   install_extlinux `uname -r` ${rootDev} ${bootDev} /mnt/tmp_root
 }
+grub_install(){
+  LNX_ver=$1
+  LNX_hdd=$2
+  LNX_rootdev=$3
+  LNX_bootdev=$4 #TODO include in fstab
+  LNX_boot_hdd=/dev/sda #asuming this is the first disk
+  LTMPDIR=$5
+
+  LNX_image=vmlinuz-$LNX_ver
+  LNX_initrd=initrd.img-$LNX_ver
+
+  cat > $LTMPDIR/boot/grub/grub.cfg <<-EOM
+set default="0"
+set timeout="3"
+insmod msdospart
+insmod ext2
+set root='($LNX_boot_hdd, msdos1)'
+search --no-floppy
+menuentry "$LNX_image" {
+  linux $LNX_image root=$LNX_boot_hdd rw
+  initrd $LNX_initrd
+}
+EOM
+  cat $LTMPDIR/boot/grub/grub.cfg
+  
+  echo "installing grub => $LNX_bootdev => $LTMPDIR/boot => $LNX_hdd"
+  grub-install --boot-directory=$LTMPDIR/boot $LNX_hdd
+}
 extlinux_install(){
   LNX_ver=$1
   LNX_hdd=$2
   LNX_rootdev=$3
   LNX_bootdev=$4 #TODO include in fstab
+  LNX_boot_hdd=/dev/sda #asuming this is the first disk
   LTMPDIR=$5
 
-  LNX_image=vmlinux-$LNX_ver
+  LNX_image=vmlinuz-$LNX_ver
   LNX_initrd=initrd.img-$LNX_ver
-
-  #- update bootloader config
-  #-- qemu default: root=/dev/sda
-  cat > $EXTDIR/extlinux.conf <<- EOM
-  DEFAULT $LNX_image
-  LABEL   $LNX_image
-  SAY     Booting - $LNX_image
-  LINUX   /boot/$LNX_image
-  INITRD  /boot/$LNX_initrd
-  APPEND  root=$LNX_rootdev rw
-EOM
-  cat $EXTDIR/extlinux.conf
 
   #- install bootloader
   EXTDIR=$LTMPDIR/boot/extlinux
@@ -100,6 +145,19 @@ EOM
   else 
     mkdir -p $EXTDIR
   fi
+  echo "[I] extlinux =>  $LNX_hdd -> $EXTDIR"
+  #- update bootloader config
+  #-- qemu default: root=/dev/sda
+  cat > $EXTDIR/extlinux.conf <<- EOM
+  DEFAULT $LNX_image
+  LABEL   $LNX_image
+  SAY     Booting - $LNX_image
+  LINUX   /boot/$LNX_image
+  INITRD  /boot/$LNX_initrd
+  APPEND  root=$LNX_boot_hdd rw
+EOM
+  cat $EXTDIR/extlinux.conf
+
   extlinux --install $EXTDIR 
 
   MBR_bin=
@@ -108,7 +166,7 @@ EOM
     MBR_bin=$i
     break;
   done
-  echo "[I] extlinux => $MBR_bin"
+  echo "[I] extlinux = $MBR_bin"
   dd if=${MBR_bin} conv=notrunc bs=440 count=1 of=${LNX_hdd}
 }
 
@@ -122,24 +180,8 @@ EOM
 
   #-- let X detect video automatically
   mv /etc/X11/xorg.conf $LTMPDIR/etc/X11/xorg.conf_disabled
-}
 
-validate(){
-  if [ $# -lt 3 ]; then
-    echo "No destination defined. Usage: $0 <cmd> <src> <dest>" >&2
-    exit 1
-  fi
+  #-- existing user min restore
+  mkdir $LTMPDIR/home/jb 
+  chown jb.jb -R $LTMPDIR/home/jb
 }
-
-echo "[I] ${1} ${2} => ${3}"
-case $1 in 
-  install)
-    part_install $2 $3 $4 $5
-    ;;
-  backup)
-    rsync1_cmd $2 $3
-    ;;
-  *)
-    echo "[E] unknown command."
-    ;;
-esac

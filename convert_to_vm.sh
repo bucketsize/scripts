@@ -6,7 +6,7 @@
 #-------------------------------------------------
 IMG_format=
 IMG_name="t_debian8_jessie"
-IMG_size=17
+IMG_size=24
 
 LNX_ver=`uname -r`
 LNX_image="vmlinuz-$LNX_ver"
@@ -15,11 +15,10 @@ LNX_rootdev="/dev/sda" #works on qemu and virtualbox
 #-------------------------------------------------
 
 TMPDIR="/mnt/vmd21/"
-WRKDIR="/media/domnic/tmp1"
+dryRun=false
 
-source ./sysbackup.sh 
-source ./create_parts.sh 
-source ./validations.sh 
+#WRKDIR="/media/domnic/tmp1"
+WRKDIR="/media/jb/83460770-be50-4a0f-bee1-113eac851f93/mnt/deb_bak-fuh_home/"
 
 create_img(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
@@ -40,7 +39,7 @@ prepare_img_pre(){
   echo "[I] preparing => $IMG"
 
   if [ "vdi" == "$IMG_format" ]; then
-    modprobe nbd max_parts=16
+    cleanup_nbd
     qemu-nbd -c /dev/nbd0 $IMG
     sleep 1
     dpart /dev/nbd0
@@ -58,8 +57,10 @@ prepare_img_post(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
   echo "[I] preparing post_part => $IMG"
   if [ "vdi" == "$IMG_format" ]; then
-    modprobe nbd max_parts=16
+    cleanup_nbd
+    sleep 1
     qemu-nbd -c /dev/nbd0 $IMG
+    sleep 1
     dformat /dev/nbd0
   else
     losetup /dev/loop0 $IMG
@@ -71,7 +72,7 @@ prepare_img_post2(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
   echo "[I] preparing post_part => $IMG"
   if [ "vdi" == "$IMG_format" ]; then
-    modprobe nbd max_parts=16
+    cleanup_nbd
     qemu-nbd -c /dev/nbd0 $IMG
   else
     losetup /dev/loop0 $IMG
@@ -90,9 +91,11 @@ mount_img(){
   boot=
   root=
   if [ "vdi" == "$IMG_format" ]; then
+    prepare_img_post2
     boot=/dev/nbd0p1
     root=/dev/nbd0p5
   else
+    prepare_img_post2
     boot=/dev/loop0p1
     root=/dev/loop0p5
   fi
@@ -112,19 +115,25 @@ umount_img(){
   disk_umount $root $boot
 }
 clone_img(){
-  echo "[I] clone => $TMPDIR ($dryRun)"
-  #rsync_cmd / $TMPDIR
-
+  echo "[I] clone => $TMPDIR (dryRun=$dryRun)"
+  if [ "false" == "$dryRun" ]; then
+    rsync1_cmd / $TMPDIR
+  fi
+}
+install_bootloader(){
+  hdd=
   boot=
   root=
   if [ "vdi" == "$IMG_format" ]; then
+    hdd=/dev/nbd0
     boot=/dev/nbd0p1
     root=/dev/nbd0p5
   else
+    hdd=/dev/loop0
     boot=/dev/loop0p1
     root=/dev/loop0p5
   fi
-  extlinux_install `uname -r` /dev/loop0 /dev/sda5 /dev/sda1 $TMPDIR  
+  grub_install `uname -r` $hdd $root $boot $TMPDIR  
 }
 
 start_vm(){
@@ -168,17 +177,31 @@ resize_vdi(){
 
 set -e
 
+source ./sysbackup.sh 
+source ./validations.sh 
+
 validate "vbox"
 validate "qemu"
 validate "parted"
 validate "extlinux"
 
+cleanup_nbd(){
+  if [ -a /dev/nbd0 ]; then
+    qemu-nbd -d /dev/nbd0 
+    rmmod nbd
+  fi
+  modprobe nbd max_part=16
+}
 case $2 in
   vdi)
     IMG_format=$2
     ;;
-  *)
+  raw)
     IMG_format=raw
+    ;;
+  *)
+    echo "[E] must specify vm format [vdi, raw]"
+    exit -1
     ;;
 esac
 case $1 in
@@ -188,10 +211,26 @@ case $1 in
   to_vdi)
     to_vdi
     ;;
+  mount_dev)
+    disk_mount $2 $3 $TMPDIR 
+    ;;
+  umount_dev)
+    disk_umount $2 $3 
+    ;;
+  mount_img)
+    mount_img
+    ;;
+  umount_img)
+    umount_img
+    ;;
+  install_boot)
+    install_bootloader 
+    ;;
   update)
     prepare_img_post
     mount_img
     clone_img
+    install_bootloader
     umount_img
     cleanup_img_post
     ;;
@@ -201,11 +240,15 @@ case $1 in
     prepare_img_post
     mount_img
     clone_img
+    install_bootloader
     umount_img
     cleanup_img_post
     ;;
   resize_vdi)
     resize_vdi $2
+    ;;
+  cleanup)
+    cleanup_img_post
     ;;
   *)
     echo "[?] unknown command."
