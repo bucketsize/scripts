@@ -133,9 +133,11 @@ install_bootloader(){
     boot=/dev/loop0p1
     root=/dev/loop0p5
   fi
-  grub_install `uname -r` $hdd $root $boot $TMPDIR  
+  grub_install `uname -r` $hdd /dev/sda5 /dev/sda1 /dev/sda $TMPDIR  
 }
-
+cleanup_old(){
+  cleanup_oldconfigs $TMPDIR
+}
 start_vm(){
   IMG="$WRKDIR/$IMG_name.$IMG_format"
   echo "[I] vm => $IMG"
@@ -230,6 +232,7 @@ case $1 in
     prepare_img_post
     mount_img
     clone_img
+    cleanup_oldconfigs
     install_bootloader
     umount_img
     cleanup_img_post
@@ -240,12 +243,16 @@ case $1 in
     prepare_img_post
     mount_img
     clone_img
+    cleanup_old
     install_bootloader
     umount_img
     cleanup_img_post
     ;;
   resize_vdi)
     resize_vdi $2
+    ;;
+  cleanup_old)
+    cleanup_old
     ;;
   cleanup)
     cleanup_img_post

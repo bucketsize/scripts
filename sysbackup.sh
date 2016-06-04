@@ -2,6 +2,15 @@
 
 source ./validations.sh 
 
+cmd(){
+  echo "CMD> $1"
+  `$1`
+  if [ "x$?" != "x0" ]; then
+    if [ "x$2" == "xfalse" ]; then
+      echo "[E] cmd failed, cleanup manually"
+    fi
+  fi
+}
 dpart(){
   pdev=$1
   echo "[I] creating partitions on [$pdev] for fresh isntall" 
@@ -95,35 +104,34 @@ part_install(){
 
   rsync1_cmd $backup /mnt/tmp_root
 
-  install_extlinux `uname -r` ${rootDev} ${bootDev} /mnt/tmp_root
+  cmd "install_extlinux `uname -r` ${rootDev} ${bootDev} /mnt/tmp_root"
 }
 grub_install(){
   LNX_ver=$1
-  LNX_hdd=$2
-  LNX_rootdev=$3
-  LNX_bootdev=$4 #TODO include in fstab
-  LNX_boot_hdd=/dev/sda #asuming this is the first disk
-  LTMPDIR=$5
+  SDA_dev=$2  # /dev/nbd0
+  LNX_root=$3 # /dev/sda5
+  LNX_boot=$4 # /dev/sda1 + TODO include in fstab
+  LNX_dev=$5  # /dev/sda + asuming this is the first disk
+  LTMPDIR=$6
 
   LNX_image=vmlinuz-$LNX_ver
   LNX_initrd=initrd.img-$LNX_ver
 
   cat > $LTMPDIR/boot/grub/grub.cfg <<-EOM
 set default="0"
-set timeout="3"
-insmod msdospart
-insmod ext2
-set root='($LNX_boot_hdd, msdos1)'
-search --no-floppy
+set timeout="5"
+insmod normal
+insmod linux
+set root=(hd0,msdos1)
 menuentry "$LNX_image" {
-  linux $LNX_image root=$LNX_boot_hdd rw
-  initrd $LNX_initrd
+  linux /$LNX_image root=$LNX_root rw
+  initrd /$LNX_initrd
 }
 EOM
   cat $LTMPDIR/boot/grub/grub.cfg
   
-  echo "installing grub => $LNX_bootdev => $LTMPDIR/boot => $LNX_hdd"
-  grub-install --boot-directory=$LTMPDIR/boot $LNX_hdd
+  echo "[I] installing grub => $SDA_dev"
+  cmd "grub-install --boot-directory=$LTMPDIR/boot $SDA_dev"
 }
 extlinux_install(){
   LNX_ver=$1
@@ -171,17 +179,24 @@ EOM
 }
 
 cleanup_oldconfigs(){
+  if [ x$1 == x ];then
+    echo "[E] invalid args"
+    exit -1
+  fi
+  suff=`date +%Y%m%d_%H%M`
   LTMPDIR=$1
   #-- remove invalid entries from $TMPDIR/etc/fstab
+  cmd "mv $LTMPDIR/etc/fstab $LTMPDIR/etc/fstab_$suff"
   cat > $LTMPDIR/etc/fstab <<- EOM
-  $LNX_rootdev   /   ext4   defaults   0   1 
+/dev/sda5   /       ext4    defaults    0   1
+/dev/sda1   /boot   ext2    defaults    0   1
 EOM
   cat $LTMPDIR/etc/fstab 
 
   #-- let X detect video automatically
-  mv /etc/X11/xorg.conf $LTMPDIR/etc/X11/xorg.conf_disabled
+  cmd "mv $LTMPDIR/etc/X11/xorg.conf $LTMPDIR/etc/X11/xorg.conf_$suff"
 
   #-- existing user min restore
-  mkdir $LTMPDIR/home/jb 
-  chown jb.jb -R $LTMPDIR/home/jb
+  cmd "mkdir $LTMPDIR/home/jb"
+  cmd "chown jb.jb -R $LTMPDIR/home/jb"
 }
