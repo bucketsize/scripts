@@ -1,6 +1,6 @@
 "call pathogen#infect() "moved to vundle
 
-"---------------------------------------------------------------
+"{{{ vundle ---------------------------------------------------------------
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -11,28 +11,26 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 Plugin 'VundleVim/Vundle.vim' "managed
-Plugin 'https://github.com/scrooloose/nerdtree.git'
-Plugin 'https://github.com/scrooloose/nerdcommenter.git'
-Plugin 'https://github.com/scrooloose/syntastic.git'
-Plugin 'https://github.com/itchyny/lightline.vim.git'
-Plugin 'https://github.com/ctrlpvim/ctrlp.vim.git'
-Plugin 'https://github.com/fholgado/minibufexpl.vim.git'
-Plugin 'https://github.com/tpope/vim-surround.git'
-Plugin 'https://github.com/vim-scripts/AutoComplPop.git'
-Plugin 'https://github.com/SirVer/ultisnips.git'
-Plugin 'https://github.com/honza/vim-snippets.git'
-Plugin 'https://github.com/artur-shaik/vim-javacomplete2.git'
-Plugin 'https://github.com/bucketsize/vim-antr.git'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/syntastic'
+Plugin 'itchyny/lightline.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'vim-scripts/AutoComplPop'
+Plugin 'SirVer/ultisnips'
+Plugin 'artur-shaik/vim-javacomplete2'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-"---------------------------------------------------------------
+" }}} ---------------------------------------------------------------
+
 
 syntax on
 
 set history=100
-set showmatch
 set ruler
 set showcmd
 set number
@@ -46,11 +44,21 @@ set fileformats=unix,dos
 set encoding=utf-8
 set hlsearch                  " highlight search
 set incsearch                 " incremental search
-set nobackup
 set noswapfile
 set nowrap                    " don't wrap lines
 set ignorecase                " ignore case when searching
 set smartcase                 " ignore case if search pattern is all
+
+set cursorline          " highlight current line
+set lazyredraw          " redraw only when we need to.
+set showmatch           " highlight matching [{()}]
+
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
+
 
 autocmd FileType * set expandtab
 autocmd FileType * set smartindent
