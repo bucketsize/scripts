@@ -1,9 +1,9 @@
 #!/bin/bash
 
 LNX_ver=3.10.0-327.el7.x86_64
-LNX_dev=/dev/sdb
-LNX_rootdev=/dev/sdb5
-LNX_bootdev=/dev/sdb1 #TODO include in fstab
+LNX_dev=/dev/sdc
+LNX_rootdev=/dev/sdc5
+LNX_bootdev=/dev/sdc1 #TODO include in fstab
 
 LNX_boot_hdd=/dev/sda #asuming this is the first disk
 
@@ -50,7 +50,7 @@ install_extlinux(){
   SAY     Booting - $LNX_image 123
   LINUX   /$LNX_image
   INITRD  /$LNX_initrd
-  APPEND  root=${LNX_boot_hdd}5 ro
+  APPEND  root=${LNX_boot_hdd}5 ro rhgb quiet LANG=en_IN.UTF-8
 EOM
   cat $EXTDIR/extlinux.conf
 
@@ -59,6 +59,8 @@ EOM
   MBR_bin=/usr/share/syslinux/mbr.bin 
   echo "[I] extlinux = $MBR_bin"
   dd if=${MBR_bin} conv=notrunc bs=440 count=1 of=${LNX_dev}
+
+  cp /usr/share/syslinux/menu.c32 $EXTDIR 
 }
 
 sync(){
@@ -100,7 +102,7 @@ umparts(){
 
 mparts "${LNX_dev}" && sleep 1
 
-#sync && sleep 1
+sync && sleep 1
 
 install_extlinux && sleep 1
 
