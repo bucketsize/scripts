@@ -1,13 +1,13 @@
 #!/bin/bash
 
 LNX_ver=3.10.0-327.el7.x86_64
-LNX_dev=/dev/sdc
-LNX_rootdev=/dev/sdc5
-LNX_bootdev=/dev/sdc1 #TODO include in fstab
-
-LNX_boot_hdd=/dev/sda #asuming this is the first disk
-
+LNX_dev=/dev/sdb
+LNX_boot_hdd=/dev/sda #assuming this is the first disk
 LTMPDIR=/mnt/ltmpdir
+
+LNX_rootdev=${LNX_dev}5
+LNX_bootdev=${LNX_dev}1 #TODO include in fstab
+
 
 dpart(){
   pdev=$1
@@ -67,10 +67,9 @@ sync(){
   rsync \
     -aAX \
     --delete \
-    --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} \
+    --exclude={"/boot/*","/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*"} \
     "/" "${LTMPDIR}"
 }
-
 mparts(){
   pdev=$1
   echo "[I] mounting partitions of [$pdev] on ${LTMPDIR}"
@@ -95,17 +94,16 @@ umparts(){
   umount ${pdev}1 
   umount ${pdev}5 
 }
+update_conf(){
+  echo "updating fstab"
+  cp conf/_fstab ${LTMPDIR}/etc/fstab 
+}
 
 #dpart "${LNX_dev}" && sleep 1
-
 #dformat "${LNX_dev}" && sleep 1
-
 mparts "${LNX_dev}" && sleep 1
-
 sync && sleep 1
-
 install_extlinux && sleep 1
-
+update_conf && sleep 1
 umparts "${LNX_dev}" && sleep 1
-
 

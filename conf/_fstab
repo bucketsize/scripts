@@ -1,0 +1,6 @@
+#custom by jb for fuhrer-2 - usb2.0 boot
+/dev/sda5 /                       ext4     defaults        0 0
+/dev/sda1 /boot                   ext2     defaults        0 0
+/dev/sdb1 /media/cdrive           ntfs     defaults        0 0
+/media/cdrive/home.img	/home	  ext4 	   loop 	   0 0
+tmpfs /tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=1777,size=1024M 0 0
