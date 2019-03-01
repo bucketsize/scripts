@@ -1,0 +1,7 @@
+
+xset -b
+(sleep 1s && $HOME/scripts/change_wallpaper.sh) &
+(sleep 2s && gnome-settings-daemon) &
+(sleep 2s && tint2) &
+(sleep 3s && nm-applet) &
+(sleep 3s && conky) &
