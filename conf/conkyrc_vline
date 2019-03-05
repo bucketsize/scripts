@@ -1,0 +1,61 @@
+-- vim: ts=4 sw=4 noet ai cindent syntax=lua
+conky.config = {
+    alignment = 'top_right',
+    background = false,
+    border_width = 1,
+    cpu_avg_samples = 2,
+	default_color = 'white',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    use_xft = true,
+    font = 'DejaVu Sans Mono:size=8',
+    gap_x = 5,
+    gap_y = 60,
+    minimum_height = 5,
+	minimum_width = 5,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    out_to_stderr = false,
+    extra_newline = false,
+    own_window = true,
+    own_window_transparent = false,
+    own_window_argb_visual = true,
+    own_window_argb_value = 90,
+    own_window_type = desktop,
+	double_buffer = true,
+    stippled_borders = 0,
+    update_interval = 1.0,
+    uppercase = false,
+    use_spacer = 'none',
+    show_graph_scale = false,
+    show_graph_range = false
+}
+
+conky.text = [[
+${color grey}node $hr
+$nodename
+$uptime_short
+${addr enp6s0}
+${color grey}cpu  $hr
+${color grey}cpu  ${color}${cpu}
+${color grey}cpuv ${color}${voltage_v}
+${color grey}proc ${color}${processes}
+${color grey}fan  ${color}${acpifan}
+${color grey}temp ${color}${execi 8 sensors | grep 'temp1' | cut -c16-19 | sed '/^$/d'}
+${color grey}mem  $hr
+${color grey}hmem ${color}${memperc}
+${color grey}swap ${color}${swapperc}
+${color grey}fs   $hr
+${color grey}fs   ${color}${fs_free_perc}
+${color grey}io   ${color}${diskio}
+${color grey}net  $hr
+${color grey}->   ${color}${upspeed enp6s0}
+${color grey}<-   ${color}${downspeed enp6s0}
+${color grey}ncon ${color}${tcp_portmon 32768 61000 count}
+
+]]

@@ -1,25 +1,4 @@
 #!/bin/bash
-#
-# Start a composition manager.
-# (xcompmgr in this case)
-
-comphelp() {
-  echo "Composition Manager:"
-  echo "   (re)start: COMP"
-  echo "   stop:      COMP -s"
-  echo "   query:     COMP -q"
-  echo "              returns 0 if composition manager is running, else 1"
-  exit
-}
-
-checkcomp() {
-  pgrep xcompmgr &>/dev/null
-}
-
-stopcomp() {
-  checkcomp && killall xcompmgr
-}
-
 
 #-d display 			 Specifies the display to manage.
 #-r radius			 Specifies the blur radius for client-side shadows.
@@ -39,15 +18,24 @@ stopcomp() {
 #-F     When -f is specified, also enables the fade effect when windows change their opacity, as with transset(1).
 #-S     Enables synchronous operation.  Useful for debugging.
 
+COMP=compton
+#OPTS="-CcfF -I-.05 -O-.07 -D2 -t-1 -l-3 -r4.2 -o.5"
+checkcomp() {
+  pgrep $COMP &>/dev/null
+}
+stopcomp() {
+  checkcomp && killall $COMP
+}
 startcomp() {
   stopcomp
-  xcompmgr -CcfF -I-.05 -O-.07 -D2 -t-1 -l-3 -r4.2 -o.5 &
+  $COMP $OPTS &
   exit
 }
-
-case "$1" in
-  "")   startcomp ;;
-  "-q") checkcomp ;;
-  "-s") stopcomp; exit ;;
-  *)    comphelp ;;
+case $1 in
+    status)
+        checkcomp ;;
+    stop)
+        stopcomp ;;
+    start)
+        startcomp ;;
 esac
