@@ -185,21 +185,21 @@ systray_monitor = 1
 
 # Clock
 time1_format = %j:%d:%H:%M
-time2_format = 
+time2_format =
 time1_font = Ubuntu Condensed Bold 12
-time1_timezone = 
-time2_timezone = 
+time1_timezone =
+time2_timezone =
 time2_font = Ubuntu Condensed Bold 12
 clock_font_color = #ffffff 100
 clock_padding = 6 0
 clock_background_id = 8
 clock_tooltip = Today is %A, %dth Day Of %B !
-clock_tooltip_timezone = 
+clock_tooltip_timezone =
 #clock_lclick_command = gsimplecal
 #clock_rclick_command = gsimplecal
-clock_mclick_command = 
-clock_uwheel_command = 
-clock_dwheel_command = 
+clock_mclick_command = orage
+clock_uwheel_command =
+clock_dwheel_command =
 
 # Battery
 battery_tooltip = 0
@@ -212,13 +212,13 @@ battery_padding = 5 5
 battery_background_id = 8
 battery_hide = 101
 # SOURCE="https://github.com/vonbrownie/homebin/blob/master/batt_stat"
-battery_lclick_command = notify-send "$(~/bin/batt_stat)"
-battery_rclick_command = xfce4-power-manager-settings
-battery_mclick_command = 
-battery_uwheel_command = 
-battery_dwheel_command = 
-ac_connected_cmd = 
-ac_disconnected_cmd = 
+battery_lclick_command =
+battery_rclick_command =
+battery_mclick_command =
+battery_uwheel_command =
+battery_dwheel_command =
+ac_connected_cmd =
+ac_disconnected_cmd =
 
 # Tooltip
 tooltip_show_timeout = 0

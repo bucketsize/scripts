@@ -28,3 +28,9 @@ xset -b
 (sleep 3s && xautolock -time 15 -locker "/usr/bin/light-locker" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'") &
 (sleep 3s && dunst -config $HOME/scripts/conf/dunstrc &) &
 
+echo "\
+#!/bin/bash
+nautilus --no-desktop
+" > $HOME/.local/bin/nautilus-no-desktop
+chmod a+x $HOME/.local/bin/nautilus-no-desktop
+
