@@ -12,7 +12,7 @@ conky.config = {
     draw_outline = false,
     draw_shades = false,
     use_xft = true,
-    font = 'DejaVu Sans Mono:size=8',
+    font = 'DejaVu Sans Mono:size=10',
     gap_x = 5,
     gap_y = 60,
     minimum_height = 5,
@@ -41,19 +41,20 @@ ${color grey}node $hr
 $nodename
 $uptime_short
 ${addr enp6s0}
-${color grey}cpu  $hr
+${color grey}> cpu  $hr
 ${color grey}cpu  ${color}${cpu}
 ${color grey}cpuv ${color}${voltage_v}
 ${color grey}proc ${color}${processes}
 ${color grey}fan  ${color}${acpifan}
 ${color grey}temp ${color}${execi 8 sensors | grep 'temp1' | cut -c16-19 | sed '/^$/d'}
-${color grey}mem  $hr
+${color grey}> mem  $hr
 ${color grey}hmem ${color}${memperc}
 ${color grey}swap ${color}${swapperc}
-${color grey}fs   $hr
+${color grey}> fs   $hr
 ${color grey}fs   ${color}${fs_free_perc}
 ${color grey}io   ${color}${diskio}
-${color grey}net  $hr
+${color grey}> net  $hr
+${color grey}ping ${color}${execi 8 ping 8.8.8.8 -c 1 | grep icmp_seq | cut -d= -f4}
 ${color grey}->   ${color}${upspeed enp6s0}
 ${color grey}<-   ${color}${downspeed enp6s0}
 ${color grey}ncon ${color}${tcp_portmon 32768 61000 count}

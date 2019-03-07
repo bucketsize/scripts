@@ -332,12 +332,12 @@
               <command>/usr/bin/dm-tool lock</command>
           </action>
       </keybind>
-      <keybind key="C-A-r">
+      <keybind key="W-e">
           <action name="Execute">
               <command>/usr/bin/rofi -show run</command>
           </action>
       </keybind>
-      <keybind key="C-A-w">
+      <keybind key="W-w">
           <action name="Execute">
               <command>/usr/bin/rofi -show window</command>
           </action>
@@ -820,5 +820,15 @@
 
   # end of the example
 -->
+<application class="Firefox">
+    <desktop>all</desktop>
+    <maximized>no</maximized>
+    <decor>no</decor>
+</application>
+<application class="conky">
+    <desktop>all</desktop>
+    <maximized>no</maximized>
+    <decor>no</decor>
+</application>
   </applications>
 </openbox_config>
