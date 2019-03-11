@@ -26,7 +26,7 @@ xset -b
 (sleep 3s && lxpolkit) &
 (sleep 3s && clipit) &
 (sleep 3s && volumeicon) &
-(sleep 3s && xautolock -time 15 -locker "/usr/bin/light-locker" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'") &
+(sleep 3s && xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'") &
 (sleep 3s && dunst -config $HOME/scripts/conf/dunstrc &) &
 
 echo "\

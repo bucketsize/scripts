@@ -327,9 +327,9 @@
               <command>scrot</command>
           </action>
       </keybind>
-      <keybind key="C-A-l">
+      <keybind key="W-l">
           <action name="Execute">
-              <command>/usr/bin/dm-tool lock</command>
+              <command>scripts/i3lock-fancy</command>
           </action>
       </keybind>
       <keybind key="W-e">
@@ -342,19 +342,14 @@
               <command>/usr/bin/rofi -show window</command>
           </action>
       </keybind>
-      <keybind key="C-A-l">
-          <action name="Execute">
-              <command>/usr/bin/dm-tool lock</command>
-          </action>
-      </keybind>
       <keybind key="XF86AudioRaiseVolume">
           <action name="Execute">
-              <command>pactl set-sink-volume 0 +5%</command>
+              <command>pactl set-sink-volume 0 +10%</command>
           </action>
       </keybind>
       <keybind key="XF86AudioLowerVolume">
           <action name="Execute">
-              <command>pactl set-sink-volume 0 +5%</command>
+              <command>pactl set-sink-volume 0 -10%</command>
           </action>
       </keybind>
       <keybind key="XF86AudioMute">
@@ -362,7 +357,6 @@
               <command>pactl set-sink-mute 0 true</command>
           </action>
       </keybind>
-
   </keyboard>
   <mouse>
       <dragThreshold>1</dragThreshold>
