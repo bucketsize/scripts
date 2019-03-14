@@ -357,6 +357,16 @@
               <command>pactl set-sink-mute 0 true</command>
           </action>
       </keybind>
+      <keybind key="XF86MonBrightnessUp">
+          <action name="Execute">
+              <command>~/scripts/xbrightness.py up</command>
+          </action>
+      </keybind>
+      <keybind key="XF86MonBrightnessDown">
+          <action name="Execute">
+              <command>~/scripts/xbrightness.py down</command>
+          </action>
+      </keybind>
   </keyboard>
   <mouse>
       <dragThreshold>1</dragThreshold>
