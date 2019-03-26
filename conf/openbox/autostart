@@ -35,3 +35,4 @@ nautilus --no-desktop
 " > $HOME/.local/bin/nautilus-no-desktop
 chmod a+x $HOME/.local/bin/nautilus-no-desktop
 
+xrdb -merge $HOME/scripts/conf/Xresources
