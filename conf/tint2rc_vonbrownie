@@ -183,29 +183,6 @@ systray_icon_size = 24
 systray_icon_asb = 100 0 30
 systray_monitor = 1
 
-# Executor 1
-execp = new
-execp_command = /home/jb/scripts/volume-icon.sh
-execp_interval = 3
-execp_has_icon = 0
-execp_cache_icon = 0
-execp_continuous = 0
-execp_markup = 1
-execp_tooltip = Scroll ↓↑, middle click to mute
-execp_lclick_command = /home/jb/scripts/volume-icon.sh toggle
-execp_rclick_command = /home/jb/scripts/volume-icon.sh pc
-execp_mclick_command = /home/jb/scripts/volume-icon.sh pc
-execp_uwheel_command = /home/jb/scripts/volume-icon.sh up
-execp_dwheel_command = /home/jb/scripts/volume-icon.sh down
-execp_font = Sans 10
-execp_font_color = #eeeeee 100
-execp_padding = 5 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 18
-execp_icon_h = 18
-
-
 # Clock
 time1_format = %Y-%m-%dT%H:%M
 time2_format =

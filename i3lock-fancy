@@ -92,8 +92,6 @@ fi
 
 command -- "${shot[@]}" "$image"
 
-value="60" #brightness value to compare to
-
 color=$(convert "$image" -gravity center -crop 100x100+0+0 +repage -colorspace hsb \
     -resize 1x1 txt:- | awk -F '[%$]' 'NR==2{gsub(",",""); printf "%.0f\n", $(NF-1)}');
 
@@ -125,11 +123,15 @@ convert "$image" "${hue[@]}" "${effect[@]}" -font "$font" -pointsize 26 -fill "$
 # the desktop) before locking.
 ${desktop} ${desktop:+-k on}
 
+# kill monitor after 60s
+(sleep 60s; pgrep i3lock && xset dpms force off) &
+
 # try to use i3lock with prepared parameters
 if ! "${i3lock_cmd[@]}" "${param[@]}" >/dev/null 2>&1; then
     # We have failed, lets get back to stock one
     "${i3lock_cmd[@]}"
 fi
+
 
 # As above, if we were passed -d/--desktop, we'll attempt to restore all windows
 # after unlocking.

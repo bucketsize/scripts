@@ -17,22 +17,52 @@
 #xfce-mcs-manager &
 
 xset -b
-(sleep 1s && $HOME/scripts/xcomp.sh start) &
-(sleep 1s && $HOME/scripts/change_wallpaper.sh) &
-(sleep 2s && gnome-settings-daemon) &
-(sleep 2s && tint2 -c $HOME/scripts/conf/tint2rc_vonbrownie) &
-(sleep 3s && conky --config $HOME/scripts/conf/conkyrc_vline) &
-(sleep 3s && nm-applet) &
-(sleep 3s && lxpolkit) &
-(sleep 3s && clipit) &
-(sleep 3s && volumeicon) &
-(sleep 3s && xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'") &
-(sleep 3s && dunst -config $HOME/scripts/conf/dunstrc &) &
 
-echo "\
-#!/bin/bash
-nautilus --no-desktop
-" > $HOME/.local/bin/nautilus-no-desktop
-chmod a+x $HOME/.local/bin/nautilus-no-desktop
+sleep 1s
+$HOME/scripts/xcomp.sh stop
+$HOME/scripts/xcomp.sh start &
 
+sleep 1s
+$HOME/scripts/change_wallpaper.sh &
+
+sleep 1s
 xrdb -merge $HOME/scripts/conf/Xresources
+
+killall gnome-settings-daemon
+gnome-settings-daemon &
+
+killall tint2
+tint2 -c $HOME/scripts/conf/tint2rc_vonbrownie &
+
+killall dunst
+dunst -config $HOME/scripts/conf/dunstrc &
+
+killall conky
+conky --config $HOME/scripts/conf/conkyrc_vline &
+
+killall nm-applet
+nm-applet &
+
+killall lxpolkit
+lxpolkit &
+
+killall clipit
+clipit &
+
+killall volumeicon
+volumeicon &
+
+kill xautolock &
+xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'" &
+
+#nautilus without desktop management
+if [ ! -f $HOME/.local/bin/nautilus-no-desktop ]; then
+    echo "#!/bin/bash \nnautilus --no-desktop" > $HOME/.local/bin/nautilus-no-desktop
+    chmod a+x $HOME/.local/bin/nautilus-no-desktop
+fi
+
+#disable wake on usb
+if [[ "$(cat /proc/acpi/wakeup | grep "PTXH.*disabled")" == "" ]]; then
+    echo "dis"
+    echo PTXH > /proc/acpi/wakeup
+fi
