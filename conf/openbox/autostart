@@ -52,7 +52,7 @@ clipit &
 killall volumeicon
 volumeicon &
 
-kill xautolock &
+killall xautolock &
 xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'" &
 
 #nautilus without desktop management

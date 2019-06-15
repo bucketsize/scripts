@@ -96,6 +96,8 @@ color=$(convert "$image" -gravity center -crop 100x100+0+0 +repage -colorspace h
     -resize 1x1 txt:- | awk -F '[%$]' 'NR==2{gsub(",",""); printf "%.0f\n", $(NF-1)}');
 
 icon_dir=$HOME/scripts/icons
+
+value=70
 if [[ $color -gt $value ]]; then #white background image and black text
     bw="black"
     icon="$icon_dir/lockdark.png"
