@@ -1,0 +1,7 @@
+Location 	VPN Server 	Protocol 	Username 	Password
+US - Chicago 	67.212.175.123 	PPTP 	freevpnaccess.com 	1295
+UK - London 	83.170.84.216 	PPTP 	freevpnaccess.com 	3172
+Canada - Montreal 	184.107.164.10 	PPTP 	freevpnaccess.com 	2228
+NL - Haarlem 	212.7.192.139 	PPTP 	freevpnaccess.com 	1540
+US - Miami 	69.60.121.29 	PPTP 	freevpnaccess.com 	1147
+UK - Maidenhead 	94.76.233.203 	PPTP 	freevpnaccess.com 	1241 
