@@ -52,7 +52,6 @@ volapp_start() {
 screenlocker_start() {
 	xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'"
 }
-
 compositer_stop(){
 	killall compton
 }
@@ -77,7 +76,12 @@ volapp_stop(){
 screenlocker_stop(){
 	killall xautolock
 }
-
+shortcuts_start(){
+    sxhkd -c $HOME/scripts/conf/sxhkdrc
+}
+shortcuts_stop(){
+    killall sxhkd
+}
 require(){
 	if [ "" == "$(which $1)" ]; then 
 		echo "? $1"
@@ -108,6 +112,8 @@ require 'volumeicon'
 require 'xautolock' 
 require 'i3lock' 
 require 'convert' 
+require 'dmenu' 
+require 'scrot' 
 
 compositer_stop
 panel_stop
@@ -117,6 +123,7 @@ netapp_stop
 clipboard_stop
 volapp_stop
 screenlocker_stop
+shortcuts_stop
 
 launch init_start
 launch compositer_start
@@ -128,3 +135,4 @@ launch netapp_start
 launch clipboard_start
 launch volapp_start
 launch screenlocker_start
+launch shortcuts_start 
