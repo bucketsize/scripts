@@ -9,120 +9,8 @@
 # 7. menu
 # 8. dmenu customize
 # 9. fix compositing; compton is crashing
-init_start() {
-	xset -b 
-	xrdb -merge $HOME/scripts/conf/Xresources
-	mkdir -p $HOME/.cache
-}
-compositer_start() {
-	compton -CcfF -I-.05 -O-.07 -D2 -t-1 -l-3 -r4.2 -o.5
-}
-wallpaper_start() {   
-	WALLPAPERS="$HOME/.cache/wallpapers"
 
-    if [ -d $WALLPAPERS ]; then
-        echo "$WALLPAPERS missing, creating it"
-	    mkdir -p $WALLPAPERS
-	fi
-
-	rndn=$(od -A n -t d -N 1 /dev/urandom)
-	idx=$((1 + rndn % 2000))
-	url="https://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1"
-
-	ipath=$(curl -s "$url" | xmllint --xpath "//image/url/text()" -)
-	iname=$(echo $ipath | sed "s/\//\./g")
-	wname="$WALLPAPERS/$iname"
-
-	wget "http://www.bing.com/$ipath" -O "$wname" &&
-	exec feh --bg-scale "$wname"
-
-	if [ "$" != "0" ]; then
-		wname=$(find "$WALLPAPERS/" -type f | shuf | head -n 1) && exec feh --bg-scale "$wname"
-	fi
-}
-panel_start() {
-	tint2 -c $HOME/scripts/conf/tint2rc_vonbrownie
-}
-notifier_start() {
-	dunst -config $HOME/scripts/conf/dunstrc
-}
-monitor_start() {
-	conky --config $HOME/scripts/conf/conkyrc_vline
-}
-netapp_start() {
-	nm-applet
-}
-clipboard_start() {
-	clipit
-}
-volapp_start() {
-	volumeicon
-}
-screenlocker_start() {
-	xautolock -time 15 -locker "scripts/i3lock-fancy" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'"
-}
-compositer_stop(){
-	killall compton
-}
-panel_stop(){
-	killall tint2
-}
-notifier_stop(){
-	killall dunst
-}
-monitor_stop(){
-	killall conky
-}
-netapp_stop(){
-	killall nm-applet
-}
-clipboard_stop(){
-	killall clipit
-}
-volapp_stop(){
-	killall volumeicon
-}
-screenlocker_stop(){
-	killall xautolock
-}
-shortcuts_start(){
-    sxhkd -c $HOME/scripts/conf/sxhkdrc
-}
-shortcuts_stop(){
-    killall sxhkd
-}
-require(){
-	if [ "" == "$(which $1)" ]; then 
-		echo "? $1"
-	fi
-}
-launch(){
-	echo "launch $1"
-	echo "`date`: $1" >> $HOME/.cache/$1.log 
-    
-    # busybox stderr redir problem
-	# $1 2>&1 > $HOME/.cache/$1.log & 
-    
-    $1 &
-}
-
-require 'xset'
-require 'compton'
-require 'wget' 
-require 'feh' 
-require 'xmllint' 
-require 'find' 
-require 'tint2' 
-require 'dunst' 
-require 'conky' 
-require 'nm-applet' 
-require 'clipit' 
-require 'volumeicon' 
-require 'xautolock' 
-require 'i3lock' 
-require 'convert' 
-require 'dmenu' 
-require 'scrot' 
+source $HOME/.config/openbox/box_services.sh
 
 compositer_stop
 panel_stop
@@ -133,6 +21,7 @@ clipboard_stop
 volapp_stop
 screenlocker_stop
 shortcuts_stop
+polkit_stop
 
 launch init_start
 launch compositer_start
@@ -145,3 +34,4 @@ launch clipboard_start
 launch volapp_start
 launch screenlocker_start
 launch shortcuts_start 
+launch polkit_start
