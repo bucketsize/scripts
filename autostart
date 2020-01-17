@@ -1,5 +1,14 @@
 # opendesktop autostart
-
+# TODO:
+# 1. fix logging 2>&1 not working in busybox
+# 2. download and cycle through wallpapers
+# 3. brightness control
+# 4. complete shortcuts
+# 5. lock screen
+# 6. cleanup openbox xmls
+# 7. menu
+# 8. dmenu customize
+# 9. fix compositing; compton is crashing
 init_start() {
 	xset -b 
 	xrdb -merge $HOME/scripts/conf/Xresources
