@@ -35,25 +35,28 @@
 /*     bspc config focus_follows_pointer {true,false} */
 
 super + r
-    dmenu_run
+    source $HOME/scripts/box_services.sh && xrun
 
 super + e
-    st -e vim &
+    source $HOME/scripts/box_services.sh && xeditor
 
 super + t
-    st
+    source $HOME/scripts/box_services.sh && xterminal
 
 super + f
-    thunar
+    source $HOME/scripts/box_services.sh && xfilemanager
 
 super + l
     $HOME/scripts/i3lock-fancy
 
 Print
-    scrot $HOME/'Pictures/Screenshots/%Y-%m-%d_%H%M%S-$wx$h_scrot.png'
+    source $HOME/scripts/box_services.sh && xscreenshot
 
 control + Print
-    scrot -s $HOME/'Pictures/Screenshots/%Y-%m-%d_%H%M%S-$wx$h_scrot.png'
+    source $HOME/scripts/box_services.sh && xscreenshot_prompt
 
 control + alt + Delete
     source $HOME/scripts/box_services.sh && handle_power
+
+control + super + x
+    xkill

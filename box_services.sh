@@ -107,8 +107,6 @@ screenlocker_stop(){
     killall xautolock
 }
 shortcuts_start(){
-    require 'dmenu' 
-    require 'scrot' 
     require 'xkill'
     require 'amixer'
     require 'sxhkd'
@@ -173,5 +171,29 @@ handle_power(){
             gsudo poweroff
             ;;
     esac
+}
+xfilemanager(){
+    require 'spacefm'
+    spacefm
+}
+xeditor(){
+    require 'vim'
+    st -e vim
+}
+xterminal(){
+    require 'st'
+    st
+}
+xrun(){
+    require 'dmenu_run'
+    dmenu_run
+}
+xscreenshot(){
+    require 'scrot'
+    scrot $HOME/'Pictures/Screenshots/%Y-%m-%d_%H%M%S-$wx$h_scrot.png'
+}
+xscreenshot_prompt(){
+    require 'scrot'
+    scrot -s $HOME/'Pictures/Screenshots/%Y-%m-%d_%H%M%S-$wx$h_scrot.png'
 }
 
