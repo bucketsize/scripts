@@ -18,6 +18,7 @@ init_start() {
     require 'xrandr'
     require 'xset'
     require 'xrdb'
+    
     xrandr --output default --mode 1368x768 --pos 0x0 --rotate normal
     xset -b 
     xrdb -merge $HOME/scripts/conf/Xresources
@@ -123,3 +124,54 @@ polkit_start(){
 polkit_stop(){
     killall xfce-polkit
 }
+gsudo(){
+    require 'pkexec'
+
+    echo "gsudo $1 > $DISPLAY, $XAUTHORITY"
+    pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY $1
+}
+logout(){
+    require 'openbox'
+
+    #TODO: start using dbus / lightdm
+    case $XDG_SESSION_DESKTOP in
+        openbox)
+            openbox --exit
+            ;;
+        *)
+            echo "don't know how to logout"
+    esac
+}
+handle_power(){
+    require 'zenity'
+    require 'pm-suspend'
+    require 'pm-hibernate'
+
+    popt=$(zenity --width=200 --height=100 --list --column "F" --title="choice" "Logout" "Suspend" "Hibernate" "Reboot" "PowerOff" --hide-header --modal)
+
+    # terminal look
+    # poptf=/tmp/.poptf
+   # st -g 40x20 -e dialog --no-shadow --no-ok --no-cancel --clear --colors --backtitle "Power" --title "Options" --menu "" 10 30 3 Suspend "" Poweroff "" Hibernate "" 2> $poptf
+    # popt=$(cat $poptf)
+
+    case $popt in
+        Logout)
+            gsudo logout 
+            ;;
+
+        # start using dbus, upowerd    
+        Suspend)
+            gsudo pm-suspend
+            ;;
+        Hibernate)
+            gsudo pm-hibernate
+            ;;
+        Reboot)
+            gsudo reboot 
+            ;;
+        Poweroff)
+            gsudo poweroff
+            ;;
+    esac
+}
+

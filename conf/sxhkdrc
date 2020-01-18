@@ -54,3 +54,6 @@ Print
 
 control + Print
     scrot -s $HOME/'Pictures/Screenshots/%Y-%m-%d_%H%M%S-$wx$h_scrot.png'
+
+control + alt + Delete
+    source $HOME/scripts/box_services.sh && handle_power
