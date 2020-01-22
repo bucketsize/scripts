@@ -1,0 +1,15 @@
+Host
+    ec2-54-197-254-189.compute-1.amazonaws.com
+Database
+    d4vvkr2us65lvp
+User
+    oejdfpyizarfhm
+Port
+    5432
+Password
+    fb4b18b8a9ba59b6720ab50bb230175466630d71aafa1f7a9463ed47e8e69d5a
+URI
+    postgres://oejdfpyizarfhm:fb4b18b8a9ba59b6720ab50bb230175466630d71aafa1f7a9463ed47e8e69d5a@ec2-54-197-254-189.compute-1.amazonaws.com:5432/d4vvkr2us65lvp
+Heroku CLI
+    heroku pg:psql soaring-calmly-7315 --app protected-temple-9268
+

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # opendesktop autostart
 # TODO:
 # 1. fix logging 2>&1 not working in busybox
@@ -10,7 +12,7 @@
 # 8. dmenu customize
 # 9. fix compositing; compton is crashing
 
-source $HOME/.config/openbox/box_services.sh
+source $HOME/scripts/box_services.sh
 
 compositer_stop
 panel_stop

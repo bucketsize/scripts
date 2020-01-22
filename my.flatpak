@@ -1,0 +1,2 @@
+flatpak --user override --allow=bluetooth --filesystem=/mnt/3dff com.valvesoftware.Steam
+
