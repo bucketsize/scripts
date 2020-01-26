@@ -7,28 +7,27 @@
 # 4. complete shortcuts
 # 9. fix compositing; compton is crashing in alpine
 
-. ~/scripts/box_services.sh
+XCS="randr compositor wallpaper panel notifier monitor network-icon clipboard volume locker shortcuts polkit"
+stopAll(){
+    for xc in $XCS; do
+        sh ~/scripts/x.$xc.sh stop
+    done
+}
+startAll(){
+    for xc in $XCS; do
+        sh ~/scripts/x.$xc.sh start
+    done
+}
+case $i in
+    stop)
+        stopAll
+        ;;
+    *)
+        stopAll
+        sleep 5
+        startAll
+        ;;
+esac
 
-compositer_stop
-panel_stop
-notifier_stop
-monitor_stop
-netapp_stop
-clipboard_stop
-volapp_stop
-screenlocker_stop
-shortcuts_stop
-polkit_stop
 
-launch init_start
-launch compositer_start
-launch wallpaper_start
-launch panel_start
-launch notifier_start
-launch monitor_start
-launch netapp_start
-launch clipboard_start
-launch volapp_start
-launch screenlocker_start
-launch shortcuts_start
-launch polkit_start
+

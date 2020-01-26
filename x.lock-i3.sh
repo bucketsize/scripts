@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: Dolores Portalatin <hello@doloresportalatin.info>
 # Dependencies: imagemagick, i3lock-color-git, scrot, wmctrl (optional)
 set -o errexit -o noclobber -o nounset
