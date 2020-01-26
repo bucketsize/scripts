@@ -2,17 +2,12 @@
 
 # opendesktop autostart
 # TODO:
-# 1. fix logging 2>&1 not working in busybox
 # 2. download and cycle through wallpapers
 # 3. brightness control
 # 4. complete shortcuts
-# 5. lock screen
-# 6. cleanup openbox xmls
-# 7. menu
-# 8. dmenu customize
-# 9. fix compositing; compton is crashing
+# 9. fix compositing; compton is crashing in alpine
 
-source $HOME/scripts/box_services.sh
+. ~/scripts/box_services.sh
 
 compositer_stop
 panel_stop
@@ -35,5 +30,5 @@ launch netapp_start
 launch clipboard_start
 launch volapp_start
 launch screenlocker_start
-launch shortcuts_start 
+launch shortcuts_start
 launch polkit_start

@@ -18,23 +18,24 @@ init_start() {
     require 'xrandr'
     require 'xset'
     require 'xrdb'
-    
+
     xrandr --output default --mode 1368x768 --pos 0x0 --rotate normal
-    xset -b 
+    xset -b
     xrdb -merge $HOME/scripts/conf/Xresources
     [ ! -d $HOME/.cache ] &&  mkdir -p $HOME/.cache
 }
 compositer_start() {
     require 'compton'
-    compton -CcfF -I-.05 -O-.07 -D2 -t-1 -l-3 -r4.2 -o.5
+    #compton -CcfF -I-.05 -O-.07 -D2 -t-1 -l-3 -o.5
+    compton
 }
 compositer_stop(){
     killall compton
 }
-wallpaper_start() {   
-    require 'wget' 
-    require 'feh' 
-    require 'xmllint' 
+wallpaper_start() {
+    require 'wget'
+    require 'feh'
+    require 'xmllint'
 
     WALLPAPERS="$HOME/.cache/wallpapers"
 
@@ -57,7 +58,7 @@ wallpaper_start() {
 }
 panel_start() {
     require 'tint2'
-    tint2 -c $(or $1 $HOME/scripts/conf/tint2rc)
+    tint2 -c $(or $1 $HOME/scripts/conf/my.tint2rc)
 }
 panel_stop(){
     killall tint2
