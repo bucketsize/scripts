@@ -5,7 +5,7 @@ require 'conky'
 
 case $1 in
     start)
-        launch conky --config $(or $2 $HOME/scripts/conf/conkyrc_vline)
+        launch conky
         ;;
     stop)
         killall conky

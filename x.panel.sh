@@ -4,7 +4,7 @@
 require 'tint2'
 case $1 in
     start)
-        launch tint2 -c $(or $2 ~/scripts/conf/my.tint2rc)
+        launch tint2
         ;;
     stop)
         killall tint2

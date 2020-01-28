@@ -4,7 +4,7 @@
 require 'dunst'
 case $1 in
     start)
-        launch dunst -config $(or $2 $HOME/scripts/conf/dunstrc)
+        launch dunst
         ;;
     stop)
         killall dunst

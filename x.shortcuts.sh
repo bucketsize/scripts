@@ -7,7 +7,7 @@ require 'sxhkd'
 
 case $1 in
     start)
-        launch sxhkd -c ~/scripts/conf/sxhkdrc
+        launch sxhkd
         ;;
     stop)
         killall sxhkd

@@ -24,7 +24,6 @@ case $i in
         ;;
     *)
         stopAll
-        sleep 5
         startAll
         ;;
 esac
