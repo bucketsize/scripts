@@ -27,11 +27,16 @@ setUpWallpaper() {
 
 }
 
+setupWebWallpaper(){
+query=$1
+url="https://duckduckgo.com/?q=$query&t=h_&iax=images&ia=images&iaf=size:Wallpaper"
+curl -XGET $url
+}
+
 case $1 in
     start)
-        launch setUPWallpaper
+        launch setUpWallpaper
         ;;
-
     stop)
         ;;
 esac

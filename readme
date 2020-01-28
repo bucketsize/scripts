@@ -1,0 +1,7 @@
+git config user.email "bucket.size@gmail.com"
+git config user.name "Herr bucketsize"
+
+ssh-keygen -t rsa -b 4096 -C "bucket.size@gmail.com"
+ssh-add ~/.ssh/id_rsa
+
+git remote set-url origin ssh://git@github.com/bucketsize/scripts.git

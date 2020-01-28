@@ -7,7 +7,7 @@
 # 4. complete shortcuts
 # 9. fix compositing; compton is crashing in alpine
 
-XCS="randr compositor wallpaper panel notifier monitor network-icon clipboard volume locker shortcuts polkit"
+XCS="randr compositor wallpaper panel notifier monitor network clipboard volume locker shortcuts polkit"
 stopAll(){
     for xc in $XCS; do
         sh ~/scripts/x.$xc.sh stop

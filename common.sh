@@ -7,7 +7,8 @@ or(){
 }
 require(){
     if [ -z "$(which $1)" ]; then
-        echo "? $1"
+        echo "missing '$1'"
+        notify-send "missing '$1'"
     fi
 }
 launch(){

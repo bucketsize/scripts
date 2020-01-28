@@ -35,40 +35,40 @@
 /*     bspc config focus_follows_pointer {true,false} */
 
 super + r
-    source $HOME/scripts/box_services.sh && xrun
+    source ~/scripts/common.sh && xrun
 
 super + e
-    source $HOME/scripts/box_services.sh && xeditor
+    source ~/scripts/common.sh && xeditor
 
 super + t
-    source $HOME/scripts/box_services.sh && xterminal
+    source ~/scripts/common.sh && xterminal
 
 super + f
-    source $HOME/scripts/box_services.sh && xfilemanager
+    source ~/scripts/common.sh && xfilemanager
 
 super + l
-    $HOME/scripts/i3lock-fancy
+    ~/scripts/i3lock-fancy
 
 Print
-    source $HOME/scripts/box_services.sh && xscreenshot
+    source ~/scripts/common.sh && xscreenshot
 
 control + Print
-    source $HOME/scripts/box_services.sh && xscreenshot_prompt
+    source ~/scripts/common.sh && xscreenshot_prompt
 
 control + alt + Delete
-    source $HOME/scripts/box_services.sh && handle_power
+    source ~/scripts/common.sh && handle_power
 
 control + super + x
     xkill
 
 super + Right
-    xdotool getactivewindow windowmove 50% 0% windowsize 50% 95%
+    xdotool getactivewindow windowmove 50% 0% windowsize 50% 92%
 
 super + Left
-    xdotool getactivewindow windowmove 0% 0% windowsize 50% 95%
+    xdotool getactivewindow windowmove 0% 0% windowsize 50% 92%
 
 super + Up
-    xdotool getactivewindow windowmove 0% 0% windowsize 100% 90%
+    xdotool getactivewindow windowmove 0% 0% windowsize 100% 92%
 
 super + Down
     xdotool getactivewindow windowmove 20% 20% windowsize 60% 60%

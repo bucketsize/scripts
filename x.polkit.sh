@@ -1,12 +1,12 @@
 #!/bin/sh
 . ~/scripts/common.sh
 
-require '/usr/lib/xfce4/xfce-polkit'
+require 'lxpolkit'
 case $1 in
     start)
-        launch /usr/lib/xfce4/xfce-polkit
+        launch lxpolkit
         ;;
     stop)
-        killall xfce-polkit
+        killall lxpolkit
         ;;
 esac
