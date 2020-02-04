@@ -1,26 +1,14 @@
-
-!    *----------------------------*
-!    |  Dotfiles  -  .Xresources  |
-!    *----------------------------*
-
-
-! This files contains configuration for:
-!  * terminal colours
-!  * urxvt
-!  * rofi
-
-
 ! === Font ===
 
-! *font:          xft:inconsolatazi4:size=18
+! *font:          xft:inconsolata:size=12
 
 
 ! === Colours ===
 
 ! main
 *.cursorColor:  #000000
-*background:    #5d729f
-*foreground:    #34405a
+*background:    #000000
+*foreground:    #c0c0c0
 
 ! black
 *color0:        #151520
@@ -47,15 +35,35 @@
 *color7:        #8581a0
 *color15:       #b2add7
 
+! X config
+Xft.dpi: 96
+Xft.antialias: true
+Xft.hinting: true
+Xft.hintstyle: hintslight
+Xft.rgba: rgb
 
 ! === URxvt ===
-
 ! Extensions
 URxvt*perl-ext-common:          default,matcher,vtwheel,clipboard
-! Looks
-URxvt*font:                     xft:inconsolatazi4:size=18 
-URxvt*scrollBar:                false
-URxvt.internalBorder:           10
+!! URxvt Appearance
+URxvt*font:                     xft:inconsolata:size=10
+URxvt.letterSpace: 0
+URxvt.lineSpace: 0
+URxvt.geometry: 96x24
+URxvt.internalBorder: 8
+URxvt.cursorColor: #C0C0C0
+URxvt.cursorBlink: true
+URxvt.cursorUnderline: false
+URxvt.saveline: 2048
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+URxvt.scrollWithBuffer: true
+URxvt.urgentOnBell: true
+URxvt.depth: 24
+URxvt.iso14755: false
+URxvt.transparent: true
+URxvt.shading: 16
+URxvt.background: #000000
 ! Clickable urls
 URxvt.url-select.underline:     true
 URxvt.url-launcher:             /usr/bin/firefox
@@ -64,12 +72,9 @@ URxvt.matcher.button:           1
 URxvt*iso14755:                 false
 URxvt.keysym.Shift-Control-C:   perl:clipboard:copy
 URxvt.keysym.Shift-Control-V:   perl:clipboard:paste
-URxvt.letterSpace:              -1
-URxvt.lineSpace:                2
 
 
 ! === rofi ===
-
 rofi.modi:                           ssh,window,drun,run
 rofi.sidebar-mode:                   true
 rofi.terminal:                       sakura
@@ -96,9 +101,6 @@ rofi.hlbg:                           #34405a
 rofi.bc:                             #789ee1
 ! State:           'bg',     'fg',     'bgalt',  'hlbg',   'hlfg'
 rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
-rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
-rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
-
 !                  'background', 'border'
 rofi.color-window: #353944,      #404552
 rofi.bw:                             10
