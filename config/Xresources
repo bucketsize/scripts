@@ -1,39 +1,5 @@
-! === Font ===
-
-! *font:          xft:inconsolata:size=12
-
-
-! === Colours ===
-
-! main
-*.cursorColor:  #000000
-*background:    #000000
-*foreground:    #c0c0c0
-
-! black
-*color0:        #151520
-*color8:        #3c3c5c
-! red
-*color1:        #5e73a0
-*color9:        #82a0df
-! green
-*color2:        #5671a0
-*color10:       #789ee1
-! yellow
-*color3:        #5b70a0
-*color11:       #7f9cdf
-! blue
-*color4:        #4c6ea0
-*color12:       #6c9ce3
-! magenta
-*color5:        #7a7fa0
-*color13:       #a5abd8
-! cyan
-*color6:        #5471a0
-*color14:       #769fe1
-! white
-*color7:        #8581a0
-*color15:       #b2add7
+! Font
+*font:          xft:DejaVu Sans:size=12
 
 ! X config
 Xft.dpi: 96
@@ -41,77 +7,8 @@ Xft.antialias: true
 Xft.hinting: true
 Xft.hintstyle: hintslight
 Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
 
-! === URxvt ===
-! Extensions
-URxvt*perl-ext-common:          default,matcher,vtwheel,clipboard
-!! URxvt Appearance
-URxvt*font:                     xft:inconsolata:size=10
-URxvt.letterSpace: 0
-URxvt.lineSpace: 0
-URxvt.geometry: 96x24
-URxvt.internalBorder: 8
-URxvt.cursorColor: #C0C0C0
-URxvt.cursorBlink: true
-URxvt.cursorUnderline: false
-URxvt.saveline: 2048
-URxvt.scrollBar: false
-URxvt.scrollBar_right: false
-URxvt.scrollWithBuffer: true
-URxvt.urgentOnBell: true
-URxvt.depth: 24
-URxvt.iso14755: false
-URxvt.transparent: true
-URxvt.shading: 16
-URxvt.background: #000000
-! Clickable urls
-URxvt.url-select.underline:     true
-URxvt.url-launcher:             /usr/bin/firefox
-URxvt.matcher.button:           1
-! Change keybinding for copy/paste
-URxvt*iso14755:                 false
-URxvt.keysym.Shift-Control-C:   perl:clipboard:copy
-URxvt.keysym.Shift-Control-V:   perl:clipboard:paste
-
-
-! === rofi ===
-rofi.modi:                           ssh,window,drun,run
-rofi.sidebar-mode:                   true
-rofi.terminal:                       sakura
-rofi.ssh-client:                     ssh
-rofi.ssh-command:                    {terminal} -e "{ssh-client} {host}"
-rofi.opacity:                        90
-rofi.width:                          50
-rofi.lines:                          8
-rofi.columns:                        1
-rofi.font:                           Inconsolata 18
-rofi.fg:                             #5294E2
-rofi.bg:                             #5d729f
-rofi.fg-active:                      #34405a
-rofi.fg-urgent:                      #34405a
-rofi.hlfg-active:                    #5e73a0
-rofi.hlfg-urgent:                    #5e73a0
-rofi.bg-active:                      #34405a
-rofi.bg-urgent:                      #34405a
-rofi.hlbg-active:                    #5d729f
-rofi.hlbg-urgent:                    #5d729f
-rofi.bgalt:                          #5671a0
-rofi.hlfg:                           #34405a
-rofi.hlbg:                           #34405a
-rofi.bc:                             #789ee1
-! State:           'bg',     'fg',     'bgalt',  'hlbg',   'hlfg'
-rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
-!                  'background', 'border'
-rofi.color-window: #353944,      #404552
-rofi.bw:                             10
-rofi.location:                       0
-rofi.padding:                        20
-rofi.levenshtein-sort:               true
-rofi.case-sensitive:                 false
-rofi.fuzzy:                          false
-rofi.line-margin:                    2
-rofi.separator-style:                solid
-rofi.hide-scrollbar:                 true
-rofi.markup-rows:                    false
-rofi.scrollbar-width:                8
-
+#include "Xresources.d/my.urxvt"
+#include "Xresources.d/my.rofi"
+#include "Xresources.d/gruvbox.colours"

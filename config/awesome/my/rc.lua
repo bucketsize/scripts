@@ -348,9 +348,10 @@ globalkeys = my_table.join(
             if client.focus then client.focus:raise() end
         end,
         {description = "focus right", group = "client"}),
+		--[[taken by rofi
     awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
-
+		]]
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
@@ -558,21 +559,26 @@ globalkeys = my_table.join(
               {description = "show the menubar", group = rlauncher"})
     --]]
     --[[ dmenu 
-    --]]
     awful.key({ modkey }, "r", function ()
             os.execute(string.format("dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
             beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
         end,
         {description = "show dmenu", group = "launcher"}),
+    --]]
     -- alternatively use rofi, a dmenu-like application with more features
     -- check https://github.com/DaveDavenport/rofi for more details
     --[[ rofi
-    awful.key({ modkey }, "x", function ()
+    --]]
+    awful.key({ modkey }, "r", function ()
             os.execute(string.format("rofi -show %s -theme %s",
-            'run', 'dmenu'))
+            'run', ''))
         end,
         {description = "show rofi", group = "launcher"}),
-    --]]
+    awful.key({ modkey }, "w", function ()
+            os.execute(string.format("rofi -show %s -theme %s",
+            'window', ''))
+        end,
+        {description = "show rofi", group = "launcher"}),
     --[[ Prompt
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),

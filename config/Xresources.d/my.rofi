@@ -1,0 +1,28 @@
+!https://gist.github.com/rawsh/9ae04a2bdbfce513ad0851d9277515d2#file-xresources-L20
+
+rofi.modi:                           ssh,window,drun,run
+rofi.sidebar-mode:                   true
+rofi.terminal:                       urxvt
+rofi.ssh-client:                     ssh
+rofi.ssh-command:                    {terminal} -e "{ssh-client} {host}"
+rofi.opacity:                        90
+rofi.width:                          50
+rofi.lines:                          8
+rofi.columns:                        1
+rofi.font:                           DejaVu Sans 14
+rofi.bw:                             2
+rofi.location:                       0
+rofi.padding:                        20
+rofi.levenshtein-sort:               true
+rofi.case-sensitive:                 false
+rofi.fuzzy:                          false
+rofi.line-margin:                    2
+rofi.separator-style:                solid
+rofi.hide-scrollbar:                 true
+rofi.markup-rows:                    false
+rofi.scrollbar-width:                8
+
+
+!#include "Xresources.d/my.rofi.colours"
+#include "Xresources.d/gruvbox.rofi.colours"
+
