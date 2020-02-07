@@ -1,5 +1,5 @@
 ! Font
-*font:          xft:DejaVu Sans:size=12
+!*font:          xft:DejaVu Sans:size=12
 
 ! X config
 Xft.dpi: 96
