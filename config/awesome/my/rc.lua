@@ -22,7 +22,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
-local switcher = require("awesome-switcher")
+local switcher 			= require("awesome-switcher")
 
 switcher.settings.preview_box = true	-- display preview-box
 switcher.settings.preview_box_bg = "#ddddddaa"	-- background color
@@ -35,7 +35,7 @@ switcher.settings.preview_box_title_color = {0,0,0,1} -- the font color
 
 switcher.settings.client_opacity = false	-- opacity for unselected clients
 switcher.settings.client_opacity_value = 0.5	-- alpha-value for any client
-switcher.settings.client_opacity_value_in_focus = 0.5	-- alpha-value for the client currently in focus
+switcher.settings.client_opacity_value_in_focus = 0.8	-- alpha-value for the client currently in focus
 switcher.settings.client_opacity_value_selected = 1	-- alpha-value for the selected client
 
 switcher.settings.cycle_raise_client = false	-- raise clients on cycle
@@ -113,7 +113,7 @@ local cycle_prev   = true -- cycle trough all previous client or just the first 
 local editor       = os.getenv("EDITOR") or "vim"
 local gui_editor   = os.getenv("GUI_EDITOR") or "gvim"
 local browser      = os.getenv("BROWSER") or "firefox"
-local scrlocker    = "slock"
+local scrlocker    = "~/scripts/x.lock-i3.sh"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2" }

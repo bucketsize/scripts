@@ -9,6 +9,6 @@ Xft.hintstyle: hintslight
 Xft.rgba: rgb
 Xft.lcdfilter: lcddefault
 
+#include "Xresources.d/gruvbox.colours"
 #include "Xresources.d/my.urxvt"
 #include "Xresources.d/my.rofi"
-#include "Xresources.d/gruvbox.colours"

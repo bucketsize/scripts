@@ -5,7 +5,9 @@ require 'xrandr'
 require 'xset'
 require 'xrdb'
 
-xrandr --output default --mode 1368x768 --pos 0x0 --rotate normal
+xinfo=$(xrandr -q)
+dev=$(echo "$xinfo" | grep -Po '(?<=^)(.*?)(?= connected)')
+res=$(echo "$xinfo" | grep -Po '(?<= )([[:digit:]]{4}x[[:digit:]]{3})(?= )' | head -n1)
+xrandr --output $dev --mode $res --pos 0x0 --rotate normal
 xset -b
-xrdb -merge $HOME/scripts/config/Xresources
-[ ! -d $HOME/.cache ] &&  mkdir -p $HOME/.cache
+xrdb -I~/scripts/config/Xresources.d -merge ~/scripts/config/Xresources
