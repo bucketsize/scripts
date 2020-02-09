@@ -17,6 +17,6 @@ ln -s ~/scripts/config/dunst/my ~/.config/dunst
 ln -s ~/scripts/config/sxhkd/my ~/.config/sxhkd
 ln -s ~/scripts/config/compton/my/compton.conf ~/.config/
 
-ln -s ~/scripts/config/awesome/my/ ~/.config/awesome
+ln -s ~/scripts/config/awesome/copycats/ ~/.config/awesome
 
 
