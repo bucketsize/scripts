@@ -4,3 +4,6 @@
 [submodule "config/awesome/copycats"]
 	path = config/awesome/copycats
 	url = https://github.com/lcpz/awesome-copycats.git
+[submodule "config/awesome/my/awesome-switcher"]
+	path = config/awesome/my/awesome-switcher
+	url = https://github.com/berlam/awesome-switcher.git
