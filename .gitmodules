@@ -7,3 +7,6 @@
 [submodule "config/awesome/my/awesome-switcher"]
 	path = config/awesome/my/awesome-switcher
 	url = https://github.com/berlam/awesome-switcher.git
+[submodule "config/awesome/my/awesome-wm-widgets"]
+	path = config/awesome/my/awesome-wm-widgets
+	url = https://github.com/streetturtle/awesome-wm-widgets.git
