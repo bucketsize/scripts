@@ -33,5 +33,14 @@ case $1 in
     switch)
         switch_audio
         ;;
+    start)
+	pulseaudio --start
+	;;
+    stop)
+	pulseaudio --kill
+	;;
+    status)
+	pactl info 
+	;;
 esac
 

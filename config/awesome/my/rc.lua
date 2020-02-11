@@ -228,7 +228,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.widget.systray(),
             volume_widget(),
             brightness_widget(),
-            cpu_widget(),
+	    cpu_widget(),
             ram_widget(),
 	    battery_widget(),
             --weather_widget(),
@@ -401,7 +401,19 @@ clientkeys = gears.table.join(
     awful.key({ "Mod1", "Shift"   }, "Tab",
       function ()
           switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
-      end)
+      end),
+
+      -- sound controls
+      awful.key({ modkey}, "[", function ()
+	      awful.spawn("amixer -D pulse sset Master 5%+")
+      end, {description = "increase volume", group = "custom"}),
+      awful.key({ modkey}, "]", function ()
+	      awful.spawn("amixer -D pulse sset Master 5%-")
+      end, {description = "decrease volume", group = "custom"}),
+      awful.key({ modkey}, "\"", function ()
+	      awful.spawn("amixer -D pulse set Master +1 toggle")
+      end, {description = "mute volume", group = "custom"})
+
 )
 
 -- Bind all key numbers to tags.
