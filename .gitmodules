@@ -1,0 +1,15 @@
+[submodule "config/awesome/awesome-copycats"]
+	path = config/awesome/awesome-copycats
+	url = https://github.com/lcpz/awesome-copycats.git
+[submodule "config/awesome/lib/awesome-wm-widgets"]
+	path = config/awesome/lib/awesome-wm-widgets
+	url = https://github.com/streetturtle/awesome-wm-widgets.git
+[submodule "config/awesome/lib/awesome-switcher"]
+	path = config/awesome/lib/awesome-switcher
+	url = https://github.com/berlam/awesome-switcher.git
+[submodule "config/awesome/lib/lain"]
+	path = config/awesome/lib/lain
+	url = https://github.com/lcpz/lain.git
+[submodule "config/awesome/lib/awesome-freedesktop"]
+	path = config/awesome/lib/awesome-freedesktop
+	url = https://github.com/lcpz/awesome-freedesktop.git

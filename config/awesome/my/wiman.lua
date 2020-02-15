@@ -101,7 +101,7 @@ function Wiman:build()
 	---- MEM
 	wgts.mem = lain.widget.mem({
 			settings = function()
-				widget:set_markup(markup.font(theme.font, string.format("mem: %02i%s", mem_now.usage, "%")))
+				widget:set_markup(markup.font(theme.font, string.format("mem: %04i%s", mem_now.used, "M")))
 			end
 		})
 
