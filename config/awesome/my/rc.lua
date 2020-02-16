@@ -234,6 +234,7 @@ local tasklist_buttons = gears.table.join(
 			))
 		-- }}}
 
+		local switcher = require("awesome-switcher")
 		-- {{{ Key bindings
 		globalkeys = gears.table.join(
 			awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -331,12 +332,25 @@ local tasklist_buttons = gears.table.join(
 					}
 				end,
 				{description = "lua execute prompt", group = "awesome"}),
+			
 			-- Menubar
 			awful.key({ modkey }, "p", function() menubar.show() end,
 				{description = "show the menubar", group = "launcher"})
 			)
 
 		local switcher = require("awesome-switcher")
+		globalkeys = gears.table.join(globalkeys
+			-- Alt-Tab
+			,	awful.key({ "Mod1",           }, "Tab",
+				function ()
+					switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab")
+				end)
+			,	awful.key({ "Mod1", "Shift"   }, "Tab",
+					function ()
+						switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
+					end)
+		)
+
 		clientkeys = gears.table.join(
 			awful.key({ modkey,           }, "f",
 				function (c)
@@ -380,27 +394,16 @@ local tasklist_buttons = gears.table.join(
 				end ,
 				{description = "(un)maximize horizontally", group = "client"}),
 
-			-- Alt-Tab 
-			awful.key({ "Mod1",           }, "Tab",
-				function ()
-					switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab")
-				end),
-				awful.key({ "Mod1", "Shift"   }, "Tab",
-					function ()
-						switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
-					end),
-
-					-- sound controls
-					awful.key({ modkey}, "[", function ()
+			-- sound controls
+			awful.key({ modkey}, "]", function ()
 						awful.spawn("amixer -D pulse sset Master 5%+")
 					end, {description = "increase volume", group = "custom"}),
-				awful.key({ modkey}, "]", function ()
+		  awful.key({ modkey}, "[", function ()
 					awful.spawn("amixer -D pulse sset Master 5%-")
 				end, {description = "decrease volume", group = "custom"}),
 			awful.key({ modkey}, "\"", function ()
 				awful.spawn("amixer -D pulse set Master +1 toggle")
 			end, {description = "mute volume", group = "custom"})
-
 		)
 
 	-- Bind all key numbers to tags.

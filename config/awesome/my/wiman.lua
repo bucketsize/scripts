@@ -27,19 +27,29 @@ function Wiman:build()
 
 	local wgts = {}
 	wgts.kb = awful.widget.keyboardlayout()
-	wgts.clock = wibox.widget.textclock()
 
 	local theme = self.theme
 
-	---- Calendar
-	wgts.cal = lain.widget.cal({
-			attach_to = { wgts.clock },
-			notification_preset = {
-				font = theme.font_mono,
-				fg   = theme.fg_normal,
-				bg   = theme.bg_normal
-			}
+	---- Clock / Calendar
+	wgts.clock = wibox.widget.textclock()
+	-- wgts.cal = lain.widget.cal({
+	-- 		attach_to = { wgts.clock },
+	-- 		notification_preset = {
+	-- 			font = theme.font_mono,
+	-- 			fg   = theme.fg_normal,
+	-- 			bg   = theme.bg_normal
+	-- 		}
+	-- 	})
+	local cal = require("awesome-wm-widgets/calendar-widget/calendar")
+	wgts.cal = cal({
+			theme = 'dark',
+			placement = 'top_right'
 		})
+	wgts.clock:connect_signal("button::press",
+		function(_, _, _, button)
+			if button == 1 then wgts.cal.toggle() end
+		end)
+
 
 	---- Mail IMAP check
 	--wgts.mailicon = wibox.widget.imagebox(theme.widget_mail)
@@ -99,18 +109,22 @@ function Wiman:build()
 	--})
 
 	---- MEM
-	wgts.mem = lain.widget.mem({
-			settings = function()
-				widget:set_markup(markup.font(theme.font, string.format("mem: %04i%s", mem_now.used, "M")))
-			end
-		})
+	-- wgts.mem = lain.widget.mem({
+	-- 		settings = function()
+	-- 			widget:set_markup(markup.font(theme.font, string.format("mem: %04i%s", mem_now.used, "M")))
+	-- 		end
+	-- 	})
+	local mem = require("widgets/memarc-widget/memarc")
+	wgts.mem = mem()
 
 	---- CPU
-	wgts.cpu = lain.widget.cpu({
-			settings = function()
-				widget:set_markup(markup.font(theme.font, string.format("cpu: %02i%s", cpu_now.usage, "%")))
-			end
-		})
+	-- wgts.cpu = lain.widget.cpu({
+	-- 		settings = function()
+	-- 			widget:set_markup(markup.font(theme.font, string.format("cpu: %02i%s", cpu_now.usage, "%")))
+	-- 		end
+	-- 	})
+	local cpu = require("widgets/cpuarc-widget/cpuarc")
+	wgts.cpu = cpu()
 
 	---- Coretemp
 	wgts.temp = lain.widget.temp({
@@ -120,54 +134,63 @@ function Wiman:build()
 		})
 
 	---- / fs
-	wgts.fs = lain.widget.fs({
-			notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
-			settings = function()
-				widget:set_markup(markup.font(theme.font_mono, string.format("/: %02i%s",fs_now["/"].percentage, "%")))
-			end
-		})
+	-- wgts.fs = lain.widget.fs({
+	-- 		notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
+	-- 		settings = function()
+	-- 			widget:set_markup(markup.font(theme.font_mono, string.format("/: %02i%s",fs_now["/"].percentage, "%")))
+	-- 		end
+	-- 	})
+	local fs = require("widgets/fsarc-widget/fsarc")
+	wgts.fs = fs()
 
 	---- Battery
-	wgts.bat = lain.widget.bat({
-			settings = function()
-				if bat_now.status and bat_now.status ~= "N/A" then
-					if bat_now.ac_status == 1 then
-						baticon:set_image(theme.widget_ac)
-					elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-						baticon:set_image(theme.widget_battery_empty)
-					elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-						baticon:set_image(theme.widget_battery_low)
-					else
-						baticon:set_image(theme.widget_battery)
-					end
-					widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
-				else
-					widget:set_markup(markup.font(theme.font, " AC "))
-				end
-			end
-		})
+	-- wgts.bat = lain.widget.bat({
+	-- 		settings = function()
+	-- 			if bat_now.status and bat_now.status ~= "N/A" then
+	-- 				if bat_now.ac_status == 1 then
+	-- 					baticon:set_image(theme.widget_ac)
+	-- 				elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+	-- 					baticon:set_image(theme.widget_battery_empty)
+	-- 				elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+	-- 					baticon:set_image(theme.widget_battery_low)
+	-- 				else
+	-- 					baticon:set_image(theme.widget_battery)
+	-- 				end
+	-- 				widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
+	-- 			else
+	-- 				widget:set_markup(markup.font(theme.font, " AC "))
+	-- 			end
+	-- 		end
+	-- 	})
+	local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
+	wgts.bat = bat()
 
-	---- ALSA volume
-	wgts.vol = lain.widget.alsa({
-			settings = function()
-				if volume_now.status == "off" then
-				elseif tonumber(volume_now.level) == 0 then
-				elseif tonumber(volume_now.level) <= 50 then
-				else
-				end
-				widget:set_markup(markup.font(theme.font, string.format("vol: %02i%s", volume_now.level, "%")))
-			end
-		})
-	wgts.vol.widget:buttons(awful.util.table.join(
-			awful.button({}, 4, function ()
-				awful.util.spawn("amixer set Master 5%+")
-				wgts.vol.update()
-			end),
-			awful.button({}, 5, function ()
-				awful.util.spawn("amixer set Master 5%-")
-				wgts.vol.update()
-			end)
-		))
+	---- ALSA/pulse volume
+	-- wgts.vol = lain.widget.alsa({
+	-- 		settings = function()
+	-- 			if volume_now.status == "off" then
+	-- 			elseif tonumber(volume_now.level) == 0 then
+	-- 			elseif tonumber(volume_now.level) <= 50 then
+	-- 			else
+	-- 			end
+	-- 			widget:set_markup(markup.font(theme.font, string.format("vol: %02i%s", volume_now.level, "%")))
+	-- 		end
+	-- 	})
+	-- wgts.vol.widget:buttons(awful.util.table.join(
+	-- 		awful.button({}, 4, function ()
+	-- 			awful.util.spawn("amixer set Master 5%+")
+	-- 			wgts.vol.update()
+	-- 		end),
+	-- 		awful.button({}, 5, function ()
+	-- 			awful.util.spawn("amixer set Master 5%-")
+	-- 			wgts.vol.update()
+	-- 		end)
+	-- 	))
+	local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
+	wgts.vol = vol()
+
+	local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
+	wgts.bri = bri()
 
 	---- Net
 	wgts.net = lain.widget.net({
@@ -191,10 +214,6 @@ function Wiman:build()
 			end
 		})
 
-	wgts.clock:connect_signal("button::press",
-		function(_, _, _, button)
-			if button == 1 then wgts.cal.toggle() end
-		end)
 
 		self.widgets = wgts
 		objdump('self', self)
@@ -203,21 +222,22 @@ function Wiman:build()
 function Wiman:boxes_right()
 	local s	= self.screen
 	return
-        { -- Right widgets
-					layout = wibox.layout.fixed.horizontal,
-					self.widgets.kb,
-										self.widgets.weather,
-										wibox.widget.systray(),
-										self.widgets.vol, sprtr,
-										self.widgets.mem,
-										self.widgets.cpu,
-										self.widgets.temp,
-										self.widgets.bat,
-										self.widgets.net,
-										self.widgets.fs,
-										self.widgets.clock,
-										s.mylayoutbox,
-        }
+		{ -- Right widgets
+			layout = wibox.layout.fixed.horizontal,
+			wibox.widget.systray(),
+			self.widgets.bri,
+			self.widgets.vol,
+			self.widgets.mem,
+			self.widgets.cpu,
+			self.widgets.temp,
+			self.widgets.bat,
+			self.widgets.net,
+			self.widgets.fs,
+			self.widgets.weather,
+			self.widgets.clock,
+			self.widgets.kb,
+			s.mylayoutbox,
+		}
 	end
 
 return Wiman
