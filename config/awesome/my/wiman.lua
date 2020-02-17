@@ -1,6 +1,7 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local lain  = require("lain")
+local gears = require("gears")
 local markup = lain.util.markup
 
 function objdump(tag, o)
@@ -25,6 +26,17 @@ function Wiman:build()
 	local	sprtr = wibox.widget.textbox()
 	sprtr:set_text(" | ")
 
+	icons_path = gears.filesystem.get_configuration_dir() .. 'themes/icons'
+	local icons = {
+		cpu=icons_path .. '/cpu.png',
+		mem=icons_path .. '/mem.png',
+		vol=icons_path .. '/vol.png',
+		temp=icons_path .. '/temp.png',
+		net=icons_path .. '/net.png',
+		bat=icons_path .. '/battery.png',
+		hdd=icons_path .. '/hdd.png',
+	}
+
 	local wgts = {}
 	wgts.kb = awful.widget.keyboardlayout()
 
@@ -32,179 +44,239 @@ function Wiman:build()
 
 	---- Clock / Calendar
 	wgts.clock = wibox.widget.textclock()
-	-- wgts.cal = lain.widget.cal({
+	-- wgts.cal = wibox.widget {
+	-- 	wibox.widget {
+	-- 		{
+	-- 			image = '/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
+	-- 			resize = false,
+	-- 			widget = wibox.widget.imagebox,
+	-- 		},
+	-- 		top = 3,
+	-- 		widget = wibox.container.margin
+	-- 	},
+	-- 	lain.widget.cal({
 	-- 		attach_to = { wgts.clock },
 	-- 		notification_preset = {
 	-- 			font = theme.font_mono,
 	-- 			fg   = theme.fg_normal,
 	-- 			bg   = theme.bg_normal
 	-- 		}
+	-- 	}),
+	-- 	layout = wibox.layout.fixed.horizontal,
+	-- }
+	-- local cal = require("awesome-wm-widgets/calendar-widget/calendar")
+	-- wgts.cal = cal({
+	-- 		theme = 'dark',
+	-- 		placement = 'top_right'
 	-- 	})
-	local cal = require("awesome-wm-widgets/calendar-widget/calendar")
-	wgts.cal = cal({
-			theme = 'dark',
-			placement = 'top_right'
-		})
-	wgts.clock:connect_signal("button::press",
-		function(_, _, _, button)
-			if button == 1 then wgts.cal.toggle() end
-		end)
-
-
-	---- Mail IMAP check
-	--wgts.mailicon = wibox.widget.imagebox(theme.widget_mail)
-	----[[ commented because it needs to be set before use
-	--wgts.mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
-	--theme.mail = lain.widget.imap({
-	--timeout  = 180,
-	--server   = "server",
-	--mail     = "mail",
-	--password = "keyring get mail",
-	--settings = function()
-	--if mailcount > 0 then
-	--widget:set_markup(markup.font(theme.font, " " .. mailcount .. " "))
-	--mailicon:set_image(theme.widget_mail_on)
-	--else
-	--widget:set_text("")
-	--mailicon:set_image(theme.widget_mail)
-	--end
-	--end
-	--})
-	----]]
-
-	---- MPD
-	--wgts.musicplr = awful.util.terminal .. " -title Music -g 130x34-320+16 -e ncmpcpp"
-	--wgts.mpdicon = wibox.widget.imagebox(theme.widget_music)
-	--wgts.mpdicon:buttons(my_table.join(
-	--awful.button({ modkey }, 1, function () awful.spawn.with_shell(musicplr) end),
-	--awful.button({ }, 1, function ()
-	--os.execute("mpc prev")
-	--theme.mpd.update()
-	--end),
-	--awful.button({ }, 2, function ()
-	--os.execute("mpc toggle")
-	--theme.mpd.update()
-	--end),
-	--awful.button({ }, 3, function ()
-	--os.execute("mpc next")
-	--theme.mpd.update()
-	--end)))
-	--theme.mpd = lain.widget.mpd({
-	--settings = function()
-	--if mpd_now.state == "play" then
-	--artist = " " .. mpd_now.artist .. " "
-	--title  = mpd_now.title  .. " "
-	--mpdicon:set_image(theme.widget_music_on)
-	--elseif mpd_now.state == "pause" then
-	--artist = " mpd "
-	--title  = "paused "
-	--else
-	--artist = ""
-	--title  = ""
-	--mpdicon:set_image(theme.widget_music)
-	--end
-
-	--widget:set_markup(markup.font(theme.font, markup("#EA6F81", artist) .. title))
-	--end
-	--})
+	-- wgts.clock:connect_signal("button::press",
+	-- 	function(_, _, _, button)
+	-- 		if button == 1 then wgts.cal.toggle() end
+	-- 	end)
 
 	---- MEM
-	-- wgts.mem = lain.widget.mem({
-	-- 		settings = function()
-	-- 			widget:set_markup(markup.font(theme.font, string.format("mem: %04i%s", mem_now.used, "M")))
-	-- 		end
-	-- 	})
-	local mem = require("widgets/memarc-widget/memarc")
-	wgts.mem = mem()
+	wgts.mem = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.mem,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.mem({
+			settings = function()
+				widget:set_markup(markup.font(theme.font, string.format("%04i%s", mem_now.used, "M")))
+			end
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
+	-- local mem = require("widgets/memarc-widget/memarc")
+	-- wgts.mem = mem()
 
 	---- CPU
-	-- wgts.cpu = lain.widget.cpu({
-	-- 		settings = function()
-	-- 			widget:set_markup(markup.font(theme.font, string.format("cpu: %02i%s", cpu_now.usage, "%")))
-	-- 		end
-	-- 	})
-	local cpu = require("widgets/cpuarc-widget/cpuarc")
-	wgts.cpu = cpu()
+	wgts.cpu = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.cpu,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.cpu({
+				settings = function()
+					widget:set_markup(markup.font(theme.font, string.format("%02i%s", cpu_now.usage, "")))
+				end
+			}),
+		layout = wibox.layout.fixed.horizontal,
+	}
+
+	-- local cpu = require("widgets/cpuarc-widget/cpuarc")
+	-- wgts.cpu = cpu()
 
 	---- Coretemp
-	wgts.temp = lain.widget.temp({
+	wgts.temp = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.temp,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.temp({
 			settings = function()
-				widget:set_markup(markup.font(theme.font, string.format("T: %s°C", coretemp_now )))
+				widget:set_markup(markup.font(theme.font, string.format("%s°C", coretemp_now )))
 			end
-		})
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
 
 	---- / fs
-	-- wgts.fs = lain.widget.fs({
-	-- 		notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
-	-- 		settings = function()
-	-- 			widget:set_markup(markup.font(theme.font_mono, string.format("/: %02i%s",fs_now["/"].percentage, "%")))
-	-- 		end
-	-- 	})
-	local fs = require("widgets/fsarc-widget/fsarc")
-	wgts.fs = fs()
+	wgts.fs = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.hdd,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.fs({
+				notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
+				settings = function()
+					widget:set_markup(markup.font(theme.font_mono, string.format("%02i%s",fs_now["/"].percentage, "")))
+				end
+			}),
+		layout = wibox.layout.fixed.horizontal,
+	}
+	-- local fs = require("widgets/fsarc-widget/fsarc")
+	-- wgts.fs = fs()
 
 	---- Battery
-	-- wgts.bat = lain.widget.bat({
-	-- 		settings = function()
-	-- 			if bat_now.status and bat_now.status ~= "N/A" then
-	-- 				if bat_now.ac_status == 1 then
-	-- 					baticon:set_image(theme.widget_ac)
-	-- 				elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-	-- 					baticon:set_image(theme.widget_battery_empty)
-	-- 				elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-	-- 					baticon:set_image(theme.widget_battery_low)
-	-- 				else
-	-- 					baticon:set_image(theme.widget_battery)
-	-- 				end
-	-- 				widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
-	-- 			else
-	-- 				widget:set_markup(markup.font(theme.font, " AC "))
-	-- 			end
-	-- 		end
-	-- 	})
-	local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
-	wgts.bat = bat()
+	wgts.bat = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.bat,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.bat({
+			settings = function()
+				if bat_now.status and bat_now.status ~= "N/A" then
+					if bat_now.ac_status == 1 then
+						baticon:set_image(theme.widget_ac)
+					elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+						baticon:set_image(theme.widget_battery_empty)
+					elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+						baticon:set_image(theme.widget_battery_low)
+					else
+						baticon:set_image(theme.widget_battery)
+					end
+					widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
+				else
+					widget:set_markup(markup.font(theme.font, " AC "))
+				end
+			end
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
+	-- local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
+	-- wgts.bat = bat()
 
 	---- ALSA/pulse volume
-	-- wgts.vol = lain.widget.alsa({
-	-- 		settings = function()
-	-- 			if volume_now.status == "off" then
-	-- 			elseif tonumber(volume_now.level) == 0 then
-	-- 			elseif tonumber(volume_now.level) <= 50 then
-	-- 			else
-	-- 			end
-	-- 			widget:set_markup(markup.font(theme.font, string.format("vol: %02i%s", volume_now.level, "%")))
-	-- 		end
-	-- 	})
-	-- wgts.vol.widget:buttons(awful.util.table.join(
-	-- 		awful.button({}, 4, function ()
-	-- 			awful.util.spawn("amixer set Master 5%+")
-	-- 			wgts.vol.update()
-	-- 		end),
-	-- 		awful.button({}, 5, function ()
-	-- 			awful.util.spawn("amixer set Master 5%-")
-	-- 			wgts.vol.update()
-	-- 		end)
-	-- 	))
-	local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
-	wgts.vol = vol()
+	wgts.vol = wibox.widget {
+		wibox.widget {
+			{
+				image = icons.vol,
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.pulse({
+				timeout = 1,
+			settings = function()
+				local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
+				local v = vl
+				if (v < vr) then
+					v = vr
+				end
+				local d = volume_now.device
+				if volume_now.status == "off" then
+				elseif tonumber(v) == 0 then
+				elseif tonumber(v) <= 50 then
+				else
+				end
+				widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
+				widget:buttons(awful.util.table.join(
+						awful.button({}, 3, function() -- right click
+							os.execute(string.format("pactl set-sink-mute %s toggle", d))
+							widget.update()
+						end),
+						awful.button({}, 4, function ()
+							awful.util.spawn("amixer set Master 5%+")
+							widget.update()
+						end),
+						awful.button({}, 5, function ()
+							awful.util.spawn("amixer set Master 5%-")
+							widget.update()
+						end)
+					))
+			end
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
+	-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
+	-- wgts.vol = vol()
 
 	local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
 	wgts.bri = bri()
 
 	---- Net
-	wgts.net = lain.widget.net({
+	wgts.net = wibox.widget {
+		wibox.widget {
+			{
+				image = '/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.net({
 			settings = function()
 				widget:set_markup(markup.font(theme.font,
 						markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
 						.. " " ..
 					markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
 			end
-		})
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
 
 	---- Weather
-	wgts.weather = lain.widget.weather({
-			city_id = 1277333, -- placeholder (London)
+	wgts.weather = wibox.widget {
+		wibox.widget {
+			{
+				image = '/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
+				resize = false,
+				widget = wibox.widget.imagebox,
+			},
+			top = 3,
+			widget = wibox.container.margin
+		},
+		lain.widget.weather({
+			city_id = 1277333,
 			notification_preset = { font = theme.font_mono, fg = theme.fg_normal },
 			weather_na_markup = markup.fontfg(theme.font, theme.fg_normal, "N/A "),
 			settings = function()
@@ -212,12 +284,13 @@ function Wiman:build()
 				units = math.floor(weather_now["main"]["temp"])
 				widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, descr .. " @ " .. units .. "°C "))
 			end
-		})
+		}),
+		layout = wibox.layout.fixed.horizontal,
+	}
 
-
-		self.widgets = wgts
-		objdump('self', self)
-	end
+	self.widgets = wgts
+	objdump('self', self)
+end
 
 function Wiman:boxes_right()
 	local s	= self.screen
