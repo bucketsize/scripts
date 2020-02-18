@@ -205,35 +205,38 @@ function Wiman:build()
 		},
 		lain.widget.pulse({
 				timeout = 1,
-			settings = function()
-				local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
-				local v = vl
-				if (v < vr) then
-					v = vr
+				settings = function()
+					if (volume_now.index == 'N/A') then
+						return
+					end
+					local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
+					local v = vl
+					if (v < vr) then
+						v = vr
+					end
+					local d = volume_now.device
+					if volume_now.status == "off" then
+					elseif tonumber(v) == 0 then
+					elseif tonumber(v) <= 50 then
+					else
+					end
+					widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
+					widget:buttons(awful.util.table.join(
+							awful.button({}, 3, function() -- right click
+								os.execute(string.format("pactl set-sink-mute %s toggle", d))
+								widget.update()
+							end),
+							awful.button({}, 4, function ()
+								awful.util.spawn("amixer set Master 5%+")
+								widget.update()
+							end),
+							awful.button({}, 5, function ()
+								awful.util.spawn("amixer set Master 5%-")
+								widget.update()
+							end)
+						))
 				end
-				local d = volume_now.device
-				if volume_now.status == "off" then
-				elseif tonumber(v) == 0 then
-				elseif tonumber(v) <= 50 then
-				else
-				end
-				widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
-				widget:buttons(awful.util.table.join(
-						awful.button({}, 3, function() -- right click
-							os.execute(string.format("pactl set-sink-mute %s toggle", d))
-							widget.update()
-						end),
-						awful.button({}, 4, function ()
-							awful.util.spawn("amixer set Master 5%+")
-							widget.update()
-						end),
-						awful.button({}, 5, function ()
-							awful.util.spawn("amixer set Master 5%-")
-							widget.update()
-						end)
-					))
-			end
-		}),
+			}),
 		layout = wibox.layout.fixed.horizontal,
 	}
 	-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
