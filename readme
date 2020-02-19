@@ -27,3 +27,9 @@ user_allow_other
 Mount your device on ~/mnt:
 mtpfs -o allow_other ~/mnt
 
+--hwdec=API
+v4l2-ctl --set-ctrl=gain=00
+v4l2-ctl --set-ctrl=exposure_auto=1
+v4l2-ctl --set-ctrl=exposure_absolute=10
+v4l2-ctl --set-ctrl=white_balance_temperature_auto=1
+v4l2-ctl --set-ctrl=white_balance_temperature=6001

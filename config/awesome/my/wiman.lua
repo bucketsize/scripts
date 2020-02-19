@@ -227,11 +227,11 @@ function Wiman:build()
 								widget.update()
 							end),
 							awful.button({}, 4, function ()
-								awful.util.spawn("amixer set Master 5%+")
+								awful.util.spawn(string.format("pactl set-sink-mute %s false; pactl set-sink-volume %s -%s", d, d, "5%"))
 								widget.update()
 							end),
 							awful.button({}, 5, function ()
-								awful.util.spawn("amixer set Master 5%-")
+								awful.util.spawn(string.format("pactl set-sink-mute %s false; pactl set-sink-volume %s +%s", d, d, "5%"))
 								widget.update()
 							end)
 						))

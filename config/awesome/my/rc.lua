@@ -17,9 +17,20 @@ local dpi       = require("beautiful.xresources").apply_dpi
 -- Notification library
 local naughty = require("naughty")
 
+-- This is used later as the default terminal and editor to run.
+terminal = "sakura"
+editor = os.getenv("EDITOR") or "vim"
+editor_cmd = terminal .. " -e " .. editor
+
+-- {{{ Menu
+local hotkeys_popup = require("awful.hotkeys_popup")
+-- Enable hotkeys help widget for VIM and other apps
+-- when client with a matching name is opened:
+require("awful.hotkeys_popup.keys")
+
+-- Create a launcher widget and a main menu
 -- local menubar = require("menubar")
 local freedesktop   = require("freedesktop")
-local terminal     = "sakura"
 local myawesomemenu = {
 	{ "hotkeys", function() return false, hotkeys_popup.show_help end },
 	{ "manual", terminal .. " -e man awesome" },
@@ -27,7 +38,7 @@ local myawesomemenu = {
 	{ "restart", awesome.restart },
 	{ "quit", function() awesome.quit() end }
 }
-awful.util.mymainmenu = freedesktop.menu.build({
+local mymainmenu = freedesktop.menu.build({
 		icon_size = beautiful.menu_height or dpi(16),
 		before = {
 			{ "Awesome", myawesomemenu, beautiful.awesome_icon },
@@ -38,11 +49,10 @@ awful.util.mymainmenu = freedesktop.menu.build({
 			-- other triads can be put here
 		}
 	})
-
-local hotkeys_popup = require("awful.hotkeys_popup")
--- Enable hotkeys help widget for VIM and other apps
--- when client with a matching name is opened:
-require("awful.hotkeys_popup.keys")
+local mylauncher = awful.widget.launcher({
+		image = beautiful.awesome_icon,
+		menu = mymainmenu
+})
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -74,10 +84,6 @@ end
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/zenburn.theme.lua")
 
--- This is used later as the default terminal and editor to run.
-terminal = "sakura"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -96,27 +102,6 @@ awful.layout.layouts = {
 }
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-	{ "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-	{ "manual", terminal .. " -e man awesome" },
-	{ "edit config", editor_cmd .. " " .. awesome.conffile },
-	{ "restart", awesome.restart },
-	{ "quit", function() awesome.quit() end },
-}
-
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-			{ "open terminal", terminal }
-		}
-	})
-
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-	menu = mymainmenu })
-
--- Menubar configuration
--- menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -186,9 +171,9 @@ local tasklist_buttons = gears.table.join(
 		-- We need one layoutbox per screen.
 		s.mylayoutbox = awful.widget.layoutbox(s)
 		s.mylayoutbox:buttons(gears.table.join(
-				awful.button({ }, 1, function () awful.layout.inc( 1) end),
-				awful.button({ }, 3, function () awful.layout.inc(-1) end),
-				awful.button({ }, 4, function () awful.layout.inc( 1) end),
+			awful.button({ }, 1, function () awful.layout.inc( 1) end),
+			awful.button({ }, 3, function () awful.layout.inc(-1) end),
+			awful.button({ }, 4, function () awful.layout.inc( 1) end),
 			awful.button({ }, 5, function () awful.layout.inc(-1) end)))
 			-- Create a taglist widget
 			s.mytaglist = awful.widget.taglist {
@@ -234,7 +219,6 @@ local tasklist_buttons = gears.table.join(
 			))
 		-- }}}
 
-		local switcher = require("awesome-switcher")
 		-- {{{ Key bindings
 		globalkeys = gears.table.join(
 			awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -331,16 +315,13 @@ local tasklist_buttons = gears.table.join(
 						history_path = awful.util.get_cache_dir() .. "/history_eval"
 					}
 				end,
-				{description = "lua execute prompt", group = "awesome"}),
-			
-			-- Menubar
-			awful.key({ modkey }, "p", function() menubar.show() end,
-				{description = "show the menubar", group = "launcher"})
+				{description = "lua execute prompt", group = "awesome"})
 			)
 
+		-- window switcher
+		-- Alt-Tab
 		local switcher = require("awesome-switcher")
 		globalkeys = gears.table.join(globalkeys
-			-- Alt-Tab
 			,	awful.key({ "Mod1",           }, "Tab",
 				function ()
 					switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab")
@@ -349,6 +330,19 @@ local tasklist_buttons = gears.table.join(
 					function ()
 						switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
 					end)
+		)
+
+	-- sound controls
+		globalkeys = gears.table.join(globalkeys
+			, awful.key({ modkey}, "]", function ()
+						awful.spawn("amixer -D pulse sset Master 5%+")
+					end, {description = "increase volume", group = "custom"})
+		  , awful.key({ modkey}, "[", function ()
+					awful.spawn("amixer -D pulse sset Master 5%-")
+				end, {description = "decrease volume", group = "custom"})
+			, awful.key({ modkey}, "\"", function ()
+				awful.spawn("amixer -D pulse set Master +1 toggle")
+			end, {description = "mute volume", group = "custom"})
 		)
 
 		clientkeys = gears.table.join(
@@ -392,18 +386,7 @@ local tasklist_buttons = gears.table.join(
 					c.maximized_horizontal = not c.maximized_horizontal
 					c:raise()
 				end ,
-				{description = "(un)maximize horizontally", group = "client"}),
-
-			-- sound controls
-			awful.key({ modkey}, "]", function ()
-						awful.spawn("amixer -D pulse sset Master 5%+")
-					end, {description = "increase volume", group = "custom"}),
-		  awful.key({ modkey}, "[", function ()
-					awful.spawn("amixer -D pulse sset Master 5%-")
-				end, {description = "decrease volume", group = "custom"}),
-			awful.key({ modkey}, "\"", function ()
-				awful.spawn("amixer -D pulse set Master +1 toggle")
-			end, {description = "mute volume", group = "custom"})
+				{description = "(un)maximize horizontally", group = "client"})
 		)
 
 	-- Bind all key numbers to tags.
@@ -507,7 +490,8 @@ local tasklist_buttons = gears.table.join(
 					"Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
 					"Wpa_gui",
 					"veromix",
-				"xtightvncviewer"},
+				"xtightvncviewer"
+			},
 
 				-- Note that the name property shown in xprop might be set slightly after creation of the client
 				-- and the name shown there might not match defined rules here.
