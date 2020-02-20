@@ -36,6 +36,7 @@ local myawesomemenu = {
 	{ "manual", terminal .. " -e man awesome" },
 	{ "edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
 	{ "restart", awesome.restart },
+	{ "shutdown", terminal .. " -e shutdown -h now" },
 	{ "quit", function() awesome.quit() end }
 }
 local mymainmenu = freedesktop.menu.build({
