@@ -37,13 +37,14 @@ end
 
 
 Wiman = {}
-function Wiman:new(theme, screen)
-	self.theme = theme
-	self.screen = screen
+function Wiman:setup(ctx)
+	self.ctx = ctx
 	return self
 end
 
 function Wiman:build()
+	local theme = self.ctx.beautiful.get()
+
 	local	sprtr = wibox.widget.textbox()
 	sprtr:set_text(" | ")
 
@@ -61,7 +62,6 @@ function Wiman:build()
 	local wgts = {}
 	wgts.kb = awful.widget.keyboardlayout()
 
-	local theme = self.theme
 
 	---- Clock / Calendar
 	wgts.clock = wibox.widget.textclock()
@@ -86,162 +86,162 @@ function Wiman:build()
 			if button == 1 then wgts.cal.toggle() end
 		end)
 
-	---- MEM
-	wgts.mem = create_wgt(
-		icons.mem,
-		lain.widget.mem({
-			settings = function()
-				widget:set_markup(markup.font(theme.font, string.format("%04i%s", mem_now.used, "M")))
-			end
-		})
-	)
-	-- local mem = require("widgets/memarc-widget/memarc")
-	-- wgts.mem = mem()
+		---- MEM
+		wgts.mem = create_wgt(
+			icons.mem,
+			lain.widget.mem({
+					settings = function()
+						widget:set_markup(markup.font(theme.font, string.format("%04i%s", mem_now.used, "M")))
+					end
+				})
+			)
+		-- local mem = require("widgets/memarc-widget/memarc")
+		-- wgts.mem = mem()
 
-	---- CPU
-	wgts.cpu = create_wgt(
-		icons.cpu,
-		lain.widget.cpu({
-				settings = function()
-					widget:set_markup(markup.font(theme.font, string.format("%02i%s", cpu_now.usage, "")))
-				end
-			})
-		)
-	-- local cpu = require("widgets/cpuarc-widget/cpuarc")
-	-- wgts.cpu = cpu()
+		---- CPU
+		wgts.cpu = create_wgt(
+			icons.cpu,
+			lain.widget.cpu({
+					settings = function()
+						widget:set_markup(markup.font(theme.font, string.format("%02i%s", cpu_now.usage, "")))
+					end
+				})
+			)
+		-- local cpu = require("widgets/cpuarc-widget/cpuarc")
+		-- wgts.cpu = cpu()
 
-	---- Coretemp
-	wgts.temp = create_wgt(
-		icons.temp,
-		lain.widget.temp({
-				settings = function()
-					widget:set_markup(markup.font(theme.font, string.format("%s°C", coretemp_now )))
-				end
-			})
-		)
+		---- Coretemp
+		wgts.temp = create_wgt(
+			icons.temp,
+			lain.widget.temp({
+					settings = function()
+						widget:set_markup(markup.font(theme.font, string.format("%s°C", coretemp_now )))
+					end
+				})
+			)
 
-	---- / fs
-	wgts.fs = create_wgt(
-		icons.hdd,
-		lain.widget.fs({
-				notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
-				settings = function()
-					widget:set_markup(markup.font(theme.font_mono, string.format("%02i%s",fs_now["/"].percentage, "")))
-				end
-			})
-		)
-	-- local fs = require("widgets/fsarc-widget/fsarc")
-	-- wgts.fs = fs()
+		---- / fs
+		wgts.fs = create_wgt(
+			icons.hdd,
+			lain.widget.fs({
+					notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
+					settings = function()
+						widget:set_markup(markup.font(theme.font_mono, string.format("%02i%s",fs_now["/"].percentage, "")))
+					end
+				})
+			)
+		-- local fs = require("widgets/fsarc-widget/fsarc")
+		-- wgts.fs = fs()
 
-	---- Battery
-	wgts.bat = create_wgt(
-		icons.bat,
-		lain.widget.bat({
-				settings = function()
-					if bat_now.status and bat_now.status ~= "N/A" then
-						if bat_now.ac_status == 1 then
-							baticon:set_image(theme.widget_ac)
-						elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-							baticon:set_image(theme.widget_battery_empty)
-						elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-							baticon:set_image(theme.widget_battery_low)
+		---- Battery
+		wgts.bat = create_wgt(
+			icons.bat,
+			lain.widget.bat({
+					settings = function()
+						if bat_now.status and bat_now.status ~= "N/A" then
+							if bat_now.ac_status == 1 then
+								baticon:set_image(theme.widget_ac)
+							elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+								baticon:set_image(theme.widget_battery_empty)
+							elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+								baticon:set_image(theme.widget_battery_low)
+							else
+								baticon:set_image(theme.widget_battery)
+							end
+							widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
 						else
-							baticon:set_image(theme.widget_battery)
+							widget:set_markup(markup.font(theme.font, " AC "))
 						end
-						widget:set_markup(markup.font(theme.font, string.format("bat: %02i%s", bat_now.perc, "% ")))
-					else
-						widget:set_markup(markup.font(theme.font, " AC "))
 					end
-				end
-			})
-		)
-	-- local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
-	-- wgts.bat = bat()
+				})
+			)
+		-- local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
+		-- wgts.bat = bat()
 
-	---- ALSA/pulse volume
-	wgts.vol = create_wgt(
-		icons.vol,
-		lain.widget.pulse({
-				timeout = 5,
-				settings = function()
-					--objdump('pulse', volume_now)
-					if (volume_now.index == 'N/A') then
-						naughty.notify({
-								preset = naughty.config.presets.critical,
-								title = "pulseaudio may not be running, start it!",
-							})
-						return
+		---- ALSA/pulse volume
+		wgts.vol = create_wgt(
+			icons.vol,
+			lain.widget.pulse({
+					timeout = 5,
+					settings = function()
+						--objdump('pulse', volume_now)
+						if (volume_now.index == 'N/A') then
+							naughty.notify({
+									preset = naughty.config.presets.critical,
+									title = "pulseaudio may not be running, start it!",
+								})
+							return
+						end
+						local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
+						local v = vl
+						if (v < vr) then
+							v = vr
+						end
+						local d = volume_now.device
+						if volume_now.status == "off" then
+						elseif tonumber(v) == 0 then
+						elseif tonumber(v) <= 50 then
+						else
+						end
+						widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
 					end
-					local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
-					local v = vl
-					if (v < vr) then
-						v = vr
+				})
+			)
+		wgts.vol:buttons(awful.util.table.join(
+				awful.button({}, 3, function() -- right click
+					awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+					wgts.vol.actual:update()
+				end),
+				awful.button({}, 4, function () -- up
+					awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
+					wgts.vol.actual:update()
+				end),
+				awful.button({}, 5, function () -- down
+					awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
+					wgts.vol.actual:update()
+				end)
+			))
+		-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
+		-- wgts.vol = vol()
+
+		local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
+		wgts.bri = bri()
+
+		---- Net
+		wgts.net = create_wgt(
+			'/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
+			lain.widget.net({
+					settings = function()
+						widget:set_markup(markup.font(theme.font,
+								markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
+								.. " " ..
+							markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
 					end
-					local d = volume_now.device
-					if volume_now.status == "off" then
-					elseif tonumber(v) == 0 then
-					elseif tonumber(v) <= 50 then
-					else
+				})
+			)
+
+		---- Weather
+		wgts.weather = create_wgt(
+			'/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
+			lain.widget.weather({
+					city_id = 1277333,
+					notification_preset = { font = theme.font_mono, fg = theme.fg_normal },
+					weather_na_markup = markup.fontfg(theme.font, theme.fg_normal, "N/A "),
+					settings = function()
+						descr = weather_now["weather"][1]["description"]:lower()
+						units = math.floor(weather_now["main"]["temp"])
+						widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, descr .. " @ " .. units .. "°C "))
 					end
-					widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
-				end
-			})
-		)
-	wgts.vol:buttons(awful.util.table.join(
-			awful.button({}, 3, function() -- right click
-				awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-				wgts.vol.actual:update()
-			end),
-			awful.button({}, 4, function () -- up
-				awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-				wgts.vol.actual:update()
-			end),
-			awful.button({}, 5, function () -- down
-				awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-				wgts.vol.actual:update()
-			end)
-		))
-	-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
-	-- wgts.vol = vol()
+				})
+			)
 
-	local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
-	wgts.bri = bri()
+		self.widgets = wgts
+		objdump('self', self)
+	end
 
-	---- Net
-	wgts.net = create_wgt(
-		'/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
-		lain.widget.net({
-				settings = function()
-					widget:set_markup(markup.font(theme.font,
-							markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
-							.. " " ..
-						markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
-				end
-			})
-		)
-
-	---- Weather
-	wgts.weather = create_wgt(
-		'/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
-		lain.widget.weather({
-				city_id = 1277333,
-				notification_preset = { font = theme.font_mono, fg = theme.fg_normal },
-				weather_na_markup = markup.fontfg(theme.font, theme.fg_normal, "N/A "),
-				settings = function()
-					descr = weather_now["weather"][1]["description"]:lower()
-					units = math.floor(weather_now["main"]["temp"])
-					widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, descr .. " @ " .. units .. "°C "))
-				end
-			})
-		)
-
-	self.widgets = wgts
-	objdump('self', self)
-end
-
-function Wiman:boxes_right()
-	local s	= self.screen
-	return
+	function Wiman:boxes_right()
+		local s	= self.ctx.screen
+		return
 		{ -- Right widgets
 			layout = wibox.layout.fixed.horizontal,
 			wibox.widget.systray(),
@@ -260,4 +260,4 @@ function Wiman:boxes_right()
 		}
 	end
 
-return Wiman
+	return Wiman

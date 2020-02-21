@@ -22,11 +22,11 @@ case $1 in
 		;;
 	my)
 		cd my/
-	 	
+
 		[ -f lain ] && rm lain
 	 	[ -f freedesktop ] && rm freedesktop
 	 	[ -f awesome-switcher ] && rm awesome-switcher
-		
+
 		ln -s ../lib/lain lain
 		ln -s ../lib/awesome-freedesktop freedesktop
 		ln -s ../lib/awesome-switcher awesome-switcher
