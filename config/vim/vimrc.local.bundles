@@ -19,3 +19,6 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " haskell
 let $PATH = $PATH . ':' . expand('~/.cabal/bin')
 Plug 'eagletmt/ghcmod-vim'
+
+" lua
+Plug 'wolfgangmehner/lua-support'
