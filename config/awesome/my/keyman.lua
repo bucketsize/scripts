@@ -92,46 +92,71 @@ function Keyman:keys_global()
 			{description = "restore minimized", group = "client"}),
 
 		-- Prompt
-		awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+		awful.key({ modkey },            "r",     function () self.ctx.mypromptbox:run() end,
 			{description = "run prompt", group = "launcher"}),
 
 		awful.key({ modkey }, "x",
 			function ()
 				awful.prompt.run {
 					prompt       = "Run Lua code: ",
-					textbox      = awful.screen.focused().mypromptbox.widget,
+					textbox      = self.ctx.mypromptbox.widget,
 					exe_callback = awful.util.eval,
 					history_path = awful.util.get_cache_dir() .. "/history_eval"
 				}
 			end,
-			{description = "lua execute prompt", group = "awesome"})
-		)
+			{description = "lua execute prompt", group = "awesome"}),
 
 	-- window switcher
 	-- Alt-Tab
-	globalkeys = gears.table.join(globalkeys
-		,	awful.key({ "Mod1",           }, "Tab",
-			function ()
-				switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab")
-			end)
-			,	awful.key({ "Mod1", "Shift"   }, "Tab",
-				function ()
-					switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
-				end)
-				)
+	awful.key({ "Mod1",           }, "Tab",
+		function ()
+			switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab")
+		end, {description = "next window", group = "custom"}),
 
-			-- sound controls
-			globalkeys = gears.table.join(globalkeys
-				, awful.key({ modkey}, "]", function ()
-					awful.spawn("amixer -D pulse sset Master 5%+")
-				end, {description = "increase volume", group = "custom"})
-			, awful.key({ modkey}, "[", function ()
-				awful.spawn("amixer -D pulse sset Master 5%-")
-			end, {description = "decrease volume", group = "custom"})
-		, awful.key({ modkey}, "\"", function ()
+	awful.key({ "Mod1", "Shift"   }, "Tab",
+		function ()
+			switcher.switch(-1, "Mod1", "Alt_L", "Shift", "Tab")
+		end, {description = "previous window", group = "custom"}),
+
+	-- sound controls
+	awful.key({ modkey}, "]",
+		function ()
+			awful.spawn("amixer -D pulse sset Master 5%+")
+		end, {description = "increase volume", group = "custom"}),
+
+	awful.key({ modkey}, "[",
+		function ()
+			awful.spawn("amixer -D pulse sset Master 5%-")
+		end, {description = "decrease volume", group = "custom"}),
+
+	awful.key({ modkey}, "\"",
+		function ()
 			awful.spawn("amixer -D pulse set Master +1 toggle")
-		end, {description = "mute volume", group = "custom"})
+		end, {description = "mute volume", group = "custom"}),
+
+	-- Volume Keys
+	awful.key({}, "XF86AudioLowerVolume", function ()
+		awful.util.spawn("amixer -q -D pulse sset Master 5%-", false)
+	end),
+	awful.key({}, "XF86AudioRaiseVolume", function ()
+		awful.util.spawn("amixer -q -D pulse sset Master 5%+", false)
+	end),
+	awful.key({}, "XF86AudioMute", function ()
+		awful.util.spawn("amixer -D pulse set Master 1+ toggle", false)
+	end),
+
+	-- Media Keys
+	awful.key({}, "XF86AudioPlay", function()
+		awful.util.spawn("playerctl play-pause", false)
+	end),
+	awful.key({}, "XF86AudioNext", function()
+		awful.util.spawn("playerctl next", false)
+	end),
+	awful.key({}, "XF86AudioPrev", function()
+		awful.util.spawn("playerctl previous", false)
+	end)
 	)
+
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.

@@ -350,6 +350,8 @@ function Wiman:build()
 
 			-- Create a promptbox for each screen
 			self.mypromptbox = awful.widget.prompt()
+			self.ctx.mypromptbox = self.mypromptbox
+
 			-- Create an imagebox widget which will contain an icon indicating which layout we're using.
 			-- We need one layoutbox per screen.
 			self.mylayoutbox = awful.widget.layoutbox(s)
@@ -370,13 +372,26 @@ function Wiman:build()
 				self.mytasklist = awful.widget.tasklist {
 					screen  = s,
 					filter  = awful.widget.tasklist.filter.currenttags,
-					buttons = tasklist_buttons
+					buttons = tasklist_buttons,
+					style    = {
+						shape_border_width = 1,
+						shape_border_color = '#777777',
+					},
 				}
 				-- Create the wibox
-				self.mywibox = awful.wibar({ position = "top", screen = s })
+				self.mywibox = awful.wibar({ position = "top", screen = s, width = "50%" })
 
 				-- Add widgets to the wibox
 				self.mywibox:setup {
+					layout = wibox.layout.align.horizontal,
+					self:boxes_right()
+				}
+
+				-- Create the wibox
+				self.mywibox2 = awful.wibar({ position = "bottom", screen = s })
+
+				-- Add widgets to the wibox
+				self.mywibox2:setup {
 					layout = wibox.layout.align.horizontal,
 					{ -- Left widgets
 						layout = wibox.layout.fixed.horizontal,
@@ -384,7 +399,6 @@ function Wiman:build()
 						self.mypromptbox,
 					},
 					self.mytasklist, -- Middle widget
-					self:boxes_right()
 				}
 			end
 	return Wiman
