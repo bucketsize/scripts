@@ -79,27 +79,27 @@ function Wiman:build()
 
 	---- Clock / Calendar
 	wgts.clock_icon = create_icon(icons.clock)
-	wgts.clock = wibox.widget.textclock()
-	-- wgts.cal = create_wgt(
-	-- 	'/usr/share/icons/Arc/devices/symbolic/media-flash-symbolic.svg',
-	-- 	lain.widget.cal({
-	-- 			attach_to = { wgts.clock },
-	-- 			notification_preset = {
-	-- 				font = theme.font_mono,
-	-- 				fg   = theme.fg_normal,
-	-- 				bg   = theme.bg_normal
-	-- 			}
-	-- 		})
-	-- 	)
-	local cal = require("awesome-wm-widgets/calendar-widget/calendar")
-	wgts.cal = cal({
-			theme = 'dark',
-			placement = 'top_right'
-		})
-	wgts.clock:connect_signal("button::press",
-		function(_, _, _, button)
-			if button == 1 then wgts.cal.toggle() end
-		end)
+	wgts.clock = create_wgt(
+		wgts.clock_icon,
+		wibox.widget.textclock()
+		)
+	wgts.cal = lain.widget.cal({
+				attach_to = { wgts.clock },
+				notification_preset = {
+					font = theme.font_mono,
+					fg   = theme.fg_normal,
+					bg   = theme.bg_normal
+				}
+			})
+	-- local cal = require("awesome-wm-widgets/calendar-widget/calendar")
+	-- wgts.cal = cal({
+	-- 		theme = 'dark',
+	-- 		placement = 'top_right'
+	-- 	})
+	-- wgts.clock:connect_signal("button::press",
+	-- 	function(_, _, _, button)
+	-- 		if button == 1 then wgts.cal.toggle() end
+	-- 	end)
 
 		---- MEM
 		wgts.mem_icon = create_icon(icons.mem)
@@ -223,8 +223,14 @@ function Wiman:build()
 		-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
 		-- wgts.vol = vol()
 
-		local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
-		wgts.bri = bri()
+		wgts.bri = awful.widget.watch("xbacklight -get", 10,
+			function(widget, stdout)
+				local perc = tonumber(stdout:match("(%d+).%d"))
+				widget:set_text("Brightness: "..perc.."%")
+			end
+			)
+		-- local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
+		-- wgts.bri = bri()
 
 		---- Net
 		wgts.net_icon = create_icon(icons.net)
@@ -259,26 +265,6 @@ function Wiman:build()
 
 		self.widgets = wgts
 		objdump('self', self)
-	end
-
-	function Wiman:boxes_right()
-		return
-		{ -- Right widgets
-			layout = wibox.layout.fixed.horizontal,
-			wibox.widget.systray(),
-			self.widgets.bri,
-			self.widgets.vol,
-			self.widgets.mem,
-			self.widgets.cpu,
-			self.widgets.temp,
-			self.widgets.bat,
-			self.widgets.net,
-			self.widgets.fs,
-			self.widgets.weather,
-			self.widgets.clock,
-			self.widgets.kb,
-			self.mylayoutbox,
-		}
 	end
 
 	function Wiman:apply_wallpaper_in_screen(s)
@@ -359,7 +345,7 @@ function Wiman:build()
 					awful.button({ }, 1, function () awful.layout.inc( 1) end),
 					awful.button({ }, 3, function () awful.layout.inc(-1) end),
 					awful.button({ }, 4, function () awful.layout.inc( 1) end),
-				awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+					awful.button({ }, 5, function () awful.layout.inc(-1) end)))
 
 				-- Create a taglist widget
 				self.mytaglist = awful.widget.taglist {
@@ -367,6 +353,44 @@ function Wiman:build()
 					filter  = awful.widget.taglist.filter.all,
 					buttons = taglist_buttons
 				}
+
+				-- self.mytasklist_popup = awful.popup {
+				-- 	widget = awful.widget.tasklist {
+				-- 		screen   = screen[1],
+				-- 		filter   = awful.widget.tasklist.filter.allscreen,
+				-- 		buttons  = tasklist_buttons,
+				-- 		style    = {
+				-- 			shape = gears.shape.rounded_rect,
+				-- 		},
+				-- 		layout   = {
+				-- 			spacing = 5,
+				-- 			forced_num_rows = 2,
+				-- 			layout = wibox.layout.grid.horizontal
+				-- 		},
+				-- 		widget_template = {
+				-- 			{
+				-- 				{
+				-- 					id     = 'clienticon',
+				-- 					widget = awful.widget.clienticon,
+				-- 				},
+				-- 				margins = 4,
+				-- 				widget  = wibox.container.margin,
+				-- 			},
+				-- 			id              = 'background_role',
+				-- 			forced_width    = 48,
+				-- 			forced_height   = 48,
+				-- 			widget          = wibox.container.background,
+				-- 			create_callback = function(self, c, index, objects) --luacheck: no unused
+				-- 				self:get_children_by_id('clienticon')[1].client = c
+				-- 			end,
+				-- 		},
+				-- 	},
+				-- 	border_color = '#777777',
+				-- 	border_width = 2,
+				-- 	ontop        = true,
+				-- 	placement    = awful.placement.centered,
+				-- 	shape        = gears.shape.rounded_rect
+				-- }
 
 				-- Create a tasklist widget
 				self.mytasklist = awful.widget.tasklist {
@@ -377,18 +401,42 @@ function Wiman:build()
 						shape_border_width = 1,
 						shape_border_color = '#777777',
 					},
+					layout   = {
+						spacing = 10,
+						layout  = wibox.layout.fixed.horizontal
+					},
 				}
 				-- Create the wibox
-				self.mywibox = awful.wibar({ position = "top", screen = s, width = "50%" })
+				self.mywibox = awful.wibar({ position = "top", screen = s, ontop = true })
 
 				-- Add widgets to the wibox
 				self.mywibox:setup {
 					layout = wibox.layout.align.horizontal,
-					self:boxes_right()
+					{
+						layout = wibox.layout.flex.horizontal,
+						self.widgets.kb,
+					},
+					{
+						layout = wibox.layout.flex.horizontal,
+						self.widgets.weather
+					},
+					{ -- Right widgets
+						layout = wibox.layout.fixed.horizontal,
+						wibox.widget.systray(),
+						self.widgets.mem,
+						self.widgets.cpu,
+						self.widgets.temp,
+						self.widgets.bat,
+						self.widgets.net,
+						self.widgets.fs,
+						self.widgets.bri,
+						self.widgets.vol,
+						self.widgets.clock,
+					},
 				}
 
 				-- Create the wibox
-				self.mywibox2 = awful.wibar({ position = "bottom", screen = s })
+				self.mywibox2 = awful.wibar({ position = "bottom", screen = s, ontop = true  })
 
 				-- Add widgets to the wibox
 				self.mywibox2:setup {
@@ -399,6 +447,7 @@ function Wiman:build()
 						self.mypromptbox,
 					},
 					self.mytasklist, -- Middle widget
+					self.mylayoutbox
 				}
 			end
 	return Wiman

@@ -7,6 +7,8 @@ bs=$(cat $blp/$bld/brightness)
 bn=$(echo "($bs+0.5)/1" | bc)
 bx=0
 
+echo "$bn"
+
 case $1 in
     down)
         if [ $bn -gt 10 ]; then
