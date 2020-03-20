@@ -7,16 +7,35 @@
 # 4. complete shortcuts
 # 9. fix compositing; compton is crashing in alpine
 
-XCS="randr compositor wallpaper panel notifier monitor network clipboard volume locker shortcuts polkit"
+XDG_APPLET_PATH=~/scripts/xdg
+
 stopAll(){
-    for xc in $XCS; do
-        sh ~/scripts/x.$xc.sh stop
-    done
+	#sh $XDG_APPLET_PATH/x.randr.sh stop
+	sh $XDG_APPLET_PATH/x.compositor.sh stop
+	sh $XDG_APPLET_PATH/x.wallpaper.sh stop
+	sh $XDG_APPLET_PATH/x.panel.sh stop
+	sh $XDG_APPLET_PATH/x.notifier.sh stop
+	sh $XDG_APPLET_PATH/x.monitor.sh stop
+	sh $XDG_APPLET_PATH/x.network.sh stop
+	sh $XDG_APPLET_PATH/x.clipboard.sh stop
+	sh $XDG_APPLET_PATH/x.volume.sh stop
+	sh $XDG_APPLET_PATH/x.locker.sh stop
+	sh $XDG_APPLET_PATH/x.shortcuts.sh stop
+	sh $XDG_APPLET_PATH/x.polkit.sh stop
 }
 startAll(){
-    for xc in $XCS; do
-        sh ~/scripts/x.$xc.sh start
-    done
+	#sh $XDG_APPLET_PATH/x.randr.sh start
+	sh $XDG_APPLET_PATH/x.compositor.sh start
+	sh $XDG_APPLET_PATH/x.wallpaper.sh start
+	sh $XDG_APPLET_PATH/x.panel.sh start
+	sh $XDG_APPLET_PATH/x.notifier.sh start
+	sh $XDG_APPLET_PATH/x.monitor.sh start
+	sh $XDG_APPLET_PATH/x.network.sh start
+	sh $XDG_APPLET_PATH/x.clipboard.sh start
+	sh $XDG_APPLET_PATH/x.volume.sh start
+	sh $XDG_APPLET_PATH/x.locker.sh start
+	sh $XDG_APPLET_PATH/x.shortcuts.sh start
+	sh $XDG_APPLET_PATH/x.polkit.sh start
 }
 case $i in
     stop)

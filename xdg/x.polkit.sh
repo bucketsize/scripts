@@ -1,12 +1,12 @@
 #!/bin/sh
 . ~/scripts/common.sh
 
-require 'lxpolkit'
+require 'polkit'
 case $1 in
     start)
-        launch lxpolkit
+        launch polkit
         ;;
     stop)
-        killall lxpolkit
+        killall polkit
         ;;
 esac
