@@ -13,3 +13,9 @@
 [submodule "config/awesome/lib/awesome-freedesktop"]
 	path = config/awesome/lib/awesome-freedesktop
 	url = https://github.com/lcpz/awesome-freedesktop.git
+[submodule "tint2-executors"]
+	path = tint2-executors
+	url = https://github.com/nwg-piotr/tint2-executors.git
+[submodule "config/tint2/tint2-executors"]
+	path = config/tint2/tint2-executors
+	url = https://github.com/bucketsize/tint2-executors.git

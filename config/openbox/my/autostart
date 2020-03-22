@@ -11,10 +11,10 @@ XDG_APPLET_PATH=~/scripts/xdg
 
 stopAll(){
 	#sh $XDG_APPLET_PATH/x.randr.sh stop
+	sh $XDG_APPLET_PATH/x.notifier.sh stop
 	sh $XDG_APPLET_PATH/x.compositor.sh stop
 	sh $XDG_APPLET_PATH/x.wallpaper.sh stop
 	sh $XDG_APPLET_PATH/x.panel.sh stop
-	sh $XDG_APPLET_PATH/x.notifier.sh stop
 	sh $XDG_APPLET_PATH/x.monitor.sh stop
 	sh $XDG_APPLET_PATH/x.network.sh stop
 	sh $XDG_APPLET_PATH/x.clipboard.sh stop
@@ -22,13 +22,14 @@ stopAll(){
 	sh $XDG_APPLET_PATH/x.locker.sh stop
 	sh $XDG_APPLET_PATH/x.shortcuts.sh stop
 	sh $XDG_APPLET_PATH/x.polkit.sh stop
+	sh $XDG_APPLET_PATH/x.cpud.sh stop &
 }
 startAll(){
 	#sh $XDG_APPLET_PATH/x.randr.sh start
+	sh $XDG_APPLET_PATH/x.notifier.sh start
 	sh $XDG_APPLET_PATH/x.compositor.sh start
 	sh $XDG_APPLET_PATH/x.wallpaper.sh start
 	sh $XDG_APPLET_PATH/x.panel.sh start
-	sh $XDG_APPLET_PATH/x.notifier.sh start
 	sh $XDG_APPLET_PATH/x.monitor.sh start
 	sh $XDG_APPLET_PATH/x.network.sh start
 	sh $XDG_APPLET_PATH/x.clipboard.sh start
@@ -36,6 +37,7 @@ startAll(){
 	sh $XDG_APPLET_PATH/x.locker.sh start
 	sh $XDG_APPLET_PATH/x.shortcuts.sh start
 	sh $XDG_APPLET_PATH/x.polkit.sh start
+	sh $XDG_APPLET_PATH/x.cpud.sh start &
 }
 case $i in
     stop)

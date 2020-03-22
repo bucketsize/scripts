@@ -18,15 +18,15 @@ border_color_pressed = #555555 80
 # Background 2: Default task, Iconified task, Tooltip
 rounded = 0
 border_width = 2
-border_sides = B
+border_sides =
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #777777 0
-border_color = #cccccc 0
-background_color_hover = #777777 4
-border_color_hover = #cccccc 30
-background_color_pressed = #333333 4
-border_color_pressed = #777777 30
+background_color = #777777 40
+border_color = #cccccc 40
+background_color_hover = #777777 60
+border_color_hover = #cccccc 60
+background_color_pressed = #777777 40
+border_color_pressed = #cccccc 80
 
 # Background 3: Active task
 rounded = 0
@@ -34,12 +34,12 @@ border_width = 2
 border_sides = B
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #777777 0
-border_color = #ccffee 80
-background_color_hover = #777777 4
-border_color_hover = #cccccc 30
-background_color_pressed = #333333 4
-border_color_pressed = #777777 30
+background_color = #777777 40
+border_color = #cccccc 40
+background_color_hover = #777777 60
+border_color_hover = #cccccc 60
+background_color_pressed = #777777 40
+border_color_pressed = #cccccc 80
 
 # Background 4: Urgent task
 rounded = 0
@@ -47,12 +47,12 @@ border_width = 2
 border_sides = B
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #777777 0
-border_color = #ffccee 80
-background_color_hover = #777777 4
-border_color_hover = #cccccc 30
-background_color_pressed = #333333 4
-border_color_pressed = #777777 30
+background_color = #777777 40
+border_color = #777777 40
+background_color_hover = #777777 60
+border_color_hover = #777777 60
+background_color_pressed = #777777 40
+border_color_pressed = #777777 80
 
 # Background 5:
 rounded = 2
@@ -86,7 +86,7 @@ border_width = 1
 border_sides = TB
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #555555 10
+background_color = #555555 0
 border_color = #ffffff 60
 background_color_hover = #555555 10
 border_color_hover = #ffffff 60
@@ -96,10 +96,10 @@ border_color_pressed = #ffffff 60
 # Background 8: Clock, Systray
 rounded = 0
 border_width = 0
-border_sides = 
+border_sides =
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #777777 80
+background_color = #777777 0
 border_color = #ffccee 80
 background_color_hover = #777777 4
 border_color_hover = #cccccc 30
@@ -116,7 +116,8 @@ panel_background_id = 1
 wm_menu = 1
 panel_dock = 0
 panel_position = bottom center horizontal
-panel_layer = normal
+#panel_position = left center vertical
+panel_layer = normal 
 panel_monitor = all
 panel_shrink = 0
 autohide = 0
@@ -205,7 +206,7 @@ launcher_item_app = /usr/share/applications/gnome-terminal.desktop
 # Clock
 time1_format = %H:%M:%S
 time2_format = %d %b, %Y
-time1_font = Sans 10
+time1_font = Sans 12
 time1_timezone =
 time2_timezone =
 time2_font = Sans 8
@@ -252,9 +253,10 @@ tooltip_font_color = #222222 100
 tooltip_font = Sans 10
 
 #-------------------------------------
+# Executors: https://github.com/nwg-piotr/tint2-executors
 # Executor 1
 execp = new
-execp_command = ~/tint2-executors/wifi-name.sh
+execp_command = ~/scripts/config/tint2/tint2-executors/net.sh
 execp_interval = 5
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -274,9 +276,53 @@ execp_icon_w = 16
 execp_icon_h = 16
 
 #-------------------------------------
+# Executor 1.5
+execp = new
+execp_command = ~/scripts/config/tint2/tint2-executors/mem.sh
+execp_interval = 2
+execp_has_icon = 1
+execp_cache_icon = 1
+execp_continuous = 0
+execp_markup = 0
+execp_tooltip = 
+execp_lclick_command = 
+execp_rclick_command = 
+execp_mclick_command = 
+execp_uwheel_command = 
+execp_dwheel_command = 
+execp_font_color = #ffffff 100
+execp_padding = 0 0
+execp_background_id = 8
+execp_centered = 1
+execp_icon_w = 20
+execp_icon_h = 20
+
+#-------------------------------------
+# Executor 1.6
+execp = new
+execp_command = ~/scripts/config/tint2/tint2-executors/cpu.sh
+execp_interval = 2
+execp_has_icon = 1
+execp_cache_icon = 1
+execp_continuous = 0
+execp_markup = 0
+execp_tooltip = 
+execp_lclick_command = 
+execp_rclick_command = 
+execp_mclick_command = 
+execp_uwheel_command = 
+execp_dwheel_command = 
+execp_font_color = #ffffff 100
+execp_padding = 0 0
+execp_background_id = 8
+execp_centered = 1
+execp_icon_w = 20
+execp_icon_h = 20
+
+#-------------------------------------
 # Executor 1
 execp = new
-execp_command = ~/tint2-executors/battery-icon.sh -l
+execp_command = ~/scripts/config/tint2/tint2-executors/battery-icon.sh -l
 execp_interval = 30
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -299,14 +345,14 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 3
 execp = new
-execp_command = ~/tint2-executors/volume-icon.sh -l
+execp_command = ~/scripts/config/tint2/tint2-executors/volume-icon.sh -l
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
 execp_continuous = 0
 execp_markup = 1
 execp_tooltip = Scroll ↓↑, middle click to mute
-execp_lclick_command = rof -P zenity ~/tint2-executors/zenity-set-volume.sh
+execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-volume.sh
 execp_rclick_command = rof pavucontrol
 execp_mclick_command = amixer -c1 set Master toggle -q
 execp_uwheel_command = amixer -c1 set Master 5%+ unmute -q
@@ -322,14 +368,14 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 4
 execp = new
-execp_command = ~/tint2-executors/brightness-icon.sh -l
+execp_command = ~/scripts/config/tint2/tint2-executors/brightness-icon.sh -l
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
 execp_continuous = 0
 execp_markup = 1
 execp_tooltip = Scroll ↓↑
-execp_lclick_command = rof -P zenity ~/tint2-executors/zenity-set-brightness.sh
+execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-brightness.sh
 execp_rclick_command = rof arandr
 execp_mclick_command = 
 execp_uwheel_command = xbacklight +5
@@ -342,24 +388,3 @@ execp_centered = 0
 execp_icon_w = 16
 execp_icon_h = 16
 
-#-------------------------------------
-# Executor 4
-execp = new
-execp_command = ~/tint2-executors/bbswitch-status.sh
-execp_interval = 2
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 0
-execp_tooltip = 
-execp_lclick_command = 
-execp_rclick_command = 
-execp_mclick_command = 
-execp_uwheel_command = 
-execp_dwheel_command = 
-execp_font_color = #ffffff 100
-execp_padding = 0 0
-execp_background_id = 8
-execp_centered = 1
-execp_icon_w = 20
-execp_icon_h = 20
