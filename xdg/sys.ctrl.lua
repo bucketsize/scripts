@@ -1,3 +1,5 @@
+#!/bin/lua
+
 Fns={}
 Mtab={
 	bri_def = 0.9,

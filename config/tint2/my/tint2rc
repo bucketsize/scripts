@@ -256,7 +256,7 @@ tooltip_font = Sans 10
 # Executors: https://github.com/nwg-piotr/tint2-executors
 # Executor 1
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/net.sh
+execp_command = ~/scripts/config/tint2/my/param.lua net_device
 execp_interval = 5
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -278,7 +278,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1.5
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/mem.sh
+execp_command = ~/scripts/config/tint2/my/param.lua mem
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -300,7 +300,7 @@ execp_icon_h = 20
 #-------------------------------------
 # Executor 1.6
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/cpu.sh
+execp_command = ~/scripts/config/tint2/my/param.lua cpu
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -322,7 +322,7 @@ execp_icon_h = 20
 #-------------------------------------
 # Executor 1
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/battery-icon.sh -l
+execp_command = ~/scripts/config/tint2/my/param.lua bat
 execp_interval = 30
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -345,7 +345,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 3
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/volume-icon.sh -l
+execp_command = ~/scripts/config/tint2/my/param.lua vol
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -368,7 +368,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 4
 execp = new
-execp_command = ~/scripts/config/tint2/tint2-executors/brightness-icon.sh -l
+execp_command = ~/scripts/config/tint2/my/param.lua bri
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1

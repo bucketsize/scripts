@@ -5,8 +5,11 @@ socket = require("socket")
 EPOC=2
 MTAB={}
 
+Fn={}
+Co={}
+
 -- CPU --
-function cpu_usage()
+function Fn:cpu_usage()
 	local handle = io.open("/proc/stat", "r")
 	local result = handle:read("*l")
 	handle:close()
@@ -20,19 +23,20 @@ function cpu_usage()
 	return s1,z1
 end
 
-function cpu_usage_co()
+function Co:cpu_usage()
 	local s0,z0,c=0,0,0
 	while true do
-		local s,z=cpu_usage()
+		local s,z=Fn:cpu_usage()
 		local c=1-(z-z0)/(s-s0)
 		s0,z0=s,z
-		MTAB['cpu'] = c
+		MTAB['cpu'] = c*100
+		MTAB['cpu_level'] = c*5 
 		coroutine.yield()
 	end
 end
 
 -- MEM --
-function mem_usage()
+function Fn:mem_usage()
 	local handle = io.open("/proc/meminfo", "r")
 	local result = handle:read("*a")
 	handle:close()
@@ -41,20 +45,24 @@ function mem_usage()
 	return 1-mfree/mtotl
 end
 
-function mem_usage_co()
+function Co:mem_usage()
 	while true do
-		local m=mem_usage()
-		MTAB['mem'] = m
+		local m=Fn:mem_usage()
+		MTAB['mem'] = m*100
+		MTAB['mem_level'] = m*5
 		coroutine.yield()
 	end
 end
 
 -- VOL --
-function vol_usage()
+function Fn:vol_usage()
 	local handle = io.popen("pactl list sinks")
 	local result = handle:read("*a")
 	handle:close()
-	vol = string.match(result, "Volume:(.*)balance")
+	local vol = string.match(result, "Volume:(.*)balance")
+	if vol == nil then
+		return 0
+	end
 	volt=0
 	for v in string.gmatch(vol, "/%s+(%d+)") do
 		volt=volt+v
@@ -63,16 +71,17 @@ function vol_usage()
 	return volt
 end
 
-function vol_usage_co()
+function Co:vol_usage()
 	while true do
-		local v=vol_usage()
+		local v=Fn:vol_usage()
 		MTAB['vol'] = v
+		MTAB['vol_level'] = v*0.05
 		coroutine.yield()
 	end
 end
 
 -- TEMP --
-function tem_usage()
+function Fn:tem_usage()
 	local tcpu_pat = "Tdie:%s++(%d+.%d+)°C"
 	local tgpu_pat = "edge:%s++(%d+.%d+)°C"
 	local handle = io.popen("sensors")
@@ -83,9 +92,9 @@ function tem_usage()
 	return tcpu,tgpu
 end
 
-function tem_usage_co()
+function Co:tem_usage()
 	while true do
-		local tcpu,tgpu=tem_usage()
+		local tcpu,tgpu=Fn:tem_usage()
 		MTAB['cpu_temp'] = tcpu
 		MTAB['gpu_temp'] = tgpu
 		coroutine.yield()
@@ -93,7 +102,7 @@ function tem_usage_co()
 end
 
 -- TEMP --
-function net_usage()
+function Fn:net_usage()
 	local net_if_pat = "default via (%d+.%d+.%d+.%d+) dev (%w+) proto (%w+)"
 	local handle = io.popen("ip route")
 	local result = handle:read("*a")
@@ -115,10 +124,10 @@ function net_usage()
 end
 
 
-function net_usage_co()
+function Co:net_usage()
 	local tx0,rx0=0,0
 	while true do
-		local gw,dev,proto,tx,rx=net_usage()
+		local gw,dev,proto,tx,rx=Fn:net_usage()
 		local ts,rs = (tx-tx0)/EPOC, (rx-rx0)/EPOC
 		tx0,rx0=tx,rx
 
@@ -134,45 +143,59 @@ function net_usage_co()
 	end
 end
 
-function logger_co()
+Fmt={
+	cpu="%s: %3.0f",
+	cpu_level="%s: %.0f",
+	mem="%s: %3.0f",
+	mem_level="%s: %.0f",
+	vol="%s: %3.0f",
+	vol_level="%s: %.0f",
+	cpu_temp="%s: %.0f",
+	gpu_temp="%s: %.0f",
+	net_gateway="%s: %s",
+	net_device="%s: %s",
+	net_proto="%s: %s",
+	net_tx="%s: %d",
+	net_rx="%s: %d",
+	net_ts="%s: %.0f",
+	net_rs="%s: %.0f"
+}
+
+function Co:logger()
 	print("logging metrics to '/tmp/sys.montor.out' ...")
 	while true do
 		local hout = io.open("/tmp/sys.monitor.out", "w")
-		hout:write("<param>:", "<value>")
-		hout:write('\ncpu:', string.format("%.0f", MTAB['cpu']*100))
-		hout:write('\nmem:', string.format("%.0f", MTAB['mem']*100))
-		hout:write('\nvol:', string.format("%.0f", MTAB['vol']))
-		hout:write('\ncpu_temp:', string.format("%.0f", MTAB['cpu_temp']))
-		hout:write('\ngpu_temp:', string.format("%.0f", MTAB['gpu_temp']))
-		hout:write('\nnet_gateway:', MTAB['net_gateway'])
-		hout:write('\nnet_device:', MTAB['net_device'])
-		hout:write('\nnet_proto:', MTAB['net_proto'])
-		hout:write('\nnet_tx:', MTAB['net_tx'])
-		hout:write('\nnet_rx:', MTAB['net_rx'])
-		hout:write('\nnet_ts:', string.format("%.0f", MTAB['net_ts']))
-		hout:write('\nnet_rs:', string.format("%.0f", MTAB['net_rs']))
+		hout:write("<param>: <value>\n")
+		for k,v in pairs(MTAB) do
+			hout:write(string.format(Fmt[k], k, v), "\n")
+		end
 		hout:close()
+		print('--> logged')
 		coroutine.yield()
 	end
 end
 
 -- START --
-function monitor()
-	local co_mem=coroutine.create(mem_usage_co)
-	local co_cpu=coroutine.create(cpu_usage_co)
-	local co_vol=coroutine.create(vol_usage_co)
-	local co_tem=coroutine.create(tem_usage_co)
-	local co_net=coroutine.create(net_usage_co)
-	local co_logger=coroutine.create(logger_co)
+Cmd={}
+CoInst={}
+function Cmd:start()
+	for k,co in pairs(Co) do
+		CoInst[k] = coroutine.create(co)
+		print('created co:', k)
+	end
 	while true do
-		coroutine.resume(co_mem)
-		coroutine.resume(co_cpu)
-		coroutine.resume(co_vol)
-		coroutine.resume(co_tem)
-		coroutine.resume(co_net)
-		coroutine.resume(co_logger)
+		for k,coInst in pairs(CoInst) do
+			print('resuming co:', k, coroutine.status(coInst))
+			coroutine.resume(coInst)
+		end
 		socket.sleep(EPOC)
 	end
 end
 
-monitor()
+function Cmd:test()
+	for k,fn in pairs(Fn) do
+		print(k, fn())
+	end
+end
+
+Cmd[arg[1]]()
