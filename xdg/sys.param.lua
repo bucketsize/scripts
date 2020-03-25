@@ -20,10 +20,27 @@ function resolve_indicator(sym)
 	local v = string.match(result, sym .. ":%s+(%w+)%c")
 	local fmt = ICON_MAP[sym]
 	if fmt == nil then
-		fmt = "question.svg"
+		fmt = "cpu.svg"
+	end
+	if v == nil then
+		v = "?"
 	end
 	print(ICON_PATH .. string.format(fmt, l))
 	print(v)
 end
+function resolve_param(sym)
+	local handle = io.open("/tmp/sys.monitor.out", "r")
+	local result = handle:read("*a")
+	handle:close()
+	local v = string.match(result, sym .. ":%s+(%w+)%c")
+	if v == nil then
+		v = "?"
+	end
+	print(v)
+end
 
-resolve_indicator(arg[1])
+if arg[2] == nil then
+	resolve_param(arg[1])
+else
+	resolve_indicator(arg[1])
+end

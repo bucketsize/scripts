@@ -19,3 +19,6 @@
 [submodule "config/tint2/tint2-executors"]
 	path = config/tint2/tint2-executors
 	url = https://github.com/bucketsize/tint2-executors.git
+[submodule "config/conky/conkybar"]
+	path = config/conky/conkybar
+	url = https://github.com/gmhafiz/conkybar.git

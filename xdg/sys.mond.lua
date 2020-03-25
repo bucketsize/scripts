@@ -1,12 +1,34 @@
 #!/bin/lua
+-- sys.mond.lua test
+-- sys.mond.lua
 
-socket = require("socket")
+package.path = package.path .. ';~/scripts/?.lua'
+local socket = require("socket")
+local Util = require("util")
 
-EPOC=2
-MTAB={}
+local EPOC=2
+local MTAB={}
+local Fmt={
+	cpu="%s: %3.0f",
+	cpu_level="%s: %.0f",
+	mem="%s: %3.0f",
+	mem_level="%s: %.0f",
+	vol="%s: %3.0f",
+	vol_level="%s: %.0f",
+	cpu_temp="%s: %.0f",
+	gpu_temp="%s: %.0f",
+	net_gateway="%s: %s",
+	net_device="%s: %s",
+	net_proto="%s: %s",
+	net_tx="%s: %d",
+	net_rx="%s: %d",
+	net_ts="%s: %.0f",
+	net_rs="%s: %.0f"
+}
 
-Fn={}
-Co={}
+
+local Fn={}
+local Co={}
 
 -- CPU --
 function Fn:cpu_usage()
@@ -30,16 +52,14 @@ function Co:cpu_usage()
 		local c=1-(z-z0)/(s-s0)
 		s0,z0=s,z
 		MTAB['cpu'] = c*100
-		MTAB['cpu_level'] = c*5 
+		MTAB['cpu_level'] = c*5
 		coroutine.yield()
 	end
 end
 
 -- MEM --
 function Fn:mem_usage()
-	local handle = io.open("/proc/meminfo", "r")
-	local result = handle:read("*a")
-	handle:close()
+	local result = Util:read("/proc/meminfo")
 	local mtotl = string.match(result, "MemTotal:%s+(%d+) kB")
 	local mfree = string.match(result, "MemFree:%s+(%d+) kB")
 	return 1-mfree/mtotl
@@ -56,9 +76,7 @@ end
 
 -- VOL --
 function Fn:vol_usage()
-	local handle = io.popen("pactl list sinks")
-	local result = handle:read("*a")
-	handle:close()
+	local result = Util:exec("pactl list sinks")
 	local vol = string.match(result, "Volume:(.*)balance")
 	if vol == nil then
 		return 0
@@ -84,9 +102,7 @@ end
 function Fn:tem_usage()
 	local tcpu_pat = "Tdie:%s++(%d+.%d+)°C"
 	local tgpu_pat = "edge:%s++(%d+.%d+)°C"
-	local handle = io.popen("sensors")
-	local result = handle:read("*a")
-	handle:close()
+	local result = Util:exec("sensors")
 	local tcpu = string.match(result, tcpu_pat)
 	local tgpu = string.match(result, tgpu_pat)
 	return tcpu,tgpu
@@ -101,21 +117,17 @@ function Co:tem_usage()
 	end
 end
 
--- TEMP --
+-- NET --
 function Fn:net_usage()
 	local net_if_pat = "default via (%d+.%d+.%d+.%d+) dev (%w+) proto (%w+)"
-	local handle = io.popen("ip route")
-	local result = handle:read("*a")
-	handle:close()
+	local result = Util:exec("ip route")
 	local gw,dev,proto = string.match(result, net_if_pat)
 
 	local net_stat_pat = dev .. ": (.+)%c"
-	local h2 = io.open("/proc/net/dev", "r")
-	local r2 = h2:read("*a")
-	h2:close()
+	local r2 = Util:read("/proc/net/dev", "r")
 	local r3 = string.match(r2, net_stat_pat)
 
-	t={}
+	local t={}
 	for i in string.gmatch(r3, "(%d+)") do
 		table.insert(t, i)
 	end
@@ -143,23 +155,30 @@ function Co:net_usage()
 	end
 end
 
-Fmt={
-	cpu="%s: %3.0f",
-	cpu_level="%s: %.0f",
-	mem="%s: %3.0f",
-	mem_level="%s: %.0f",
-	vol="%s: %3.0f",
-	vol_level="%s: %.0f",
-	cpu_temp="%s: %.0f",
-	gpu_temp="%s: %.0f",
-	net_gateway="%s: %s",
-	net_device="%s: %s",
-	net_proto="%s: %s",
-	net_tx="%s: %d",
-	net_rx="%s: %d",
-	net_ts="%s: %.0f",
-	net_rs="%s: %.0f"
-}
+-- BAT --
+function Fn:bat_usage()
+	local r1 = Util:read("/sys/class/power_supply/BAT0/capacity")
+	if r1 == "" then
+		r1 = -1
+	else
+		r1 = tonumber(r1)
+	end
+
+	local r2 = Util:read("/sys/class/power_supply/BAT0/status")
+	if r2 == "" then
+		r2 = "AC"
+	end
+
+	return r1, r2
+end
+function Co:bat_usage()
+	while true do
+		local level,status=Fn:bat_usage()
+		MTAB['bat_status']=status
+		MTAB['bat_level']=level
+		coroutine.yield()
+	end
+end
 
 function Co:logger()
 	print("logging metrics to '/tmp/sys.montor.out' ...")
@@ -167,10 +186,14 @@ function Co:logger()
 		local hout = io.open("/tmp/sys.monitor.out", "w")
 		hout:write("<param>: <value>\n")
 		for k,v in pairs(MTAB) do
-			hout:write(string.format(Fmt[k], k, v), "\n")
+			local fmt = Fmt[k]
+			if fmt == nil then
+				print('missing Fmt ', k)
+				fmt = "%s: %s"
+			end
+			hout:write(string.format(fmt, k, v), "\n")
 		end
 		hout:close()
-		print('--> logged')
 		coroutine.yield()
 	end
 end
@@ -185,7 +208,7 @@ function Cmd:start()
 	end
 	while true do
 		for k,coInst in pairs(CoInst) do
-			print('resuming co:', k, coroutine.status(coInst))
+			print(k, coroutine.status(coInst))
 			coroutine.resume(coInst)
 		end
 		socket.sleep(EPOC)
@@ -198,4 +221,8 @@ function Cmd:test()
 	end
 end
 
-Cmd[arg[1]]()
+if arg[1] == nil then
+	Cmd['start']()
+else
+	Cmd[arg[1]]()
+end
