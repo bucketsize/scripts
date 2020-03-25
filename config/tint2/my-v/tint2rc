@@ -110,8 +110,8 @@ border_color_pressed = #777777 30
 # Panel
 panel_items = TEEEEES
 panel_size = 100% 42
-panel_margin = 2 2
-panel_padding = 18 2 0
+panel_margin = 0 0
+panel_padding = 18 0 0
 panel_background_id = 1
 wm_menu = 1
 panel_dock = 0
