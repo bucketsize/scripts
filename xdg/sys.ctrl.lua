@@ -1,20 +1,62 @@
-#!/bin/lua
+#!/usr/bin/env lua
 -- $(luarocks path) && sys.ctrl.lua start
-
-local sleep = require('socket').sleep
-
--- pre: arch linux
+--
 -- luarocks install --server=https://luarocks.org/dev lua-dbus --local DBUS_INCDIR=/usr/include/dbus-1.0 DBUS_ARCH_INCDIR=/usr/lib/dbus-1.0/include DBUS_LIBDIR=/usr/lib
-local dbus = require 'lua-dbus'
+--
 
-Fn={}
-Mtab={
+package.path = package.path .. ';~/scripts/?.lua'
+package.path = package.path .. ';/usr/share/lua/5.3/?.lua;/usr/share/lua/5.3/?/init.lua;/usr/lib/lua/5.3/?.lua;/usr/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;/home/jb/.luarocks/share/lua/5.3/?.lua;/home/jb/.luarocks/share/lua/5.3/?/init.lua'
+package.cpath = package.cpath .. ';/usr/lib/lua/5.3/?.so;/usr/lib/lua/5.3/loadall.so;./?.so;/home/jb/.luarocks/lib/lua/5.3/?.so'
+
+local Socket = require('socket')
+local dbus = require('lua-dbus')
+
+local sleep = Socket.sleep
+local Fn={}
+local Mtab={
 	bri_def = 0.9,
 	gam_def = '0.7:0.7:0.7',
 	gam_nmo = '0.5:0.4:0.3',
 	bri = 0.9,
 	gam = '0.7:0.7:0.7'
 }
+local MCache={}
+function MCache:init(host, port)
+	MCache.con = true
+	MCache.soc = Socket.tcp()
+	MCache.soc:settimeout(timeout)
+	if MCache.soc:connect(host, port) == nil then
+		MCache.con = false
+	end
+end
+function MCache:put(key, val)
+	local cmd=string.format("set %s 0 84600 %d \n%s \n", key, string.len(val), val)
+	print('cmd> ', cmd)
+	MCache.soc:send(cmd)
+end
+function MCache:get(key)
+	MCache.soc:send("get "..key.." \n")
+	return MCache.query()
+end
+function MCache:query()
+	local data = {}
+	while true do
+		local line, err = MCache.soc:receive()
+		if line == 'END' then
+			break
+		elseif string.sub(line, 1, 5) == 'VALUE' then
+		else
+			table.insert(data, line)
+			print('<< ', line)
+		end
+	end
+	if table.getn(data) == 0 then
+		return nil
+	end
+	local datastring = table.concat(data, '\n')
+	return datastring
+end
+
 function Mtab:save()
 	local h=io.open('/var/tmp/sys.ctrl.cfg', "w")
 	for k, v in pairs(Mtab) do
@@ -173,8 +215,7 @@ function on_signal()
 
 end
 
-Cmd={}
-function Cmd:start()
+function Fn:start()
 	if not awesome then
 		dbus.init()
 
@@ -200,8 +241,14 @@ function Cmd:start()
 	end
 end
 
+function Fn:test_memcache()
+	MCache:init('localhost', 11211)
+	MCache:put('os.date', os.date())
+	local v = MCache:get('foo')
+	print('MCache::get', v)
+end
 
-local fn = Cmd[arg[1]]
+local fn = Fn[arg[1]]
 if fn == nil then
 	print('huh!')
 else

@@ -1,4 +1,4 @@
-#!/bin/lua
+#!/usr/bin/env lua
 
 BASEDIR=arg[0]:match(".*/")
 ICON_PATH=BASEDIR .. 'icons/'

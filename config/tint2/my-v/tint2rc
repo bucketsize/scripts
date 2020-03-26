@@ -111,7 +111,7 @@ border_color_pressed = #777777 30
 panel_items = TEEEEES
 panel_size = 100% 42
 panel_margin = 0 0
-panel_padding = 18 0 0
+panel_padding = 20 0 0
 panel_background_id = 1
 wm_menu = 1
 panel_dock = 0
@@ -242,7 +242,7 @@ tooltip_font = Sans 10
 #-------------------------------------
 # Executor 1
 execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua net_device
+execp_command = ~/scripts/xdg/sys.param.lua net_device
 execp_interval = 5
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -264,7 +264,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1.5
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua mem
+# execp_command = ~/scripts/xdg/sys.param.lua mem
 # execp_interval = 2
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -286,7 +286,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1.6
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua cpu
+# execp_command = ~/scripts/xdg/sys.param.lua cpu
 # execp_interval = 2
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -308,7 +308,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua bat
+# execp_command = ~/scripts/xdg/sys.param.lua bat
 # execp_interval = 30
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -331,7 +331,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 3
 execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua vol
+execp_command = ~/scripts/xdg/sys.param.lua vol
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1
@@ -354,7 +354,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 4
 execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua bri
+execp_command = ~/scripts/xdg/sys.param.lua bri
 execp_interval = 2
 execp_has_icon = 1
 execp_cache_icon = 1

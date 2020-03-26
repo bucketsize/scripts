@@ -85,7 +85,7 @@
     </font>
     <font place="MenuItem">
       <name>sans</name>
-      <size>11</size>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -329,7 +329,7 @@
     </keybind>
     <keybind key="W-l">
       <action name="Execute">
-        <command>scripts/xdg/x.lock-i3.sh start</command>
+				<command>~/scripts/xdg/x.lock-i3.sh start</command>
       </action>
     </keybind>
     <keybind key="W-r">
@@ -349,17 +349,17 @@
     </keybind>
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
-        <command>~/scripts/xdg/x.volume.sh up</command>
+        <command>~/scripts/xdg/sys.ctrl.lua vol_up</command>
       </action>
     </keybind>
     <keybind key="XF86AudioLowerVolume">
       <action name="Execute">
-        <command>~/scripts/xdg/x.volume.sh down</command>
+        <command>~/scripts/xdg/sys.ctrl.lua vol_down</command>
       </action>
     </keybind>
     <keybind key="XF86AudioMute">
       <action name="Execute">
-        <command/>
+        <command>~/scripts/xdg/sys.ctrl.lua vol_mute</command>
       </action>
     </keybind>
     <keybind key="XF86MonBrightnessUp">

@@ -15,8 +15,7 @@
         <!-- This requires the presence of the 'openbox-menu' package to work -->
         <menu id="/Debian" />
 				<separator />
-				<!-- <menu id="applications" label="Applications" execute="xdg_menu format openbox3-pipe root-menu /etc/xdg/menus/arch-applications.menu" /> -->
-				<menu id="applications" label="Applications" execute="obamenu" />
+				<menu id="applications" label="Applications" execute="~/scripts/xdg/obmenu-pipe.sh" />
         <separator />
         <item label="Settings">
             <action name="Execute"><execute>obconf</execute></action>
