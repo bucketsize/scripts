@@ -7,14 +7,13 @@
 # 4. complete shortcuts
 # 9. fix compositing; compton is crashing in alpine
 
-XDG_APPLET_PATH=~/scripts/xdg
-
 stopAll(){
 	killall picom
 	killall dunst
 	killall tint2
 	killall conky
 	killall lx-polkit
+	xautolock -exit
 }
 startAll(){
 	picom &
@@ -22,9 +21,13 @@ startAll(){
 	tint2 &
 	conky &
 	lx-polkit &
-	xautolock -time 15 -locker "~/scripts/x.lock-i3.sh" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking screen in 30 seconds'" &
-	$XDG_APPLET_PATH/x.wallpaper.sh &
-	$XDG_APPLET_PATH/sys.mond.lua &
+	xautolock \
+		-time 5 -locker "~/scripts/xdg/x.lock-i3.sh" \
+		-killtime 10 -killer "xterm" \
+		-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Lock activated ETA 30s'" &
+
+	~/scripts/xdg/x.wallpaper.sh &
+	~/scripts/xdg/sys.mond.lua &
 }
 case $i in
     stop)

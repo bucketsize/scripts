@@ -30,9 +30,14 @@ function MCache:init(host, port)
 	end
 end
 function MCache:put(key, val)
-	local cmd=string.format("set %s 0 84600 %d \n%s \n", key, string.len(val), val)
-	print('cmd> ', cmd)
+	local size = string.len(val)
+	local cmd=string.format("set %s 0 84600 %d\n", key, size)
 	MCache.soc:send(cmd)
+	MCache.soc:send(val)
+	MCache.soc:send("\n")
+	print(">> ", cmd, val)
+	-- local line, err = MCache.soc:receive()
+	-- print("<< ", line, err)
 end
 function MCache:get(key)
 	MCache.soc:send("get "..key.." \n")

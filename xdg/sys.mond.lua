@@ -2,7 +2,7 @@
 -- sys.mond.lua test
 -- sys.mond.lua
 
-package.path = package.path .. ';~/scripts/?.lua'
+package.path = package.path .. ';/home/jb/scripts/?.lua'
 local socket = require("socket")
 local Util = require("util")
 
