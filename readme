@@ -33,3 +33,30 @@ v4l2-ctl --set-ctrl=exposure_auto=1
 v4l2-ctl --set-ctrl=exposure_absolute=10
 v4l2-ctl --set-ctrl=white_balance_temperature_auto=1
 v4l2-ctl --set-ctrl=white_balance_temperature=6001
+
+# previous boot-*all log
+journalctl -b-1
+
+# install grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# 2020-03-27 suspend-resume bug kerne; 5.x onwards
+# workaround with kernel param
+amggpu.dc=1
+
+# steam from flatpak
+flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak --user install flathub com.valvesoftware.Steam
+flatpak run com.valvesoftware.Steam
+
+# expose fs to flatpak
+flatpak --user override com.valvesoftware.Steam --filesystem=$HOME
+flatpak --user override com.valvesoftware.Steam --filesystem=/mnt/f1aa
+
+# run a flatpak
+flatpak list
+flatpak run com.valvesoftware.Steam
+
+# awesome testing
+Xephyr :1 -ac -br -noreset -screen 1152x720 &
+DISPLAY=:1.0 awesome

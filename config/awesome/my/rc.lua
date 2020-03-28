@@ -56,6 +56,8 @@ CTX = {}
 CTX.beautiful = beautiful
 CTX.terminal = terminal
 CTX.editor = editor
+CTX.root = root
+
 
 local menu = require("menu")
 menu:setup(CTX)
@@ -109,16 +111,23 @@ awful.layout.layouts = {
 	-- 	wiman:apply()
 
 	-- end)
-		local wiman = require('wiman')
-		wiman:setup(CTX)
-		wiman:apply()
+		local panel_top = require('panel_top')
+		panel_top:setup(CTX)
+		panel_top:apply()
+		
+		local panel_left = require('panel_left')
+		panel_left:setup(CTX)
+		panel_left:apply()
+		
+		local wallpaper = require('wallpaper')
+		wallpaper:setup(CTX)
+		wallpaper:apply()
 		-- }}}
 
 	-- Set keys
 		local keyman = require('keyman')
 		keyman:setup(CTX)
-		root.keys(keyman:keys_global())
-		root.buttons(keyman:buttons_global())
+		keyman:apply()
 
 
 		local rules = require("rules")

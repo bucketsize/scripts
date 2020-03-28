@@ -8,6 +8,10 @@ function Keyman:setup(ctx)
 	self.ctx.keyman = self
 	return self
 end
+function Keyman:apply()
+	self.ctx.root.keys(Keyman:keys_global())
+	self.ctx.root.buttons(Keyman:buttons_global())
+end
 function Keyman:keys_global()
 	local globalkeys = gears.table.join(
 		awful.key({ modkey,           }, "s",      self.ctx.hotkeys_popup.show_help,
@@ -92,7 +96,10 @@ function Keyman:keys_global()
 			{description = "restore minimized", group = "client"}),
 
 		-- Prompt
-		awful.key({ modkey },            "r",     function () self.ctx.mypromptbox:run() end,
+		awful.key({ modkey },            "r",     function ()
+			-- self.ctx.mypromptbox:run()
+			awful.util.spawn("dmenu_run", false)
+		end,
 			{description = "run prompt", group = "launcher"}),
 
 		awful.key({ modkey }, "x",
@@ -206,7 +213,6 @@ for i = 1, 9 do
 			{description = "toggle focused client on tag #" .. i, group = "tag"})
 		)
 end
-
 return globalkeys
 end
 function Keyman:keys_client()
