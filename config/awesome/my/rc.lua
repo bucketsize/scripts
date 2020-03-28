@@ -44,8 +44,8 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
--- beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/zenburn.theme.lua")
+--beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "sakura"
@@ -78,39 +78,6 @@ awful.layout.layouts = {
 	awful.layout.suit.tile.bottom,
 	awful.layout.suit.fair,
 }
--- }}}
---
-
-
-
-
-
-	-- local function set_wallpaper(s)
-	-- 	-- Wallpaper
-	-- 	if beautiful.wallpaper then
-	-- 		local wallpaper = beautiful.wallpaper
-	-- 		-- If wallpaper is a function, call it with the screen
-	-- 		if type(wallpaper) == "function" then
-	-- 			wallpaper = wallpaper(s)
-	-- 		end
-	-- 		gears.wallpaper.maximized(wallpaper, s, true)
-	-- 	end
-	-- end
-
-	-- -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-	-- screen.connect_signal("property::geometry", set_wallpaper)
-
-	-- awful.screen.connect_for_each_screen(function(s)
-	-- 	-- Wallpaper
-	-- 	set_wallpaper(s)
-
-
-	-- 	local wiman = require('wiman')
-	-- 	CTX.screen = s
-	-- 	wiman:setup(CTX)
-	-- 	wiman:apply()
-
-	-- end)
 		local panel_top = require('panel_top')
 		panel_top:setup(CTX)
 		panel_top:apply()
@@ -122,7 +89,6 @@ awful.layout.layouts = {
 		local wallpaper = require('wallpaper')
 		wallpaper:setup(CTX)
 		wallpaper:apply()
-		-- }}}
 
 	-- Set keys
 		local keyman = require('keyman')
@@ -133,6 +99,10 @@ awful.layout.layouts = {
 		local rules = require("rules")
 		rules:setup(CTX)
 		rules:apply()
+
+		local lockscreen = require('lockscreen')
+		lockscreen:setup(CTX)
+		lockscreen:apply()
 
 	-- {{{ Signals
 	-- Signal function to execute when a new client appears.
