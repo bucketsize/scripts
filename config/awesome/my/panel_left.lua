@@ -92,16 +92,34 @@ function Wiman:apply_in_screen(s)
 			spacing = 2,
 			layout  = wibox.layout.fixed.vertical
 		},
+		widget_template = {
+			{
+				{
+					id     = 'clienticon',
+					widget = awful.widget.clienticon,
+				},
+				margins = 4,
+				widget  = wibox.container.margin,
+			},
+			id              = 'background_role',
+			forced_width    = 40,
+			forced_height   = 40,
+			widget          = wibox.container.background,
+			create_callback = function(self, c, index, objects) --luacheck: no unused
+				self:get_children_by_id('clienticon')[1].client = c
+			end,
+		},
 	}
 	-- Create the wibox
-	self.mywibox2 = awful.wibar({ position = "left", screen = s, ontop = true  })
+	self.mywibox2 = awful.wibar({ position = "left", screen = s, ontop = true,
+		width = 42, opacity = 0.3 })
 
 	-- Add widgets to the wibox
 	self.mywibox2:setup {
 		layout = wibox.layout.align.vertical,
 		{ -- Left widgets
 			layout = wibox.layout.fixed.vertical,
-			self.mytaglist,
+			-- self.mytaglist,
 			self.mypromptbox,
 		},
 		self.mytasklist, -- Middle widget

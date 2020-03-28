@@ -6,12 +6,12 @@ ssh-add ~/.ssh/id_rsa
 
 git remote set-url origin ssh://git@github.com/bucketsize/scripts.git
 
-git submodule add [URL to Git repo] 
-git submodule init 
+git submodule add [URL to Git repo]
+git submodule init
 
-git submodule deinit -f — mymodule
+git submodule deinit -f mymodule
 rm -rf .git/modules/mymodule
-git rm -f mymodule
+git rm -rf mymodule
 
 $HOME/.config/gtk-3.0/settings.ini
 ----- begin of file ------

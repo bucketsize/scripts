@@ -31,6 +31,16 @@ case $1 in
 		ln -s ~/scripts/config/awesome/my ~/.config/awesome
 		xbootstrap
 		;;
+	floppy)
+		cleanup
+		ln -s ~/scripts/config/awesome/floppy ~/.config/awesome
+		xbootstrap
+		;;
+	gnawesome)
+		cleanup
+		ln -s ~/scripts/config/awesome/gnawesome ~/.config/awesome
+		xbootstrap
+		;;
 	*)
 		echo "./setup.sh {my|copycats}"
 		;;
