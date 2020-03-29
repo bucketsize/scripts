@@ -8,7 +8,8 @@ local dpi = beautiful.xresources.apply_dpi
 
 local filesystem = require('gears.filesystem')
 local config_dir = filesystem.get_configuration_dir()
-local widget_icon_dir = config_dir .. '/widgets/icons/'
+local widget_icon_dir = config_dir .. 'widgets/icons/'
+print(">>> widget_icon_dir:", widget_icon_dir)
 
 local Lockscreen = {}
 function Lockscreen:setup(ctx)
@@ -32,10 +33,81 @@ end
 function Lockscreen:off()
 	self.I.visible = false
 end
-function Lockscreen:pass(password)
-	return true
+function Lockscreen:pass(username, password)
+	-- print('pass:', username, password)
+	local h = io.popen(string.format("~/scripts/pam_auth %s %s", username, password))
+	local r
+	if h == nil then
+		r = ""
+	else
+		r = h:read("*a")
+		h:close()
+	end
+	local s = string.match(r, "status:%s(%w+)%c")
+	print('pass:', s)
+
+	return (s == "success")
 end
+	function Lockscreen:check_caps()
+		awful.spawn.easy_async("xset q", function(stdout)
+			local caps_lock = string.match(stdout, "Caps Lock:%s+(%w+)%s")
+			if string.match(caps_lock, 'on') then
+				Lockscreen.caps_text.opacity = 1.0
+				Lockscreen.caps_text:set_markup('Caps Lock is on')
+			else
+				Lockscreen.caps_text.opacity = 0.0
+			end
+
+			Lockscreen.caps_text:emit_signal('widget::redraw_needed')
+		end)
+	end
+	function Lockscreen:set_msg(msg)
+			Lockscreen.msg_text.opacity = 1.0
+			print('>>> set_msg:', msg)
+			Lockscreen.msg_text:set_markup(msg)
+			Lockscreen.msg_text:emit_signal('widget::redraw_needed')
+	end
+	function Lockscreen:release()
+
+		-- Add a little delay before unlocking completely
+		gears.timer.start_new(1, function()
+
+			-- Hide all the lockscreen on all screen
+			for s in screen do
+				if s.index == 1 then
+					Lockscreen.I.visible = false
+				else
+					-- Lockscreen_extended.visible = false -- TODO
+				end
+			end
+
+
+			-- Enable locking again
+			Lockscreen.lock_again = true
+
+			-- Enable validation again
+			Lockscreen.type_again = true
+
+			-- if capture_now then
+			-- 	-- Hide wanted poster
+			-- 	wanted_poster.visible = false
+			-- end
+		end)
+
+	end
+	function Lockscreen:throw()
+		gears.timer.start_new(1, function()
+			Lockscreen.type_again = true
+		end)
+		gears.timer.start_new(5, function()
+			Lockscreen:set_msg("Start typing the password and `Return` when ready!")
+		end)
+		Lockscreen:set_msg("Invalid credentials, please try again")
+	end
 function Lockscreen:input()
+	Lockscreen.type_again = true
+	Lockscreen.input_password = nil
+	Lockscreen:set_msg("Start typing the password and `Return` when ready!")
 	local password_grabber = awful.keygrabber {
 		autostart          = true,
 		stop_event          = 'release',
@@ -46,94 +118,68 @@ function Lockscreen:input()
 			end},
       {{'Control'         }, 'Return', function(self)
 				self:stop()
-				-- back_door()
+				Lockscreen:release()
 			end},
 		},
 		keypressed_callback = function(self, mod, key, command)
-
-			if not type_again then
+			if not Lockscreen.type_again then
 				return
 			end
 
-			-- Clear input string
 			if key == 'Escape' then
-				-- Clear input threshold
-				input_password = nil
+				Lockscreen.input_password = nil
 			end
 
 			-- Accept only the single charactered key
 			-- Ignore 'Shift', 'Control', 'Return', 'F1', 'F2', etc., etc
 			if #key == 1 then
-
-				-- locker_widget_rotate()
-
-				if input_password == nil then
-					input_password = key
+				if Lockscreen.input_password == nil then
+					Lockscreen.input_password = key
 					return
 				end
-
-				input_password = input_password .. key
+				Lockscreen.input_password = Lockscreen.input_password .. key
 			end
 
 		end,
 		keyreleased_callback = function(self, mod, key, command)
-			Lockscreen.locker_arc.bg = beautiful.transparent
-			Lockscreen.locker_arc:emit_signal('widget::redraw_needed')
-
+			-- print(">>> input", mod, key, command)
 			if key == 'Caps_Lock' then
-				-- check_caps()
+				Lockscreen:check_caps()
 			end
 
-			if not type_again then
+			if not Lockscreen.type_again then
 				return
 			end
 
-			-- Validation
 			if key == 'Return' then
-
-				type_again = false
-
-				-- Validate password
-				if Lockscreen:pass(input_password) then
-					-- Come in!
+				Lockscreen.type_again = false
+				if Lockscreen:pass(Lockscreen.username, Lockscreen.input_password) then
 					self:stop()
-					-- generalkenobi_ohhellothere()
+					Lockscreen:release()
 				else
-					-- F*ck off, you [REDACTED]!
-					-- stoprightthereyoucriminalscum()
+					Lockscreen:throw()
 				end
-
-				input_password = nil
+				Lockscreen.input_password = nil
 			end
-
 		end
 
 	}
 	return password_grabber
 end
 function Lockscreen:build(s)
-		local lockscreen = wibox {
-			visible = false,
-			ontop = true,
-			type = "splash",
-			width = s.geometry.width,
-			height = s.geometry.height,
-			bg = beautiful.background,
-			fg = beautiful.fg_normal
-		}
+	local lockscreen = wibox {
+		visible = false,
+		ontop = true,
+		type = "splash",
+		width = s.geometry.width,
+		height = s.geometry.height,
+		bg = beautiful.background,
+		fg = beautiful.fg_normal
+	}
 
 	local uname_text = wibox.widget {
 		id = 'uname_text',
 		markup = '$USER',
-		font = 'SF Pro Display Bold 17',
-		align = 'center',
-		valign = 'center',
-		widget = wibox.widget.textbox
-	}
-
-	local uname_text_shadow = wibox.widget {
-		id = 'uname_text_shadow',
-		markup = '<span foreground="#00000066">' .. '$USER' .. "</span>",
 		font = 'SF Pro Display Bold 17',
 		align = 'center',
 		valign = 'center',
@@ -149,53 +195,42 @@ function Lockscreen:build(s)
 		opacity = 0.0,
 		widget = wibox.widget.textbox
 	}
-	local caps_text_shadow = wibox.widget {
-		id = 'uname_text',
-		markup = '<span foreground="#00000066">' .. 'Caps Lock is off' .. "</span>",
-		font = 'SF Pro Display Italic 10',
+  Lockscreen.caps_text = caps_text
+
+	local msg_text = wibox.widget {
+		id = 'msg_text',
+		markup = '',
+		font = 'SF Pro Display Italic 12',
 		align = 'center',
 		valign = 'center',
-		opacity = 0.0,
+		opacity = 0.8,
 		widget = wibox.widget.textbox
 	}
+  Lockscreen.msg_text = msg_text
 
 	-- Update username textbox
-	awful.spawn.easy_async_with_shell('whoami | tr -d "\\n"', function(stdout) 
+	awful.spawn.easy_async_with_shell('whoami | tr -d "\\n"', function(stdout)
 		uname_text.markup = stdout
-		uname_text_shadow.markup = '<span foreground="#00000066">' .. stdout .. "</span>"
+		Lockscreen.username = string.match(stdout, "%w+")
 	end)
-
 
 	local profile_imagebox = wibox.widget {
 		id = 'user_icon',
 		image = widget_icon_dir .. 'user.svg',
-		forced_height = dpi(100),
-		forced_width = dpi(100),
-		clip_shape = gears.shape.circle,
-		widget = wibox.widget.imagebox,
-		resize = true
+		forced_height = dpi(128),
+		forced_width = dpi(128),
+		resize = true,
+		align = 'center',
+		widget = wibox.widget.imagebox
 	}
 
 	local update_profile_pic = function()
-
-		local user_jpg_checker = [[
-		if test -f ]] .. widget_icon_dir .. 'user.jpg' .. [[; then print 'yes'; fi
-		]]
-
-		awful.spawn.easy_async_with_shell(user_jpg_checker, function(stdout)
-
-			if stdout:match('yes') then
-				profile_imagebox:set_image(widget_icon_dir .. 'user' .. '.jpg')
-			else
-				profile_imagebox:set_image(widget_icon_dir .. 'user' .. '.svg')
-			end
-			
-			profile_imagebox:emit_signal('widget::redraw_needed')
-		end)
+		profile_imagebox:set_image(widget_icon_dir .. 'user' .. '.svg')
+		profile_imagebox:emit_signal('widget::redraw_needed')
 	end
 
 	-- Update image
-	gears.timer.start_new(5, function() 
+	gears.timer.start_new(5, function()
 		update_profile_pic()
 	end)
 
@@ -204,46 +239,6 @@ function Lockscreen:build(s)
 		1
 	)
 
-	local time_shadow = wibox.widget.textclock(
-		'<span foreground="#00000066" font="SF Pro Display Bold 56">%H:%M</span>',
-		1
-	)
-
-	local wanted_text = wibox.widget {
-		markup = 'INTRUDER ALERT',
-		font   = 'SFNS Pro Text Bold 12',
-		align  = 'center',
-		valign = 'center',
-		widget = wibox.widget.textbox
-	}
-
-	local msg_table = {
-		'We are watching you.',
-		'We know where you live.',
-		'This incident will be reported.',
-		'RUN!',
-		'Yamete, Oniichan~ uwu',
-		'This will self-destruct in 5 seconds!',
-		'Image successfully sent!',
-		'You\'re doomed!'
-	}
-
-	local wanted_msg = wibox.widget {
-		markup = 'This incident will be reported!',
-		font   = 'SFNS Pro Text Regular 10',
-		align  = 'center',
-		valign = 'center',
-		widget = wibox.widget.textbox
-	}
-
-	local wanted_image = wibox.widget {
-		image  = widget_icon_dir .. 'user.svg',
-		resize = true,
-		forced_height = dpi(100),
-		clip_shape = gears.shape.rounded_rect,
-	    widget = wibox.widget.imagebox
-	}
-	
 	local date_value = function()
 		local date_val = {}
 		local ordinal = nil
@@ -251,8 +246,8 @@ function Lockscreen:build(s)
 		local day = os.date('%d')
 		local month = os.date('%B')
 
-		local first_digit = string.sub(day, 0, 1) 
-		local last_digit = string.sub(day, -1) 
+		local first_digit = string.sub(day, 0, 1)
+		local last_digit = string.sub(day, -1)
 
 		if first_digit == '0' then
 		  day = last_digit
@@ -281,62 +276,26 @@ function Lockscreen:build(s)
 		valign = 'center',
 		widget = wibox.widget.textbox
 	}
-	local date_shadow = wibox.widget {
-		markup = "<span foreground='#00000066'>" .. date_value().day .. date_value().ordinal .. " of " .. 
-			date_value().month .. "</span>",
-		font = 'SF Pro Display Bold 20',
-		align = 'center',
-		valign = 'center',
-		widget = wibox.widget.textbox
-	}
-	local circle_container = wibox.widget {
-		bg = '#f2f2f233',
-	    forced_width = dpi(110),
-	    forced_height = dpi(110),
-	    shape = gears.shape.circle,
-	    widget = wibox.container.background
-	}
-
-	local locker_arc = wibox.widget {
-	    bg = beautiful.transparent,
-	    forced_width = dpi(110),
-	    forced_height = dpi(110),
-	    shape = function(cr, width, height)
-	        gears.shape.arc(cr, width, height, dpi(5), 0, math.pi/2, true, true)
-	    end,
-	    widget = wibox.container.background
-	}
-	Lockscreen.locker_arc = locker_arc
-	local rotate_container = wibox.container.rotate()
-
-	local locker_widget = wibox.widget {
-		{
-		    locker_arc,
-		    widget = rotate_container
-		},
-		layout = wibox.layout.fixed.vertical
-	}
 
 	-- build layout
 	lockscreen : setup {
 		layout = wibox.layout.align.vertical,
 		expand = 'none',
 		nil,
-		{
+		{ --1
 			layout = wibox.layout.align.horizontal,
 			expand = 'none',
 			nil,
-			{
+			{ --2
 				layout = wibox.layout.fixed.vertical,
 				expand = 'none',
 				spacing = dpi(20),
-				{
+				{ --3
 					{
 						layout = wibox.layout.align.horizontal,
 						expand = 'none',
 						nil,
 						{
-							time_shadow,
 							time,
 							vertical_offset = dpi(-1),
 							widget = wibox.layout.stack
@@ -349,7 +308,6 @@ function Lockscreen:build(s)
 						expand = 'none',
 						nil,
 						{
-							date_shadow,
 							date,
 							vertical_offset = dpi(-1),
 							widget = wibox.layout.stack
@@ -360,11 +318,9 @@ function Lockscreen:build(s)
 					expand = 'none',
 					layout = wibox.layout.fixed.vertical
 				},
-				{
+				{ --4
 					layout = wibox.layout.fixed.vertical,
 					{
-						circle_container,
-						locker_widget,
 						{
 							layout = wibox.layout.align.vertical,
 							expand = 'none',
@@ -381,14 +337,17 @@ function Lockscreen:build(s)
 						layout = wibox.layout.stack
 					},
 					{
-						uname_text_shadow,
 						uname_text,
 						vertical_offset = dpi(-1),
 						widget = wibox.layout.stack
 					},
 					{
-						caps_text_shadow,
 						caps_text,
+						vertical_offset = dpi(-1),
+						widget = wibox.layout.stack
+					},
+					{
+						msg_text,
 						vertical_offset = dpi(-1),
 						widget = wibox.layout.stack
 					}

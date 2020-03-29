@@ -25,4 +25,10 @@ end
 -- print(Util:read("/proc/cpuinfo", "r"))
 -- print(Util:exec("ls -l", "r"))
 
+-- local cmd = string.format("~/scripts/pam_auth %s %s", "jb", "1234")
+-- local r = Util:exec(cmd)
+-- print(r)
+-- local s = string.match(r, "status:%s(%w+)%c")
+-- print('|' .. s ..'|')
+
 return Util

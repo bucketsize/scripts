@@ -6,7 +6,6 @@ local gears = require("gears")
 local naughty = require("naughty")
 
 function Wiman:apply()
-	-- Setup screen and stuff
 	awful.screen.connect_for_each_screen(function(s)
 		self:apply_in_screen(s)
 	end)
@@ -63,10 +62,10 @@ function Wiman:apply_in_screen(s)
 	self.mylayoutbox = awful.widget.layoutbox(s)
 	self.mylayoutbox:buttons(
 		gears.table.join(
-			awful.button({ }, 1, function () awful.layout.inc( 1) end),
-			awful.button({ }, 3, function () awful.layout.inc(-1) end),
-			awful.button({ }, 4, function () awful.layout.inc( 1) end),
-		awful.button({ }, 5, function () awful.layout.inc(-1) end))
+			awful.button({}, 1, function () awful.layout.inc( 1) end),
+			awful.button({}, 3, function () awful.layout.inc(-1) end),
+			awful.button({}, 4, function () awful.layout.inc( 1) end),
+		  awful.button({}, 5, function () awful.layout.inc(-1) end))
 		)
 
 	-- Create a taglist widget
@@ -77,6 +76,15 @@ function Wiman:apply_in_screen(s)
 		layout   = {
 			layout  = wibox.layout.fixed.vertical
 		},
+	}
+
+	-- Create a systray
+	-- FIXME: not displaying when placed on wibar
+	self.mysystray = wibox.widget.systray {
+		opacity = 0.8,
+		visibility = true,
+		forced_width    = 40,
+		forced_height   = 40,
 	}
 
 	-- Create a tasklist widget
@@ -110,9 +118,10 @@ function Wiman:apply_in_screen(s)
 			end,
 		},
 	}
+
 	-- Create the wibox
 	self.mywibox2 = awful.wibar({ position = "left", screen = s, ontop = true,
-		width = 42, opacity = 0.3 })
+		width = 42, opacity = 0.7 })
 
 	-- Add widgets to the wibox
 	self.mywibox2:setup {
@@ -123,6 +132,7 @@ function Wiman:apply_in_screen(s)
 			self.mypromptbox,
 		},
 		self.mytasklist, -- Middle widget
+		--self.mysystray,
 		self.mylayoutbox
 	}
 end

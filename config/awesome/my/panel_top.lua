@@ -223,9 +223,14 @@ function Wiman:build()
 	-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
 	-- wgts.vol = vol()
 
+	-- Brightness
+	wgts.bri_icon = create_icon(icons.bri)
 	wgts.bri = awful.widget.watch("xbacklight -get", 10,
 		function(widget, stdout)
 			local perc = tonumber(stdout:match("(%d+).%d"))
+			if perc == nil then
+				perc = '?'
+			end
 			widget:set_text("Brightness: "..perc.."%")
 		end
 		)
