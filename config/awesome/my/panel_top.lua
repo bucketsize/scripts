@@ -39,7 +39,6 @@ function create_icon(icon_path)
 		image = icon_path,
 		resize = false,
 		widget = wibox.widget.imagebox,
-
 	}
 	local icon = wibox.widget {
 		image,
@@ -49,6 +48,108 @@ function create_icon(icon_path)
 	icon.image = image
 	return icon
 end
+function create_text()
+	return wibox.widget.textbox()
+end
+function compose_widget(icon_path)
+	local icon = create_icon(icon_path)
+	local text = create_text()
+	local widget = wibox.widget {
+		icon,
+		text,
+		layout = wibox.layout.fixed.horizontal
+	}
+	function widget:update(msg)
+		print('>>> cpu2', msg)
+		text:set_markup(msg)
+	end
+	function widget:handler(signal, handlerfn)
+	end
+	function widget:timer(updatefn, timeout)
+		if (updatefn) then
+			gears.timer {
+				timeout   = 1,
+				call_now  = true,
+				autostart = true,
+				callback  = updatefn
+			}
+		end
+	end
+	return widget
+end
+
+local cpu = compose_widget(icons.cpu)
+cpu:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua cpu"},
+		function(out)
+			local val = tonumber(out)
+			cpu:update(string.format("%02i", val))
+		end)
+	end, 1)
+
+local mem = compose_widget(icons.mem)
+mem:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua mem"},
+		function(out)
+			local val = tonumber(out)
+			mem:update(string.format("%02i", val))
+		end)
+	end, 1)
+
+
+local cpu_temp = compose_widget(icons.temp)
+cpu_temp:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua cpu_temp"},
+		function(out)
+			local val = tonumber(out)
+			cpu_temp:update(string.format("%02i", val))
+		end)
+	end, 1)
+
+local gpu_temp = compose_widget(icons.temp)
+gpu_temp:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua gpu_temp"},
+		function(out)
+			local val = tonumber(out)
+			gpu_temp:update(string.format("%02i", out))
+		end)
+	end, 1)
+
+local net = compose_widget(icons.net)
+net:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua net_ts"},
+		function(out)
+			local ts = tonumber(out) / 1000
+			awful.spawn.easy_async(
+				{"sh", "-c", "~/scripts/xdg/sys.param.lua net_rs"},
+				function(out)
+					local rs = tonumber(out) / 1000
+					net:update(string.format('%4.2f, %4.2f', ts, rs))
+				end)
+		end)
+	end, 1)
+
+local bat_stat = compose_widget(icons.bat)
+bat_stat:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua bat_status"},
+		function(out)
+			local bs = out:match("^%s*(.-)%s*$")
+			awful.spawn.easy_async(
+				{"sh", "-c", "~/scripts/xdg/sys.param.lua bat_level"},
+				function(out)
+					local bl = tonumber(out)
+					if bl == nil then bl = 0 end
+					bat_stat:update(string.format('%s, %03i', bs, bl))
+				end)
+		end)
+	end, 5)
+
 function create_wgt(icon, actual)
 	local wgt = wibox.widget {
 		icon,
@@ -91,52 +192,6 @@ function Wiman:build()
 				bg   = theme.bg_normal
 			}
 		})
-	-- local cal = require("awesome-wm-widgets/calendar-widget/calendar")
-	-- wgts.cal = cal({
-	-- 		theme = 'dark',
-	-- 		placement = 'top_right'
-	-- 	})
-	-- wgts.clock:connect_signal("button::press",
-	-- 	function(_, _, _, button)
-	-- 		if button == 1 then wgts.cal.toggle() end
-	-- 	end)
-
-	---- MEM
-	wgts.mem_icon = create_icon(icons.mem)
-	wgts.mem = create_wgt(
-		wgts.mem_icon,
-		lain.widget.mem({
-				settings = function()
-					widget:set_markup(markup.font(theme.font, string.format("%04i%s", mem_now.used, "M")))
-				end
-			})
-		)
-	-- local mem = require("widgets/memarc-widget/memarc")
-	-- wgts.mem = mem()
-
-	---- CPU
-	wgts.cpu_icon = create_icon(icons.cpu)
-	wgts.cpu = create_wgt(
-		wgts.cpu_icon,
-		lain.widget.cpu({
-				settings = function()
-					widget:set_markup(markup.font(theme.font, string.format("%02i%s", cpu_now.usage, "")))
-				end
-			})
-		)
-	-- local cpu = require("widgets/cpuarc-widget/cpuarc")
-	-- wgts.cpu = cpu()
-
-	---- Coretemp
-	wgts.temp_icon = create_icon(icons.temp)
-	wgts.temp = create_wgt(
-		wgts.temp_icon,
-		lain.widget.temp({
-				settings = function()
-					widget:set_markup(markup.font(theme.font, string.format("%s°C", coretemp_now )))
-				end
-			})
-		)
 
 	---- / fs
 	wgts.fs_icon = create_icon(icons.hdd)
@@ -149,8 +204,6 @@ function Wiman:build()
 				end
 			})
 		)
-	-- local fs = require("widgets/fsarc-widget/fsarc")
-	-- wgts.fs = fs()
 
 	---- Battery
 	wgts.bat_icon = create_icon(icons.bat)
@@ -171,8 +224,6 @@ function Wiman:build()
 				end
 			})
 		)
-	-- local bat = require("awesome-wm-widgets/batteryarc-widget/batteryarc")
-	-- wgts.bat = bat()
 
 	---- ALSA/pulse volume
 	wgts.vol_icon = create_icon(icons.vol)
@@ -220,37 +271,7 @@ function Wiman:build()
 				wgts.vol.actual:update()
 			end)
 		))
-	-- local vol = require("awesome-wm-widgets/volumearc-widget/volumearc")
-	-- wgts.vol = vol()
 
-	-- Brightness
-	wgts.bri_icon = create_icon(icons.bri)
-	wgts.bri = awful.widget.watch("xbacklight -get", 10,
-		function(widget, stdout)
-			local perc = tonumber(stdout:match("(%d+).%d"))
-			if perc == nil then
-				perc = '?'
-			end
-			widget:set_text("Brightness: "..perc.."%")
-		end
-		)
-	-- local bri = require("awesome-wm-widgets/brightnessarc-widget/brightnessarc")
-	-- wgts.bri = bri()
-
-	---- Net
-	wgts.net_icon = create_icon(icons.net)
-	wgts.net = create_wgt(
-		wgts.net_icon,
-		lain.widget.net({
-				settings = function()
-					widget:set_markup(markup.font(theme.font,
-							string.format("%s %s",
-								markup("#7AC82E",  string.format("%06.1f", net_now.received)),
-								markup("#46A8C3", string.format("%06.1f", net_now.sent))
-						)))
-				end
-			})
-		)
 
 	---- Weather
 	wgts.weather_icon = create_icon(icons.weather)
@@ -296,13 +317,13 @@ function Wiman:apply_in_screen(s)
 		{ -- Right widgets
 			layout = wibox.layout.fixed.horizontal,
 			wibox.widget.systray(),
-			self.widgets.mem,
-			self.widgets.cpu,
-			self.widgets.temp,
-			self.widgets.bat,
-			self.widgets.net,
+			cpu,
+			mem,
+			cpu_temp,
+			gpu_temp,
+			bat_stat,
+			net,
 			self.widgets.fs,
-			self.widgets.bri,
 			self.widgets.vol,
 			self.widgets.clock,
 		},

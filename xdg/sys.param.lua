@@ -34,7 +34,7 @@ function resolve_param(sym)
 	handle:close()
 	local v = string.match(result, sym .. ":%s+(%w+)%c")
 	if v == nil then
-		v = "?"
+		v = "-1"
 	end
 	print(v)
 end
