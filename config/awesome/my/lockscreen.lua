@@ -360,4 +360,5 @@ function Lockscreen:build(s)
 	return lockscreen
 end
 
+LOCKSCREEN = Lockscreen
 return Lockscreen

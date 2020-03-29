@@ -5,6 +5,11 @@ local markup = lain.util.markup
 local gears = require("gears")
 local naughty = require("naughty")
 
+local Wiman = {}
+function Wiman:setup(ctx)
+	self.ctx = ctx
+	return self
+end
 function Wiman:apply()
 	awful.screen.connect_for_each_screen(function(s)
 		self:apply_in_screen(s)
@@ -59,8 +64,8 @@ function Wiman:apply_in_screen(s)
 
 	-- Create an imagebox widget which will contain an icon indicating which layout we're using.
 	-- We need one layoutbox per screen.
-	self.mylayoutbox = awful.widget.layoutbox(s)
-	self.mylayoutbox:buttons(
+	self.layoutbox = awful.widget.layoutbox(s)
+	self.layoutbox:buttons(
 		gears.table.join(
 			awful.button({}, 1, function () awful.layout.inc( 1) end),
 			awful.button({}, 3, function () awful.layout.inc(-1) end),
@@ -69,7 +74,7 @@ function Wiman:apply_in_screen(s)
 		)
 
 	-- Create a taglist widget
-	self.mytaglist = awful.widget.taglist {
+	self.taglist = awful.widget.taglist {
 		screen  = s,
 		filter  = awful.widget.taglist.filter.all,
 		buttons = taglist_buttons,
@@ -80,15 +85,13 @@ function Wiman:apply_in_screen(s)
 
 	-- Create a systray
 	-- FIXME: not displaying when placed on wibar
-	self.mysystray = wibox.widget.systray {
-		opacity = 0.8,
-		visibility = true,
+	self.systray = wibox.widget.systray {
 		forced_width    = 40,
 		forced_height   = 40,
 	}
 
 	-- Create a tasklist widget
-	self.mytasklist = awful.widget.tasklist {
+	self.tasklist = awful.widget.tasklist {
 		screen  = s,
 		filter  = awful.widget.tasklist.filter.currenttags,
 		buttons = tasklist_buttons,
@@ -120,20 +123,23 @@ function Wiman:apply_in_screen(s)
 	}
 
 	-- Create the wibox
-	self.mywibox2 = awful.wibar({ position = "left", screen = s, ontop = true,
+	self.wibox = awful.wibar({ position = "left", screen = s, ontop = true,
 		width = 42, opacity = 0.7 })
 
 	-- Add widgets to the wibox
-	self.mywibox2:setup {
+	self.wibox:setup {
 		layout = wibox.layout.align.vertical,
 		{ -- Left widgets
 			layout = wibox.layout.fixed.vertical,
-			-- self.mytaglist,
-			self.mypromptbox,
+			-- self.taglist,
+			self.promptbox,
 		},
-		self.mytasklist, -- Middle widget
-		--self.mysystray,
-		self.mylayoutbox
+		self.tasklist, -- Middle widget
+		{ -- Right widgets
+			layout = wibox.layout.fixed.vertical,
+			self.systray,
+			self.layoutbox,
+		}
 	}
 end
 return Wiman

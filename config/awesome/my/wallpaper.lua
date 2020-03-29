@@ -5,6 +5,11 @@ local markup = lain.util.markup
 local gears = require("gears")
 local naughty = require("naughty")
 
+local Wiman = {}
+function Wiman:setup(ctx)
+	self.ctx = ctx
+	return self
+end
 function Wiman:apply_wallpaper_in_screen(s)
 	local beautiful = self.ctx.beautiful
 	-- Wallpaper

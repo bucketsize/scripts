@@ -60,13 +60,18 @@ function compose_widget(icon_path)
 		layout = wibox.layout.fixed.horizontal
 	}
 	function widget:update(msg)
-		print('>>> cpu2', msg)
 		text:set_markup(msg)
+	end
+	function widget:refresh()
+		if widget.updatefn then
+			widget.updatefn()
+		end
 	end
 	function widget:handler(signal, handlerfn)
 	end
 	function widget:timer(updatefn, timeout)
 		if (updatefn) then
+			widget.updatefn = updatefn
 			gears.timer {
 				timeout   = 1,
 				call_now  = true,
@@ -150,18 +155,52 @@ bat_stat:timer(function()
 		end)
 	end, 5)
 
-function create_wgt(icon, actual)
-	local wgt = wibox.widget {
-		icon,
-		actual,
-		layout = wibox.layout.fixed.horizontal
-	}
-	wgt.actual = actual
-	return wgt
-end
+local vol_ctrl = compose_widget(icons.vol)
+vol_ctrl:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "~/scripts/xdg/sys.param.lua vol"},
+		function(out)
+			local val = tonumber(out)
+			vol_ctrl:update(string.format("%02i", val))
+		end)
+	end, 1)
 
+-- TODO: responsive update on volume change
+vol_ctrl:buttons(awful.util.table.join(
+		awful.button({}, 3, function() -- right click
+			awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+			vol_ctrl:refresh()
+		end),
+		awful.button({}, 4, function () -- up
+			awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
+			vol_ctrl:refresh()
+		end),
+		awful.button({}, 5, function () -- down
+			awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
+			vol_ctrl:refresh()
+		end)
+	))
 
-Wiman = {}
+-- TODO: mouse click opens calendar
+local clock = compose_widget(icons.clock)
+clock:timer(function()
+	local date = os.date('%Y-%m-%dT%H:%M:%S')
+	clock:update(date)
+end, 1)
+
+local fs_stat = compose_widget(icons.hdd)
+fs_stat:timer(function()
+	awful.spawn.easy_async(
+		{"sh", "-c", "df -h --output='pcent' . | grep -v 'Use' | tr -d ' %'"},
+		function(out)
+			local val = tonumber(out)
+			fs_stat:update(string.format("%02i", val))
+		end)
+end, 1)
+
+local kb = awful.widget.keyboardlayout()
+
+local Wiman = {}
 function Wiman:setup(ctx)
 	self.ctx = ctx
 	self:build()
@@ -170,127 +209,6 @@ end
 
 function Wiman:build()
 	local theme = self.ctx.beautiful.get()
-
-	local	sprtr = wibox.widget.textbox()
-	sprtr:set_text(" | ")
-
-	local wgts = {}
-	wgts.kb = awful.widget.keyboardlayout()
-
-
-	---- Clock / Calendar
-	wgts.clock_icon = create_icon(icons.clock)
-	wgts.clock = create_wgt(
-		wgts.clock_icon,
-		wibox.widget.textclock()
-		)
-	wgts.cal = lain.widget.cal({
-			attach_to = { wgts.clock },
-			notification_preset = {
-				font = theme.font_mono,
-				fg   = theme.fg_normal,
-				bg   = theme.bg_normal
-			}
-		})
-
-	---- / fs
-	wgts.fs_icon = create_icon(icons.hdd)
-	wgts.fs = create_wgt(
-		wgts.fs_icon,
-		lain.widget.fs({
-				notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_mono },
-				settings = function()
-					widget:set_markup(markup.font(theme.font_mono, string.format("%02i%s",fs_now["/"].percentage, "")))
-				end
-			})
-		)
-
-	---- Battery
-	wgts.bat_icon = create_icon(icons.bat)
-	wgts.bat = create_wgt(
-		wgts.bat_icon,
-		lain.widget.bat({
-				settings = function()
-					if bat_now.status and bat_now.status ~= "N/A" then
-						if bat_now.ac_status == 1 then
-						elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-						elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-						else
-						end
-						widget:set_markup(markup.font(theme.font, string.format("%02i%s", bat_now.perc, "")))
-					else
-						widget:set_markup(markup.font(theme.font, "AC"))
-					end
-				end
-			})
-		)
-
-	---- ALSA/pulse volume
-	wgts.vol_icon = create_icon(icons.vol)
-	wgts.vol = create_wgt(
-		wgts.vol_icon,
-		lain.widget.pulse({
-				timeout = 5,
-				settings = function()
-					--objdump('pulse', volume_now)
-					if (volume_now.index == 'N/A') then
-						-- Annoying
-						-- naughty.notify({
-						-- 		preset = naughty.config.presets.critical,
-						-- 		title = "pulseaudio may not be running, start it!",
-						-- 	})
-						print("Pulseaudio daemon not running, start it.")
-						return
-					end
-					local vl, vr = tonumber(volume_now.left), tonumber(volume_now.right)
-					local v = vl
-					if (v < vr) then
-						v = vr
-					end
-					local d = volume_now.device
-					if volume_now.status == "off" then
-					elseif tonumber(v) == 0 then
-					elseif tonumber(v) <= 50 then
-					else
-					end
-					widget:set_markup(markup.font(theme.font, string.format("%02i%s", v, "")))
-				end
-			})
-		)
-	wgts.vol:buttons(awful.util.table.join(
-			awful.button({}, 3, function() -- right click
-				awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-				wgts.vol.actual:update()
-			end),
-			awful.button({}, 4, function () -- up
-				awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-				wgts.vol.actual:update()
-			end),
-			awful.button({}, 5, function () -- down
-				awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-				wgts.vol.actual:update()
-			end)
-		))
-
-
-	---- Weather
-	wgts.weather_icon = create_icon(icons.weather)
-	wgts.weather = create_wgt(
-		wgts.weather_icon,
-		lain.widget.weather({
-				city_id = 1277333,
-				notification_preset = { font = theme.font_mono, fg = theme.fg_normal },
-				weather_na_markup = markup.fontfg(theme.font, theme.fg_normal, "N/A "),
-				settings = function()
-					descr = weather_now["weather"][1]["description"]:lower()
-					units = math.floor(weather_now["main"]["temp"])
-					widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, descr .. " @ " .. units .. "°C "))
-				end
-			})
-		)
-
-	self.widgets = wgts
-	objdump('self', self)
 end
 
 function Wiman:apply()
@@ -308,24 +226,19 @@ function Wiman:apply_in_screen(s)
 		layout = wibox.layout.align.horizontal,
 		{
 			layout = wibox.layout.flex.horizontal,
-			self.widgets.kb,
+			bat_stat,
 		},
-		{
-			layout = wibox.layout.flex.horizontal,
-			self.widgets.weather
-		},
+		kb,
 		{ -- Right widgets
 			layout = wibox.layout.fixed.horizontal,
-			wibox.widget.systray(),
 			cpu,
 			mem,
 			cpu_temp,
 			gpu_temp,
-			bat_stat,
 			net,
-			self.widgets.fs,
-			self.widgets.vol,
-			self.widgets.clock,
+			vol_ctrl,
+			fs_stat,
+			clock,
 		},
 	}
 end
