@@ -28,7 +28,7 @@ function Menu:apply()
 		{ "quit", function() awesome.quit() end }
 	}
 	local mymainmenu = freedesktop.menu.build({
-			icon_size = beautiful.menu_height or dpi(16),
+			icon_size = beautiful.menu_height or dpi(24),
 			before = {
 				{ "Awesome", myawesomemenu, beautiful.awesome_icon },
 				-- other triads can be put here
@@ -43,10 +43,10 @@ function Menu:apply()
 			menu = mymainmenu
 		})
 
-	self.ctx.hotkeys_popup =  hotkeys_popup
-	self.ctx.myawesomemenu =  myawesomemenu
-	self.ctx.mymainmenu = mymainmenu
-	self.ctx.mylauncher = mylauncher
+	self.ctx.hotkeys_popup = hotkeys_popup
+	self.ctx.myawesomemenu = myawesomemenu
+	self.ctx.mymainmenu    = mymainmenu
+	self.ctx.mylauncher    = mylauncher
 
 	-- }}}
 end

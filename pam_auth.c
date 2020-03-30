@@ -1,6 +1,10 @@
-/* /etc/pam.d/pam_auth */
-/*  auth       required     pam_unix.so */
-/*  account    required     pam_unix.so */
+/* build:
+ *  gcc -lpam -lpam_misc pam_auth.c -o pam_auth
+ *
+ * usage:
+ *  ./pam_auth <domain> <user> <passwd>
+ */
+
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 #include <stdio.h>
@@ -28,22 +32,23 @@ int check_user_conv(int num_msg, const struct pam_message **msgm,
         /*         , msgm[count]->msg */
         /*         ); */
 
-        char *passwd = g_passwd; //"wsad1234\0";
+        char *passwd = g_passwd; //"aslkjdak\0";
         char *string = NULL;
+
         char **retstr;
-        retstr = &string;
-        *retstr = NULL;
-        *retstr = strdup(passwd);
+        retstr       = &string;
+        *retstr      = NULL;
+        *retstr      = strdup(passwd);
 
         if (string) {
             reply[count].resp_retcode = 0;
-            reply[count].resp = string;
-            string = NULL;
+            reply[count].resp         = string;
+            string                    = NULL;
         }
     }
 
     *response = reply;
-    reply = NULL;
+    reply     = NULL;
 
     return PAM_SUCCESS;
 
@@ -61,18 +66,20 @@ void clean_exit(){
 
 int main(int argc, char *argv[])
 {
-    const char *user="nobody";
-    if(argc == 3) {
-        user = argv[1];
-        g_passwd = argv[2];
+    const char *domain  = NULL;
+    const char *user    = NULL;
+    if(argc == 4) {
+        domain          = argv[1];
+        user            = argv[2];
+        g_passwd        = argv[3];
     }else{
         // TODO: secure usage
-        fprintf(stderr, "Usage: check_user [username] [password]\n");
+        fprintf(stderr, "Usage: check_user [domain] [username] [password]\n");
         clean_exit();
     }
 
-    pam_handle_t *pamh=NULL;
-    int retval = pam_start("pam_auth", user, &conv, &pamh);
+    pam_handle_t *pamh = NULL;
+    int retval         = pam_start(domain, user, &conv, &pamh);
 
     if (retval == PAM_SUCCESS)
         retval = pam_authenticate(pamh, 0);    /* is user really user? */

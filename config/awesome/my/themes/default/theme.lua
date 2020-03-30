@@ -10,9 +10,6 @@ local gfs = require("gears.filesystem")
 -- local themes_path = gfs.get_themes_dir()
 local themes_path = gfs.get_configuration_dir() .. 'themes/'
 
-print("fs>>>",themes_path)
-
-
 local theme = {}
 
 theme.font          = "sans 8"
@@ -75,51 +72,51 @@ theme.menu_width  = dpi(100)
 --theme.bg_widget = "#cc0000"
 
 -- Define the image to load
-theme.titlebar_close_button_normal = themes_path.."default/titlebar/close_normal.svg"
-theme.titlebar_close_button_focus  = themes_path.."default/titlebar/close_focus.svg"
+theme.titlebar_close_button_normal              = themes_path.."default/titlebar/close_normal.svg"
+theme.titlebar_close_button_focus               = themes_path.."default/titlebar/close_focus.svg"
 
-theme.titlebar_minimize_button_normal = themes_path.."default/titlebar/minimize_normal.svg"
-theme.titlebar_minimize_button_focus  = themes_path.."default/titlebar/minimize_focus.svg"
+theme.titlebar_minimize_button_normal           = themes_path.."default/titlebar/minimize_normal.svg"
+theme.titlebar_minimize_button_focus            = themes_path.."default/titlebar/minimize_focus.svg"
 
-theme.titlebar_ontop_button_normal_inactive = themes_path.."default/titlebar/ontop_normal_inactive.svg"
-theme.titlebar_ontop_button_focus_inactive  = themes_path.."default/titlebar/ontop_focus_inactive.svg"
-theme.titlebar_ontop_button_normal_active = themes_path.."default/titlebar/ontop_normal_active.svg"
-theme.titlebar_ontop_button_focus_active  = themes_path.."default/titlebar/ontop_focus_active.svg"
+theme.titlebar_ontop_button_normal_inactive     = themes_path.."default/titlebar/ontop_normal_inactive.svg"
+theme.titlebar_ontop_button_focus_inactive      = themes_path.."default/titlebar/ontop_focus_inactive.svg"
+theme.titlebar_ontop_button_normal_active       = themes_path.."default/titlebar/ontop_normal_active.svg"
+theme.titlebar_ontop_button_focus_active        = themes_path.."default/titlebar/ontop_focus_active.svg"
 
-theme.titlebar_sticky_button_normal_inactive = themes_path.."default/titlebar/sticky_normal_inactive.svg"
-theme.titlebar_sticky_button_focus_inactive  = themes_path.."default/titlebar/sticky_focus_inactive.svg"
-theme.titlebar_sticky_button_normal_active = themes_path.."default/titlebar/sticky_normal_active.svg"
-theme.titlebar_sticky_button_focus_active  = themes_path.."default/titlebar/sticky_focus_active.svg"
+theme.titlebar_sticky_button_normal_inactive    = themes_path.."default/titlebar/sticky_normal_inactive.svg"
+theme.titlebar_sticky_button_focus_inactive     = themes_path.."default/titlebar/sticky_focus_inactive.svg"
+theme.titlebar_sticky_button_normal_active      = themes_path.."default/titlebar/sticky_normal_active.svg"
+theme.titlebar_sticky_button_focus_active       = themes_path.."default/titlebar/sticky_focus_active.svg"
 
-theme.titlebar_floating_button_normal_inactive = themes_path.."default/titlebar/floating_normal_inactive.svg"
-theme.titlebar_floating_button_focus_inactive  = themes_path.."default/titlebar/floating_focus_inactive.svg"
-theme.titlebar_floating_button_normal_active = themes_path.."default/titlebar/floating_normal_active.svg"
-theme.titlebar_floating_button_focus_active  = themes_path.."default/titlebar/floating_focus_active.svg"
+theme.titlebar_floating_button_normal_inactive  = themes_path.."default/titlebar/floating_normal_inactive.svg"
+theme.titlebar_floating_button_focus_inactive   = themes_path.."default/titlebar/floating_focus_inactive.svg"
+theme.titlebar_floating_button_normal_active    = themes_path.."default/titlebar/floating_normal_active.svg"
+theme.titlebar_floating_button_focus_active     = themes_path.."default/titlebar/floating_focus_active.svg"
 
 theme.titlebar_maximized_button_normal_inactive = themes_path.."default/titlebar/maximized_normal_inactive.svg"
 theme.titlebar_maximized_button_focus_inactive  = themes_path.."default/titlebar/maximized_focus_inactive.svg"
-theme.titlebar_maximized_button_normal_active = themes_path.."default/titlebar/maximized_normal_active.svg"
-theme.titlebar_maximized_button_focus_active  = themes_path.."default/titlebar/maximized_focus_active.svg"
+theme.titlebar_maximized_button_normal_active   = themes_path.."default/titlebar/maximized_normal_active.svg"
+theme.titlebar_maximized_button_focus_active    = themes_path.."default/titlebar/maximized_focus_active.svg"
 
 theme.wallpaper = themes_path.."default/background.png"
 
 -- You can use your own layout icons like this:
-theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
-theme.layout_fairv = themes_path.."default/layouts/fairvw.png"
-theme.layout_floating  = themes_path.."default/layouts/floatingw.png"
-theme.layout_magnifier = themes_path.."default/layouts/magnifierw.png"
-theme.layout_max = themes_path.."default/layouts/maxw.png"
+theme.layout_fairh      = themes_path.."default/layouts/fairhw.png"
+theme.layout_fairv      = themes_path.."default/layouts/fairvw.png"
+theme.layout_floating   = themes_path.."default/layouts/floatingw.png"
+theme.layout_magnifier  = themes_path.."default/layouts/magnifierw.png"
+theme.layout_max        = themes_path.."default/layouts/maxw.png"
 theme.layout_fullscreen = themes_path.."default/layouts/fullscreenw.png"
 theme.layout_tilebottom = themes_path.."default/layouts/tilebottomw.png"
 theme.layout_tileleft   = themes_path.."default/layouts/tileleftw.png"
-theme.layout_tile = themes_path.."default/layouts/tilew.png"
-theme.layout_tiletop = themes_path.."default/layouts/tiletopw.png"
-theme.layout_spiral  = themes_path.."default/layouts/spiralw.png"
-theme.layout_dwindle = themes_path.."default/layouts/dwindlew.png"
-theme.layout_cornernw = themes_path.."default/layouts/cornernww.png"
-theme.layout_cornerne = themes_path.."default/layouts/cornernew.png"
-theme.layout_cornersw = themes_path.."default/layouts/cornersww.png"
-theme.layout_cornerse = themes_path.."default/layouts/cornersew.png"
+theme.layout_tile       = themes_path.."default/layouts/tilew.png"
+theme.layout_tiletop    = themes_path.."default/layouts/tiletopw.png"
+theme.layout_spiral     = themes_path.."default/layouts/spiralw.png"
+theme.layout_dwindle    = themes_path.."default/layouts/dwindlew.png"
+theme.layout_cornernw   = themes_path.."default/layouts/cornernww.png"
+theme.layout_cornerne   = themes_path.."default/layouts/cornernew.png"
+theme.layout_cornersw   = themes_path.."default/layouts/cornersww.png"
+theme.layout_cornerse   = themes_path.."default/layouts/cornersew.png"
 
 -- Generate Awesome icon:
 theme.awesome_icon = theme_assets.awesome_icon(
@@ -133,7 +130,7 @@ theme.icon_theme = nil
 -- jb<
 theme.font                                      = "DejaVu Sans 10"
 theme.font_mono                                 = "DejaVu Sans Mono 10"
-theme.wallpaper 																= "/home/jb/Pictures/IMG_20200128_213854.jpg"
+theme.font_italic                               = "DejaVu Sans Italic 10"
 theme.tasklist_disable_task_name								= true
 -- jb>
 

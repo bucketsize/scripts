@@ -18,16 +18,16 @@ end
 
 local icons_path = gears.filesystem.get_configuration_dir() .. 'themes/icons'
 local icons = {
-	cpu=icons_path .. '/cpu.png',
-	mem=icons_path .. '/mem.png',
-	vol=icons_path .. '/vol.png',
-	temp=icons_path .. '/temp.png',
-	net=icons_path .. '/net.png',
-	bat=icons_path .. '/battery.png',
-	bat_empty=icons_path .. '/battery.png',
-	bat_low=icons_path .. '/battery.png',
-	hdd=icons_path .. '/hdd.png',
-	any=icons_path .. '/hdd.png',
+	cpu       = icons_path .. '/cpu.png',
+	mem       = icons_path .. '/mem.png',
+	vol       = icons_path .. '/vol.png',
+	temp      = icons_path .. '/temp.png',
+	net       = icons_path .. '/net.png',
+	bat       = icons_path .. '/battery.png',
+	bat_empty = icons_path .. '/battery.png',
+	bat_low   = icons_path .. '/battery.png',
+	hdd       = icons_path .. '/hdd.png',
+	any       = icons_path .. '/hdd.png',
 
 }
 
@@ -219,7 +219,9 @@ function Wiman:apply()
 end
 function Wiman:apply_in_screen(s)
 	-- Create the wibox
-	self.mywibox = awful.wibar({ position = "top", screen = s, ontop = true })
+	self.mywibox = awful.wibar({ position = "top", screen = s, -- ontop = true
+			opacity = 0.8
+		})
 
 	-- Add widgets to the wibox
 	self.mywibox:setup {

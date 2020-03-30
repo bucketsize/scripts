@@ -10,11 +10,11 @@ Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
-" python lsp: TODO
-"Plug 'ryanolsonx/vim-lsp-python'
+" python lsp
+Plug 'ryanolsonx/vim-lsp-python'
 
-" typescript lsp: TODO
-"Plug 'ryanolsonx/vim-lsp-typescript'
+" typescript lsp
+Plug 'ryanolsonx/vim-lsp-typescript'
 
 " haskell
 let $PATH = $PATH . ':' . expand('~/.cabal/bin')
@@ -22,3 +22,6 @@ Plug 'eagletmt/ghcmod-vim'
 
 " lua
 Plug 'wolfgangmehner/lua-support'
+
+" align: gaip
+Plug 'junegunn/vim-easy-align'

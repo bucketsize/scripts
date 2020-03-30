@@ -1,11 +1,13 @@
 local awful = require('awful')
 local items = {
-	'picom &',
-
+	'picom',
+	'~/scripts/xdg/x.wallpaper.sh',
+  '~/scripts/xdg/sys.mond.lua',
 	'xautolock'
-		.. ' -time 1 -locker "awesome-client \'_G.LOCKSCREEN:on()\'"'
-		.. ' -killtime 10 -killer "xterm"'
-		.. ' -notify 30 -notifier "notify-send -u critical -t 10000 -- \'Lock activated ETA 30s\'" &'
+		.. ' -time 5 -locker "awesome-client \'_G.LOCKSCREEN:on()\'"'
+		.. ' -killtime 10 -killer "feh"'
+		.. ' -notify 30 -notifier "notify-send -u critical -t 10000 -- \'Lock activated ETA 30s\'"',
+	'lxsession',
 }
 
 local Autostart = {}
@@ -13,11 +15,10 @@ function Autostart:setup(ctx)
 end
 function Autostart:apply()
 	for i,cmd in pairs(items) do
-		local spt = "pkill -f %s; sleep 1; %s"
 		local exe = string.match(cmd, '(%w+)%s+')
-		local spx = string.format(spt, exe, cmd)
-		print('cmd>: ' .. spx)
-		awful.spawn.with_shell(spx, false)
+		local spx = string.format("killall %s; %s &", exe, cmd)
+		print('cmd> ' .. spx)
+		awful.spawn.with_shell(spx)
 	end
 end
 return Autostart

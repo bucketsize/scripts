@@ -123,7 +123,7 @@ function Wiman:apply_in_screen(s)
 	}
 
 	-- Create the wibox
-	self.wibox = awful.wibar({ position = "left", screen = s, ontop = true,
+	self.wibox = awful.wibar({ position = "left", screen = s, -- ontop = true,
 		width = 42, opacity = 0.7 })
 
 	-- Add widgets to the wibox

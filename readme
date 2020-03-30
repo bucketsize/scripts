@@ -60,3 +60,7 @@ flatpak run com.valvesoftware.Steam
 # awesome testing
 Xephyr :1 -ac -br -noreset -screen 1152x720 &
 DISPLAY=:1.0 awesome
+
+#bulk rename files
+for i in $files; do j=$(echo $i | grep -Po '(?<=id=)(.+?)(?=&)'); echo $j; mv "$i" $j -v ; done
+

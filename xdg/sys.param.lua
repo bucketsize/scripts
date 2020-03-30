@@ -30,6 +30,10 @@ function resolve_indicator(sym)
 end
 function resolve_param(sym)
 	local handle = io.open("/tmp/sys.monitor.out", "r")
+	if handle == nil then
+		print("-1")
+		return
+	end
 	local result = handle:read("*a")
 	handle:close()
 	local v = string.match(result, sym .. ":%s+(%w+)%c")

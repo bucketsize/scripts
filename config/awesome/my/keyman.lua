@@ -66,7 +66,7 @@ function Keyman:keys_global()
 		awful.key({ modkey, "Shift"   }, "q", awesome.quit,
 			{description = "quit awesome", group = "awesome"}),
 
-		awful.key({ modkey,           }, "l",
+		awful.key({ "Mod1", "Control" }, "l",
 			function ()
 				self.ctx.lockscreen:on()
 			end,
@@ -128,7 +128,7 @@ function Keyman:keys_global()
 	awful.key({ modkey}, "\"",
 		function ()
 			awful.spawn("amixer -D pulse set Master +1 toggle")
-		end, {description = "mute volume", group = "custom"}),
+		end, {description = "toggle mute volume", group = "custom"}),
 
 	-- Volume Keys
 	awful.key({}, "XF86AudioLowerVolume", function ()
@@ -206,6 +206,13 @@ return globalkeys
 end
 function Keyman:keys_client()
 	local clientkeys = gears.table.join(
+		awful.key({ modkey, "Control"   }, "m",
+			function ()
+				for _, c in ipairs(mouse.screen.selected_tag:clients()) do
+					c.minimized = true
+				end
+			end,
+			{description = "close all windows in current tag", group = "client"}),
 		awful.key({ modkey,           }, "f",
 			function (c)
 				c.fullscreen = not c.fullscreen
