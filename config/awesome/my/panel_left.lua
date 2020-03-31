@@ -1,7 +1,5 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local lain  = require("lain")
-local markup = lain.util.markup
 local gears = require("gears")
 local naughty = require("naughty")
 
@@ -131,8 +129,9 @@ function Wiman:apply_in_screen(s)
 		layout = wibox.layout.align.vertical,
 		{ -- Left widgets
 			layout = wibox.layout.fixed.vertical,
+			self.ctx.mylauncher,
 			-- self.taglist,
-			self.promptbox,
+			-- self.promptbox,
 		},
 		self.tasklist, -- Middle widget
 		{ -- Right widgets

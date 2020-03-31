@@ -1,5 +1,6 @@
 local awful = require("awful")
 local freedesktop   = require("freedesktop")
+local Config = require('config')
 
 local Menu = {}
 function Menu:setup(ctx)
@@ -8,8 +9,8 @@ function Menu:setup(ctx)
 end
 function Menu:apply()
 	local beautiful = self.ctx.beautiful
-	local terminal = self.ctx.terminal
-	local editor = self.ctx.editor
+	local terminal  = Config.terminal
+	local editor    = Config.editor
 
 	-- {{{ Menu
 	local hotkeys_popup  = require("awful.hotkeys_popup")
@@ -20,12 +21,12 @@ function Menu:apply()
 	-- Create a launcher widget and a main menu
 	-- local menubar = require("menubar")
 	local myawesomemenu = {
-		{ "hotkeys", function() return false, hotkeys_popup.show_help end },
-		{ "manual", terminal .. " -e man awesome" },
+		{ "hotkeys",     function() return false, hotkeys_popup.show_help end },
+		{ "manual",      terminal .. " -e man awesome" },
 		{ "edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
-		{ "restart", awesome.restart },
-		{ "shutdown", terminal .. " -e shutdown -h now" },
-		{ "quit", function() awesome.quit() end }
+		{ "restart",     awesome.restart },
+		{ "shutdown",    terminal .. " -e shutdown -h now" },
+		{ "quit",        function() awesome.quit() end }
 	}
 	local mymainmenu = freedesktop.menu.build({
 			icon_size = beautiful.menu_height or dpi(24),
@@ -34,13 +35,13 @@ function Menu:apply()
 				-- other triads can be put here
 			},
 			after = {
-				{ "Open terminal", terminal },
+				{ "terminal", terminal },
 				-- other triads can be put here
 			}
 		})
 	local mylauncher = awful.widget.launcher({
 			image = beautiful.awesome_icon,
-			menu = mymainmenu
+			menu = mymainmenu,
 		})
 
 	self.ctx.hotkeys_popup = hotkeys_popup

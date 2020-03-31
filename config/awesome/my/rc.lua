@@ -44,13 +44,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
---beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/default/theme.lua")
-
--- This is used later as the default terminal and editor to run.
-terminal = "sakura"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
+beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/xresources/theme.lua")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -68,21 +62,19 @@ awful.layout.layouts = {
 	awful.layout.suit.fair,
 }
 
-CTX = {}
-CTX.beautiful = beautiful
-CTX.terminal = terminal
-CTX.editor = editor
-CTX.root = root
+CTX              = {}
+CTX.beautiful    = beautiful
+CTX.root         = root
 
-local menu = require("menu")
+local menu       = require("menu")
 menu:setup(CTX)
 menu:apply()
 
-local autostart = require('autostart')
+local autostart  = require('autostart')
 autostart:setup(CTX)
 autostart:apply()
 
-local panel_top = require('panel_top')
+local panel_top  = require('panel_top')
 panel_top:setup(CTX)
 panel_top:apply()
 
@@ -90,15 +82,15 @@ local panel_left = require('panel_left')
 panel_left:setup(CTX)
 panel_left:apply()
 
-local wallpaper = require('wallpaper')
+local wallpaper  = require('wallpaper')
 wallpaper:setup(CTX)
 wallpaper:apply()
 
-local keyman = require('keyman')
+local keyman     = require('keyman')
 keyman:setup(CTX)
 keyman:apply()
 
-local rules = require("rules")
+local rules      = require("rules")
 rules:setup(CTX)
 rules:apply()
 
@@ -143,7 +135,7 @@ client.connect_signal("request::titlebars", function(c)
 		},
 		{ -- Middle
 			{ -- Title
-				align  = "center",
+				align  = "left",
 				widget = awful.titlebar.widget.titlewidget(c)
 			},
 			buttons = buttons,
@@ -163,7 +155,8 @@ end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
-	c:emit_signal("request::activate", "mouse_enter", {raise = false})
+	-- focus follow mouse
+	-- c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)

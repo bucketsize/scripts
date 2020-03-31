@@ -1,7 +1,5 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local lain  = require("lain")
-local markup = lain.util.markup
 local gears = require("gears")
 local naughty = require("naughty")
 

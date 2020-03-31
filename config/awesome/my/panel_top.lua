@@ -1,7 +1,5 @@
 local awful = require("awful")
 local wibox = require("wibox")
-local lain  = require("lain")
-local markup = lain.util.markup
 local gears = require("gears")
 local naughty = require("naughty")
 
@@ -150,7 +148,7 @@ bat_stat:timer(function()
 				function(out)
 					local bl = tonumber(out)
 					if bl == nil then bl = 0 end
-					bat_stat:update(string.format('%s, %03i', bs, bl))
+					bat_stat:update(string.format('%s, %02i', bs, bl))
 				end)
 		end)
 	end, 5)

@@ -13,6 +13,8 @@ cleanup(){
 xbootstrap(){
 	echo "exec awesome" > ~/.xinitrc
 	chmod +x ~/.xinitrc
+
+	ln -s ~/scripts/config/Xresources ~/.Xresources
 }
 
 case $1 in

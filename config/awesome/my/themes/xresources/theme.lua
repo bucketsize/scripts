@@ -129,6 +129,14 @@ theme.wallpaper = function(s)
     return theme_assets.wallpaper(wallpaper_bg, wallpaper_fg, wallpaper_alt_fg, s)
 end
 
+-- jb
+theme.font                       = "DejaVu Sans 10"
+theme.font_mono                  = "DejaVu Sans Mono 10"
+theme.font_italic                = "DejaVu Sans Italic 10"
+theme.tasklist_disable_task_name = true
+theme.menu_height                = 24
+theme.menu_width                 = 200
+
 return theme
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

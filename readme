@@ -10,8 +10,8 @@ git submodule add [URL to Git repo]
 git submodule init
 
 git submodule deinit -f mymodule
-rm -rf .git/modules/mymodule
-git rm -rf mymodule
+rm .git/modules/mymodule -rf
+git rm mymodule -rf
 
 $HOME/.config/gtk-3.0/settings.ini
 ----- begin of file ------

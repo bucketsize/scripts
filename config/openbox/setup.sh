@@ -13,3 +13,4 @@ ln -s ~/scripts/config/tint2/my-v ~/.config/tint2
 ln -s ~/scripts/config/conky/asuramin ~/.config/conky
 ln -s ~/scripts/config/dunst/my ~/.config/dunst
 ln -s ~/scripts/config/compton/default/compton.conf ~/.config/
+ln -s ~/scripts/config/Xresources ~/.Xresources
