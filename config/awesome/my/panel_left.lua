@@ -84,8 +84,8 @@ function Wiman:apply_in_screen(s)
 	-- Create a systray
 	-- FIXME: not displaying when placed on wibar
 	self.systray = wibox.widget.systray {
-		forced_width    = 40,
-		forced_height   = 40,
+		forced_width    = 32,
+		forced_height   = 32,
 	}
 
 	-- Create a tasklist widget
@@ -94,8 +94,7 @@ function Wiman:apply_in_screen(s)
 		filter  = awful.widget.tasklist.filter.currenttags,
 		buttons = tasklist_buttons,
 		style    = {
-			shape_border_width = 1,
-			shape_border_color = '#777777',
+			shape_border_width = 0,
 		},
 		layout   = {
 			spacing = 2,

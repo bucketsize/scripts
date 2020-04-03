@@ -10,7 +10,7 @@ set bomb
 set binary
 set tabstop=2
 set shiftwidth=2
-silent! colorscheme desert
+silent! colorscheme slate
 
 " rooter
 let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']

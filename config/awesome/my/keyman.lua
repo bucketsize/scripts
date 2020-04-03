@@ -14,6 +14,20 @@ function Keyman:apply()
 end
 function Keyman:keys_global()
 	local globalkeys = gears.table.join(
+		awful.key({				            }, "Print", function()
+			awful.spawn.easy_async("scrot '/var/tmp/%F-%H%M%S.png'", function()
+				print(">>> screenshot done")
+			end)
+		end,
+		{description="screenshot", group="awesome"}),
+
+		awful.key({         "Control" }, "Print", function()
+			awful.spawn.easy_async("scrot -s '/var/tmp/%F-%H%M%S.png'", function()
+				print(">>> screenshot selection done")
+			end)
+		end,
+		{description="selected screenshot", group="awesome"}),
+
 		awful.key({ modkey,           }, "s",      self.ctx.hotkeys_popup.show_help,
 			{description="show help", group="awesome"}),
 		awful.key({ modkey,           }, "Left",   awful.tag.viewprev,

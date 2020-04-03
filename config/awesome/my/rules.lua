@@ -42,7 +42,6 @@ function Rules:apply()
 					"Wpa_gui",
 					"veromix",
 					"xtightvncviewer",
-					"eclipse"
 				},
 
 				-- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -60,6 +59,14 @@ function Rules:apply()
 		-- Add titlebars to normal clients and dialogs
 		{ rule_any = {type = { "normal", "dialog" }
 			}, properties = { titlebars_enabled = true }
+		},
+
+		-- Start maximized
+		{ rule_any = {class = { "feh", "mpv" }
+			}, properties = {
+				maximized_vertical = true,
+				maximized_horizontal = true,
+			}
 		},
 
 		-- Set Firefox to always map on the tag named "2" on screen 1.
