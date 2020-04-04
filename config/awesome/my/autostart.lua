@@ -1,5 +1,6 @@
 local awful = require('awful')
 local items = {
+	'xrdb ~/.Xresources',
 	'picom',
 	'~/scripts/xdg/x.wallpaper.sh',
   '~/scripts/xdg/sys.mond.lua',
@@ -7,7 +8,6 @@ local items = {
 		.. ' -time 5 -locker "awesome-client \'_G.LOCKSCREEN:on()\'"'
 		.. ' -killtime 10 -killer "feh"'
 		.. ' -notify 30 -notifier "notify-send -u critical -t 10000 -- \'Lock activated ETA 30s\'"',
-	'xrdb ~/.Xresources',
 	'lxsession',
 }
 

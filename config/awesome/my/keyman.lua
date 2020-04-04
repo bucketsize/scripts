@@ -101,7 +101,7 @@ function Keyman:keys_global()
 		-- Prompt
 		awful.key({ modkey },            "r",     function ()
 			-- self.ctx.mypromptbox:run()
-			awful.util.spawn("dmenu_run", false)
+			awful.spawn("dmenu_run", false)
 		end,
 			{description = "run prompt", group = "launcher"}),
 
@@ -146,24 +146,24 @@ function Keyman:keys_global()
 
 	-- Volume Keys
 	awful.key({}, "XF86AudioLowerVolume", function ()
-		awful.util.spawn("amixer -q -D pulse sset Master 5%-", false)
+		awful.spawn("amixer -q -D pulse sset Master 5%-", false)
 	end),
 	awful.key({}, "XF86AudioRaiseVolume", function ()
-		awful.util.spawn("amixer -q -D pulse sset Master 5%+", false)
+		awful.spawn("amixer -q -D pulse sset Master 5%+", false)
 	end),
 	awful.key({}, "XF86AudioMute", function ()
-		awful.util.spawn("amixer -D pulse set Master 1+ toggle", false)
+		awful.spawn("amixer -D pulse set Master 1+ toggle", false)
 	end),
 
 	-- Media Keys
 	awful.key({}, "XF86AudioPlay", function()
-		awful.util.spawn("playerctl play-pause", false)
+		awful.spawn("playerctl play-pause", false)
 	end),
 	awful.key({}, "XF86AudioNext", function()
-		awful.util.spawn("playerctl next", false)
+		awful.spawn("playerctl next", false)
 	end),
 	awful.key({}, "XF86AudioPrev", function()
-		awful.util.spawn("playerctl previous", false)
+		awful.spawn("playerctl previous", false)
 	end)
 	)
 

@@ -62,7 +62,7 @@ function Rules:apply()
 		},
 
 		-- Start maximized
-		{ rule_any = {class = { "feh", "mpv" }
+		{ rule_any = {class = {"imv", "qiv", "feh", "mpv" }
 			}, properties = {
 				maximized_vertical = true,
 				maximized_horizontal = true,
