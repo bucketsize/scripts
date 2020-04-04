@@ -188,7 +188,7 @@ function Co:logger()
 		for k,v in pairs(MTAB) do
 			local fmt = Fmt[k]
 			if fmt == nil then
-				print('missing Fmt ', k)
+				-- print('missing Fmt ', k)
 				fmt = "%s: %s"
 			end
 			hout:write(string.format(fmt, k, v), "\n")
@@ -208,7 +208,7 @@ function Cmd:start()
 	end
 	while true do
 		for k,coInst in pairs(CoInst) do
-			print(k, coroutine.status(coInst))
+			-- print(k, coroutine.status(coInst))
 			coroutine.resume(coInst)
 		end
 		socket.sleep(EPOC)

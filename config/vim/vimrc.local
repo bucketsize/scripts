@@ -10,7 +10,6 @@ set bomb
 set binary
 set tabstop=2
 set shiftwidth=2
-silent! colorscheme slate
 
 " rooter
 let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']
@@ -18,7 +17,7 @@ let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']
 " autocomplete
 " c-x c-n
 set completeopt-=preview
-set completeopt+=longest,menuone,noinsert,select
+set completeopt+=longest,menuone,noinsert
 set shortmess+=c
 
 augroup OmniCompletionSetup
@@ -31,7 +30,7 @@ augroup OmniCompletionSetup
     autocmd FileType html       set omnifunc=htmlcomplete#CompleteTags
     autocmd FileType css        set omnifunc=csscomplete#CompleteCSS
     autocmd FileType xml        set omnifunc=xmlcomplete#CompleteTags
-    autocmd FileType java         set omnifunc=javacomplete#Complete
+    autocmd FileType java       set omnifunc=javacomplete#Complete
 augroup END
 
 " asynccomplete

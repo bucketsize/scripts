@@ -16,10 +16,15 @@ function Autostart:setup(ctx)
 end
 function Autostart:apply()
 	for i,cmd in pairs(items) do
-		local exe = string.match(cmd, '(%w+)%s+')
-		local spx = string.format("killall %s; %s &", exe, cmd)
-		print('cmd> ' .. spx)
-		awful.spawn.with_shell(spx)
+		local spk = string.format("pkill -f %s", cmd)
+		local spx = string.format("%s &", cmd)
+		print('>>> stopping ', spk)
+		awful.spawn.easy_async_with_shell(spk, function()
+			print('>>> starting ', spx)
+			awful.spawn.easy_async_with_shell(spx, function()
+				print('>>> done')
+			end)
+		end)
 	end
 end
 return Autostart

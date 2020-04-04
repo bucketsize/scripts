@@ -64,3 +64,5 @@ DISPLAY=:1.0 awesome
 #bulk rename files
 for i in $files; do j=$(echo $i | grep -Po '(?<=id=)(.+?)(?=&)'); echo $j; mv "$i" $j -v ; done
 
+# install AUR package
+git clone [the package], cd [the package], makepkg -si
