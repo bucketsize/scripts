@@ -1,6 +1,6 @@
 local awful = require('awful')
 local items = {
-	'xrdb ~/.Xresources',
+	'xrdb -merge ~/.Xresources',
 	'picom',
 	'~/scripts/xdg/x.wallpaper.sh',
   '~/scripts/xdg/sys.mond.lua',

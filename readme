@@ -66,3 +66,7 @@ for i in $files; do j=$(echo $i | grep -Po '(?<=id=)(.+?)(?=&)'); echo $j; mv "$
 
 # install AUR package
 git clone [the package], cd [the package], makepkg -si
+
+# run with proton
+python3 /mnt/f1aa/data/SteamLibrary/steamapps/common/Proton 4.11/proton waitforexitandrun /mnt/f1aa/data/SteamLibrary/steamapps/common/Planet Zoo/PlanetZoo.exe
+

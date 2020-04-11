@@ -105,6 +105,21 @@ client.connect_signal("manage", function (c)
 	-- i.e. put it at the end of others instead of setting it master.
 	-- if not awesome.startup then awful.client.setslave(c) end
 
+	local icon_image = {
+		URxvt   = '/usr/share/icons/hicolor/128x128/apps/lxterminal.png',
+		unknown = '/usr/share/icons/hicolor/128x128/apps/fcitx.png',
+	}
+
+	if c.icon == nil then
+		print(">> c :: ",  c, c.icon, c.class)
+		local image = icon_image[c.class]
+		if image == nil then
+			image = icon_image['unknown']
+		end
+		local icon = gears.surface(image)
+		c.icon = icon and icon._native or nil
+	end
+
 	if awesome.startup
 		and not c.size_hints.user_position
 		and not c.size_hints.program_position then

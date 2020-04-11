@@ -47,42 +47,41 @@ Xft.lcdfilter: lcddefault
 
 ! terminal.sexy
 ! special
-*.foreground:   #cdcfd1
-*.background:   #0c0d0d
-*.cursorColor:  #cdcfd1
+*.foreground:   #c5c8c6
+*.background:   #1d1f21
+*.cursorColor:  #c5c8c6
 
 ! black
-*.color0:       #151616
-*.color8:       #68696C
+*.color0:       #282a2e
+*.color8:       #373b41
 
 ! red
-*.color1:       #1e1f20
-*.color9:       #9fcafa
+*.color1:       #a54242
+*.color9:       #cc6666
 
 ! green
-*.color2:       #2f3031
-*.color10:      #eb6df7
+*.color2:       #8c9440
+*.color10:      #b5bd68
 
 ! yellow
-*.color3:       #46474a
-*.color11:      #60b0a9
+*.color3:       #de935f
+*.color11:      #f0c674
 
 ! blue
-*.color4:       #636569
-*.color12:      #42d5cb
+*.color4:       #5f819d
+*.color12:      #81a2be
 
 ! magenta
-*.color5:       #86898e
-*.color13:      #f6c63d
+*.color5:       #85678f
+*.color13:      #b294bb
 
 ! cyan
-*.color6:       #b0b3b7
-*.color14:      #63d73b
+*.color6:       #5e8d87
+*.color14:      #8abeb7
 
 ! white
-*.color7:       #e1e2e4
-*.color15:      #85b8eb
-
+*.color7:       #707880
+*.color15:      #c5c8c6
 
 ! vim: set ft=xdefaults:
 
@@ -91,9 +90,9 @@ Xft.lcdfilter: lcddefault
 URxvt*perl-ext-common:        default,matcher,vtwheel,clipboard
 ! appearance
 URxvt*font:                   xft:DejaVu Sans Mono:size=10
-URxvt.letterSpace:            0
+URxvt.letterSpace:            -1
 URxvt.lineSpace:              0
-URxvt.geometry:               96x24
+URxvt.geometry:               104x24
 URxvt.internalBorder:         8
 URxvt.cursorBlink:            true
 URxvt.cursorUnderline:        false
@@ -114,7 +113,6 @@ URxvt.matcher.button:         1
 URxvt*iso14755:               false
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
-URxvt.letterSpace:            -1
 
 ! rofi
 rofi.modi:             ssh,window,drun,run
