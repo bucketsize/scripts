@@ -1,19 +1,38 @@
-local wibox = require('wibox')
-local gears = require('gears')
-local awful = require('awful')
-local naughty = require('naughty')
-local beautiful = require('beautiful')
+local wibox           = require('wibox')
+local gears           = require('gears')
+local awful           = require('awful')
+local naughty         = require('naughty')
+local beautiful       = require('beautiful')
+local dpi             = beautiful.xresources.apply_dpi
 
-local dpi = beautiful.xresources.apply_dpi
-
-local filesystem = require('gears.filesystem')
-local config_dir = filesystem.get_configuration_dir()
+local filesystem      = require('gears.filesystem')
+local config_dir      = filesystem.get_configuration_dir()
 local widget_icon_dir = config_dir .. 'widgets/icons/'
 print(">>> widget_icon_dir:", widget_icon_dir)
 
-local Config = require('config')
+local Config          = require('config')
 
-local Lockscreen = {}
+-- FIXME: backspace restarts x
+-- FIXME: modal window / popup before lock looses keygrabber focus
+--
+local Lockscreen      = {}
+function Lockscreen:shouldlock()
+	local cs = client.get()
+	for i, j in pairs(cs) do
+		-- firefox
+		if not string.find(j.name, 'YouTube') == nil then
+		end
+		-- firefox
+		if not string.find(j.name, 'Picture-in-Picture') == nil then
+		end
+		-- videoplayer
+		if not string.find(j.class, 'mpv') == nil then
+		end
+
+		-- TODO: check if reapply playing, hint: pulse audio / cpu/gpu activity
+		return true
+	end
+end
 function Lockscreen:setup(ctx)
 	self.ctx = ctx
 	self.ctx.lockscreen = Lockscreen
@@ -24,13 +43,20 @@ function Lockscreen:apply()
 		self.I = Lockscreen:build(s)
 	end)
 end
+function Lockscreen:auto_on()
+	if Lockscreen:shouldlock() then
+		Lockscreen:on()
+	else
+		print('>>> skip lock on criteria')
+	end
+end
 function Lockscreen:on()
 	self.I.visible = true
 	local pin = Lockscreen:input()
 	pin:start()
 end
 function Lockscreen:off()
-	self.I.visible = false
+	Lockscreen:release()
 end
 function Lockscreen:pass(username, password)
 	-- print('>>> pass:', username, password)
@@ -95,7 +121,8 @@ function Lockscreen:input()
 		stop_event           = 'release',
 		mask_event_callback  = true,
 		keybindings          = {
-			{{'Control', 'Alt_L', 'r'}, 'Return', function(self)
+			{{'Mod1', 'Control'}, 'r', function(self)
+				print('>>> secret pass')
 				self:stop()
 				Lockscreen:release()
 			end},

@@ -70,3 +70,8 @@ git clone [the package], cd [the package], makepkg -si
 # run with proton
 python3 /mnt/f1aa/data/SteamLibrary/steamapps/common/Proton 4.11/proton waitforexitandrun /mnt/f1aa/data/SteamLibrary/steamapps/common/Planet Zoo/PlanetZoo.exe
 
+# initrd image: current - default, fallback
+mkinitcpio -p linux
+
+# initrd image: all
+mkinitcpio -P
