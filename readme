@@ -75,3 +75,13 @@ mkinitcpio -p linux
 
 # initrd image: all
 mkinitcpio -P
+
+RADV_PERFTEST=aco
+PYTHONIOENCODING=utf-8
+DXVK_STATE_CACHE=0
+PROTON_NO_ESYNC=1
+PROTON_USE_WINED3D11=1 %command%
+
+
+DXVK_HUD=devinfo,fps RADV_PERFTEST=aco PROTON_LOG=1 %command%
+

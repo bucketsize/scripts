@@ -17,21 +17,32 @@ local Config          = require('config')
 --
 local Lockscreen      = {}
 function Lockscreen:shouldlock()
-	local cs = client.get()
-	for i, j in pairs(cs) do
+	function __shouldlock(j)
 		-- firefox
-		if not string.find(j.name, 'YouTube') == nil then
+		if string.match(j.name, 'YouTube') ~= nil then
+			return false
 		end
 		-- firefox
-		if not string.find(j.name, 'Picture-in-Picture') == nil then
+		if string.match(j.name, 'Picture-in-Picture') ~= nil then
+			return false
 		end
 		-- videoplayer
-		if not string.find(j.class, 'mpv') == nil then
+		if string.match(j.class, 'mpv') ~= nil then
+			return false
 		end
 
 		-- TODO: check if reapply playing, hint: pulse audio / cpu/gpu activity
 		return true
 	end
+	local cs = client.get()
+	for i, j in pairs(cs) do
+		local lock = __shouldlock(j)
+		print('__shouldlock:', j.name, lock)
+		if not lock then
+			return false
+		end
+	end
+	return true
 end
 function Lockscreen:setup(ctx)
 	self.ctx = ctx
