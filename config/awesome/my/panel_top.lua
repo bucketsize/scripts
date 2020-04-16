@@ -166,16 +166,19 @@ vol_ctrl:timer(function()
 -- TODO: responsive update on volume change
 vol_ctrl:buttons(awful.util.table.join(
 		awful.button({}, 3, function() -- right click
-			awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-			vol_ctrl:refresh()
+			awful.spawn.easy_async("pactl set-sink-mute @DEFAULT_SINK@ toggle", function()
+				vol_ctrl:refresh()
+			end)
 		end),
 		awful.button({}, 4, function () -- up
-			awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-			vol_ctrl:refresh()
+			awful.spawn.easy_async("pactl set-sink-volume @DEFAULT_SINK@ +5%", function()
+				vol_ctrl:refresh()
+			end)
 		end),
 		awful.button({}, 5, function () -- down
-			awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-			vol_ctrl:refresh()
+			awful.spawn.easy_async("pactl set-sink-volume @DEFAULT_SINK@ -5%", function()
+				vol_ctrl:refresh()
+			end)
 		end)
 	))
 

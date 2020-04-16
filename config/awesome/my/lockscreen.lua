@@ -50,8 +50,9 @@ function Lockscreen:setup(ctx)
 	return self
 end
 function Lockscreen:apply()
+	self.boxes = {}
 	awful.screen.connect_for_each_screen(function(s)
-		self.I = Lockscreen:build(s)
+		table.insert(self.boxes, Lockscreen:build(s))
 	end)
 end
 function Lockscreen:auto_on()
@@ -62,7 +63,9 @@ function Lockscreen:auto_on()
 	end
 end
 function Lockscreen:on()
-	self.I.visible = true
+	for _, box in pairs(self.boxes) do
+		box.visible = true
+	end
 	local pin = Lockscreen:input()
 	pin:start()
 end
@@ -104,29 +107,32 @@ function Lockscreen:set_msg(msg)
 end
 function Lockscreen:release()
 	gears.timer.start_new(1, function()
-		for s in screen do
-			if s.index == 1 then
-				Lockscreen.I.visible = false
-			else
-				-- Lockscreen_extended.visible = false -- TODO
-			end
+		for _, box in pairs(self.boxes) do
+			box.visible = false
 		end
-		Lockscreen.lock_again = true
-		Lockscreen.type_again = true
+		Lockscreen:reset_entry()
 	end)
 
 end
 function Lockscreen:throw()
 	Lockscreen:set_msg("Invalid credentials, please try again")
 	gears.timer.start_new(1, function()
-		Lockscreen.type_again = true
-		Lockscreen:set_msg("Start typing the password and `Return` when ready!")
+		Lockscreen:reset_entry()
 	end)
 end
-function Lockscreen:input()
+function Lockscreen:accum_entry(key)
+	Lockscreen.input_password = Lockscreen.input_password .. key
+	Lockscreen.input_password_shadow = Lockscreen.input_password_shadow .. '*'
+	Lockscreen:set_msg(Lockscreen.input_password_shadow)
+end
+function Lockscreen:reset_entry()
+	Lockscreen.input_password = ''
+	Lockscreen.input_password_shadow = ''
 	Lockscreen.type_again = true
-	Lockscreen.input_password = nil
 	Lockscreen:set_msg("Start typing the password and `Return` when ready!")
+end
+function Lockscreen:input()
+	Lockscreen:reset_entry()
 	local password_grabber = awful.keygrabber {
 		autostart            = true,
 		stop_event           = 'release',
@@ -144,18 +150,16 @@ function Lockscreen:input()
 			end
 
 			if key == 'Escape' then
-				Lockscreen.input_password = nil
+				Lockscreen:reset_entry()
 			end
 
 			-- Accept only the single charactered key
 			-- Ignore 'Shift', 'Control', 'Return', 'F1', 'F2', etc., etc
 			if #key == 1 then
 				if Lockscreen.input_password == nil then
-					Lockscreen.input_password = key
-					return
+					Lockscreen:reset_entry()
 				end
-				Lockscreen.input_password = Lockscreen.input_password .. key
-				Lockscreen:set_msg(".." .. string.len(Lockscreen.input_password))
+				Lockscreen:accum_entry(key)
 			end
 		end,
 		keyreleased_callback = function(self, mod, key, command)
@@ -176,7 +180,6 @@ function Lockscreen:input()
 				else
 					Lockscreen:throw()
 				end
-				Lockscreen.input_password = nil
 			end
 		end
 

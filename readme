@@ -42,7 +42,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # 2020-03-27 suspend-resume bug kerne; 5.x onwards
 # workaround with kernel param
-amggpu.dc=1
+amggpu.dc=0
 
 # steam from flatpak
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -82,6 +82,6 @@ DXVK_STATE_CACHE=0
 PROTON_NO_ESYNC=1
 PROTON_USE_WINED3D11=1 %command%
 
-
-DXVK_HUD=devinfo,fps RADV_PERFTEST=aco PROTON_LOG=1 %command%
+DXVK_HUD=devinfo,fps,memory,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
+DXVK_HUD=fps,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
 
