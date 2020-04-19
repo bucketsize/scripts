@@ -131,28 +131,42 @@ function Keyman:keys_global()
 	-- sound controls
 	awful.key({ modkey}, "]",
 		function ()
-			awful.spawn("amixer -D pulse sset Master 5%+")
+			awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%", false)
+		_G.vol_update_realtime()
 		end, {description = "increase volume", group = "custom"}),
-
 	awful.key({ modkey}, "[",
 		function ()
-			awful.spawn("amixer -D pulse sset Master 5%-")
+			awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%", false)
+		_G.vol_update_realtime()
 		end, {description = "decrease volume", group = "custom"}),
-
 	awful.key({ modkey}, "\"",
 		function ()
-			awful.spawn("amixer -D pulse set Master +1 toggle")
+			awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ toggle%", false)
+			if _G.vol_muted then
+				_G.vol_muted = false
+			else
+				_G.vol_muted = true
+			end
+			_G.vol_update_realtime()
 		end, {description = "toggle mute volume", group = "custom"}),
 
 	-- Volume Keys
-	awful.key({}, "XF86AudioLowerVolume", function ()
-		awful.spawn("amixer -q -D pulse sset Master 5%-", false)
-	end),
 	awful.key({}, "XF86AudioRaiseVolume", function ()
-		awful.spawn("amixer -q -D pulse sset Master 5%+", false)
+		awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%", false)
+		_G.vol_update_realtime()
+	end),
+	awful.key({}, "XF86AudioLowerVolume", function ()
+		awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%", false)
+		_G.vol_update_realtime()
 	end),
 	awful.key({}, "XF86AudioMute", function ()
-		awful.spawn("amixer -D pulse set Master 1+ toggle", false)
+		awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ toggle%", false)
+		if _G.vol_muted then
+			_G.vol_muted = false
+		else
+			_G.vol_muted = true
+		end
+		_G.vol_update_realtime()
 	end),
 
 	-- Media Keys

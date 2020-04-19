@@ -224,5 +224,9 @@ end
 if arg[1] == nil then
 	Cmd['start']()
 else
-	Cmd[arg[1]]()
+	if arg[1] == 'fn' then
+		print(Fn[arg[2]]())
+	else
+		Cmd[arg[1]]()
+	end
 end

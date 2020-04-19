@@ -1,6 +1,6 @@
-local awful = require("awful")
-local wibox = require("wibox")
-local gears = require("gears")
+local awful   = require("awful")
+local wibox   = require("wibox")
+local gears   = require("gears")
 local naughty = require("naughty")
 
 function objdump(tag, o)
@@ -26,7 +26,6 @@ local icons = {
 	bat_low   = icons_path .. '/battery.png',
 	hdd       = icons_path .. '/hdd.png',
 	any       = icons_path .. '/hdd.png',
-
 }
 
 function create_icon(icon_path)
@@ -66,6 +65,9 @@ function compose_widget(icon_path)
 		end
 	end
 	function widget:handler(signal, handlerfn)
+	end
+	function widget:init(initfn)
+		initfn()
 	end
 	function widget:timer(updatefn, timeout)
 		if (updatefn) then
@@ -154,30 +156,52 @@ bat_stat:timer(function()
 	end, 5)
 
 local vol_ctrl = compose_widget(icons.vol)
-vol_ctrl:timer(function()
+function notify_sndvol_event(msg)
+	naughty.notify({
+		replaces_id = 1,
+		font        = 'DejaVu Sans 17',
+		icon        = '/usr/share/icons/Adwaita/96x96/devices/audio-speakers-symbolic.symbolic.png',
+		icon_size   = 40,
+		text        = msg,
+		timeout     = 2,
+	})
+end
+vol_muted=false
+function vol_update_realtime()
 	awful.spawn.easy_async(
-		{"sh", "-c", "~/scripts/xdg/sys.param.lua vol"},
+		{"sh", "-c", "~/scripts/xdg/sys.mond.lua fn vol_usage"},
 		function(out)
 			local val = tonumber(out)
-			vol_ctrl:update(string.format("%02i", val))
+			local msg = '00'
+			if vol_muted then
+				msg = 'MM'
+			else
+				msg = string.format("%02i", val)
+			end
+			vol_ctrl:update(msg)
+			notify_sndvol_event(msg)
 		end)
-	end, 1)
-
--- TODO: responsive update on volume change
+	end
+vol_ctrl:init(vol_update_realtime)
 vol_ctrl:buttons(awful.util.table.join(
 		awful.button({}, 3, function() -- right click
 			awful.spawn.easy_async("pactl set-sink-mute @DEFAULT_SINK@ toggle", function()
-				vol_ctrl:refresh()
+				if vol_muted then
+					vol_muted = false
+				else
+					vol_muted = true
+				end
+				vol_update_realtime()
 			end)
 		end),
 		awful.button({}, 4, function () -- up
 			awful.spawn.easy_async("pactl set-sink-volume @DEFAULT_SINK@ +5%", function()
-				vol_ctrl:refresh()
+				vol_update_realtime()
 			end)
 		end),
 		awful.button({}, 5, function () -- down
 			awful.spawn.easy_async("pactl set-sink-volume @DEFAULT_SINK@ -5%", function()
-				vol_ctrl:refresh()
+				vol_update_realtime()
 			end)
 		end)
 	))
