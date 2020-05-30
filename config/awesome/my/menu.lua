@@ -35,19 +35,14 @@ function Menu:apply()
 				-- other triads can be put here
 			},
 			after = {
-				{ "terminal", terminal },
+				{ "Terminal", terminal },
 				-- other triads can be put here
 			}
-		})
-	local mylauncher = awful.widget.launcher({
-			image = beautiful.awesome_icon,
-			menu = mymainmenu,
 		})
 
 	self.ctx.hotkeys_popup = hotkeys_popup
 	self.ctx.myawesomemenu = myawesomemenu
 	self.ctx.mymainmenu    = mymainmenu
-	self.ctx.mylauncher    = mylauncher
 
 	-- }}}
 end

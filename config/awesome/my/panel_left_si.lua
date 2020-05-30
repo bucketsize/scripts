@@ -62,14 +62,17 @@ function Wiman:apply_in_screen(s)
 
 	-- Create an imagebox widget which will contain an icon indicating which layout we're using.
 	-- We need one layoutbox per screen.
-	self.layoutbox = awful.widget.layoutbox(s)
-	self.layoutbox:buttons(
+	local layoutbox0 = awful.widget.layoutbox(s)
+	layoutbox0:buttons(
 		gears.table.join(
 			awful.button({}, 1, function () awful.layout.inc( 1) end),
 			awful.button({}, 3, function () awful.layout.inc(-1) end),
 			awful.button({}, 4, function () awful.layout.inc( 1) end),
 		  awful.button({}, 5, function () awful.layout.inc(-1) end))
 		)
+
+	local dpi = require("beautiful.xresources").apply_dpi
+	self.layoutbox = wibox.container.margin(layoutbox0, dpi(4), dpi(4), dpi(4), dpi(0))
 
 	-- Create a taglist widget
 	self.taglist = awful.widget.taglist {
@@ -120,6 +123,8 @@ function Wiman:apply_in_screen(s)
 		},
 	}
 
+	local Widgets = require('widgets')
+
 	-- Create the wibox
 	self.wibox = awful.wibar({ position = "left", screen = s, -- ontop = true,
 		width = 42, opacity = 0.7 })
@@ -136,6 +141,9 @@ function Wiman:apply_in_screen(s)
 		self.tasklist, -- Middle widget
 		{ -- Right widgets
 			layout = wibox.layout.fixed.vertical,
+			Widgets.cpu,
+			Widgets.cpu_temp,
+			Widgets.vol_ctrl,
 			self.systray,
 			self.layoutbox,
 		}

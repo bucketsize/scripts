@@ -38,13 +38,17 @@ do
 				title = "Oops, an error happened!",
 			text = tostring(err) })
 		in_error = false
+
+		print(tostring(err))
 	end)
 end
 -- }}}
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/gtk/theme.lua")
+local themes_dir = gears.filesystem.get_themes_dir()
+--local themes_dir = gears.filesystem.get_configuration_dir()
+beautiful.init(themes_dir .. "default/theme.lua")
 beautiful.notification_opacity  = 70
 beautiful.notification_width  = 200
 beautiful.notification_height = 50
@@ -85,11 +89,7 @@ local klient  = require('klient')
 klient:setup(CTX)
 klient:apply()
 
-local panel_top  = require('panel_top')
-panel_top:setup(CTX)
-panel_top:apply()
-
-local panel_left  = require('panel_left')
+local panel_left  = require('panel_left_si')
 panel_left:setup(CTX)
 panel_left:apply()
 

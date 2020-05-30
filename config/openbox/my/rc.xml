@@ -329,7 +329,8 @@
     </keybind>
     <keybind key="W-l">
       <action name="Execute">
-				<command>~/scripts/xdg/x.lock-i3.sh start</command>
+				<!-- <command>~/scripts/xdg/x.lock-i3.sh start</command> -->
+				<command>light-locker-command --lock</command>
       </action>
     </keybind>
     <keybind key="W-r">

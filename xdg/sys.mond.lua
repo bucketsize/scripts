@@ -1,4 +1,4 @@
-#!/bin/lua
+#!/usr/bin/env lua
 -- sys.mond.lua test
 -- sys.mond.lua
 

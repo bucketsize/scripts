@@ -14,6 +14,7 @@ stopAll(){
 	killall conky
 	killall lx-polkit
 	xautolock -exit
+	killall light-locker
 }
 startAll(){
 	picom &
@@ -22,10 +23,10 @@ startAll(){
 	conky &
 	lx-polkit &
 	xautolock \
-		-time 5 -locker "~/scripts/xdg/x.lock-i3.sh" \
-		-killtime 10 -killer "xterm" \
-		-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Lock activated ETA 30s'" &
-
+		-time 5 -locker "light-locker-command --lock" \
+		-killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'" \
+		-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'" &
+	light-locker --lock-on-suspend --lock-on-lid &
 	~/scripts/xdg/x.wallpaper.sh &
 	~/scripts/xdg/sys.mond.lua &
 }
