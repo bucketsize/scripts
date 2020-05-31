@@ -42,6 +42,8 @@ function Rules:apply()
 					"Wpa_gui",
 					"veromix",
 					"xtightvncviewer",
+					"Eclipse",
+					"eclipse",
 				},
 
 				-- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -59,6 +61,16 @@ function Rules:apply()
 		-- Add titlebars to normal clients and dialogs
 		{ rule_any = {type = { "normal", "dialog" }
 			}, properties = { titlebars_enabled = true }
+		},
+
+		-- Steam client has it's own decorations
+		{ rule_any = {
+				class = { "Steam" }
+			},
+			properties = {
+				titlebars_enabled = false,
+				floating = true
+			}
 		},
 
 		-- Start maximized

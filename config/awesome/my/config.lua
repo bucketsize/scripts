@@ -1,6 +1,6 @@
 local Config = {
 	pam_domain = 'xdm',
-	terminal   = 'gnome-terminal',
+	terminal   = 'lxterminal',
 	webbrowser = 'firefox',
 	fsbrowser  = 'pcmanfm',
 	editor     = 'gvim',

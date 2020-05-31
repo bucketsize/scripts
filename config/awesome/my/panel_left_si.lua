@@ -141,10 +141,11 @@ function Wiman:apply_in_screen(s)
 		self.tasklist, -- Middle widget
 		{ -- Right widgets
 			layout = wibox.layout.fixed.vertical,
+			self.systray,
 			Widgets.cpu,
 			Widgets.cpu_temp,
 			Widgets.vol_ctrl,
-			self.systray,
+			Widgets.bat_stat,
 			self.layoutbox,
 		}
 	}

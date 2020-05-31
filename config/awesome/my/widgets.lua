@@ -139,7 +139,7 @@ bat_stat:timer(function()
 				function(out)
 					local bl = tonumber(out)
 					if bl == nil then bl = 0 end
-					bat_stat:update(string.format('%s, %02i', bs, bl))
+					bat_stat:update(string.format('%s, %02i', string.sub(bs,1,2), bl))
 				end)
 		end)
 	end, 5)
@@ -235,6 +235,7 @@ return {
 	vol_ctrl = vol_ctrl,
 	clock = clock,
 	fs_stat = fs_stat,
+	bat_stat = bat_stat,
 	kb_info = kb_info,
 	app_launcher = boxed_applauncher
 }
