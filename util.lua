@@ -21,6 +21,14 @@ function Util:exec(cmd)
 	end
 	return r
 end
+function Util:exec_stream(cmd, fn)
+	local h = io.popen(cmd)
+	while true do
+		local l = h:read("*line")
+		if l == nil then break end
+		fn(l)
+	end
+end
 
 -- print(Util:read("/proc/cpuinfo", "r"))
 -- print(Util:exec("ls -l", "r"))

@@ -85,3 +85,18 @@ PROTON_USE_WINED3D11=1 %command%
 DXVK_HUD=devinfo,fps,memory,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
 DXVK_HUD=fps,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
 
+# lua pattern matching
+.	  all characters
+%a	letters
+%c	control characters
+%d	digits
+%l	lower case letters
+%p	punctuation characters
+%s	space characters
+%u	upper case letters
+%w	alphanumeric characters
+%x	hexadecimal digits
+%z	the character with representation 0
+
+
+
