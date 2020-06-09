@@ -66,8 +66,8 @@ function Co:ps_top()
 	while true do
 		local m=Fn:ps_top()
 		for i,p in ipairs(m) do
-			MTAB['p' .. tostring(i)] = string.format('%s, pid=%s, cpu=%s, mem=%s'
-				, p['comm'], p['pid'], p['pcpu'], p['pmem'])
+			MTAB['p' .. tostring(i)] = string.format('%s %s %s %s'
+				, p['pid'], p['pcpu'], p['pmem'], p['comm'])
 			--print(MTAB['p2'])
 		end
 		coroutine.yield()
@@ -128,21 +128,40 @@ function Co:bat_usage()
 	end
 end
 
+function num(x, d)
+	if x == nil then
+		return d
+	else
+		return x
+	end
+end
+
 -- Log to '/tmp/sys.montor.out' --
 function Co:logger()
 	print("logging metrics to '/tmp/sys.montor.out' ...")
 	while true do
 		local hout = io.open("/tmp/sys.monitor.out", "w")
+		local hlog = io.open("/var/tmp/sys.monitor.log", "a")
 		for i,k in ipairs(ORen) do
 			local fmt = Fmt[k]
 			local v = MTAB[k]
 			if v == nil then
-				v = ''
-				fmt = "%s: %s"
+				v = 0
+				fmt = "%s: %d"
 			end
 			hout:write(string.format(fmt, k, v), "\n")
 		end
 		hout:close()
+		hlog:write(string.format("T=%d,%.0f,%.0f,%d,%d,%.0f,<%s,%s,%s>\n"
+				, os.time()
+				, num(MTAB['cpu'], 0)
+				, num(MTAB['cpu_temp'], 0)
+				, num(MTAB['gpu_mclk'], 0)
+				, num(MTAB['gpu_temp'], 0)
+				, num(MTAB['mem'], 0)
+				, MTAB['p2'], MTAB['p3'], MTAB['p4']
+			))
+		hlog:close()
 		coroutine.yield()
 	end
 end
