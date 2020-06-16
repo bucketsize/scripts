@@ -49,7 +49,7 @@ function Fn:ps_top()
 end
 -- VOL --
 function Fn:vol_usage()
-	local result = Util:exec("pactl list sinks")
+	local result = Util:exec("pactl list sinks 2>&1")
 	local vol = string.match(result, "Volume:(.*)balance")
 	if vol == nil then
 		return 0
@@ -67,7 +67,7 @@ function Fn:senors_usage_ryzen3_2200g()
 	local result = Util:exec("sensors")
 	local tcpu = string.match(result, "Tdie:%s++(%d+.%d+)°C")
 	local tgpu = string.match(result, "edge:%s++(%d+.%d+)°C")
-	return tcpu,tgpu
+	return tonumber(tcpu),tonumber(tgpu)
 end
 
 
@@ -76,7 +76,7 @@ function Fn:gpu_usage_amdgpu()
 	local tgpu = string.match(result, "GPU Temperature: (%d+) C")
 	local mclk = string.match(result, "%s+(%d+) MHz%s+%ZMCLK")
 	local sclk = string.match(result, "%s+(%d+) MHz%s+%ZSCLK")
-	return tgpu,mclk,sclk
+	return tonumber(tgpu),tonumber(mclk),tonumber(sclk)
 end
 
 -- NET --

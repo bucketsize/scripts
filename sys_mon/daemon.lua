@@ -2,10 +2,11 @@
 -- sys.mond.lua test
 -- sys.mond.lua
 
-package.path = package.path .. ';/home/jb/scripts/?.lua;/home/jb/scripts/xdg/?.lua'
+package.path = package.path .. ';/home/jb/scripts/?.lua;/home/jb/scripts/sys_mon/?.lua'
 local socket = require("socket")
 local Util = require("util")
-local Fn = require("sys_mon_fn")
+local Fn = require("functions")
+local Al = require("alerts")
 
 local EPOC=2
 local MTAB={}
@@ -28,13 +29,12 @@ local Fmt={
 	net_rx="%s: %d",
 	net_ts="%s: %.0f",
 	net_rs="%s: %.0f",
-	p1="%s: %s",
-	p2="%s: %s",
-	p3="%s: %s",
-	p4="%s: %s",
-	p5="%s: %s",
+	p2_pid="%s: %s",
+	p2_pcpu="%s: %s",
+	p2_pmem="%s: %s",
+	p2_name="%s: %s",
 }
-local ORen = {'cpu','cpu_temp','gpu_mclk','gpu_temp','mem','vol','net_tx','net_rx','p2','p3','p4'}
+local ORen = {'cpu','cpu_temp','gpu_mclk','gpu_temp','mem','vol','net_tx','net_rx','p2_pid','p2_pcpu','p2_pmem','p2_name'}
 
 local Co={}
 
@@ -47,6 +47,7 @@ function Co:cpu_usage()
 		s0,z0=s,z
 		MTAB['cpu'] = c*100
 		MTAB['cpu_level'] = c*5
+		Al:check('cpu', c*100)
 		coroutine.yield()
 	end
 end
@@ -66,8 +67,10 @@ function Co:ps_top()
 	while true do
 		local m=Fn:ps_top()
 		for i,p in ipairs(m) do
-			MTAB['p' .. tostring(i)] = string.format('%s %s %s %s'
-				, p['pid'], p['pcpu'], p['pmem'], p['comm'])
+			MTAB[string.format('p%s_pid',i)] = p['pid']
+			MTAB[string.format('p%s_pcpu',i)] = p['pcpu']
+			MTAB[string.format('p%s_pmem',i)] = p['pmem']
+			MTAB[string.format('p%s_name',i)] = p['comm']
 			--print(MTAB['p2'])
 		end
 		coroutine.yield()
@@ -89,6 +92,7 @@ function Co:tem_usage()
 	while true do
 		local tcpu,_=Fn:senors_usage_ryzen3_2200g()
 		MTAB['cpu_temp'] = tcpu
+		Al:check('cpu_temp', tcpu)
 		local tgpu,gmf,gsf=Fn:gpu_usage_amdgpu()
 		--print('->', tgpu,gmf,gsf)
 		MTAB['gpu_temp'] = tgpu
@@ -138,7 +142,7 @@ end
 
 -- Log to '/tmp/sys.montor.out' --
 function Co:logger()
-	print("logging metrics to '/tmp/sys.montor.out' ...")
+	print("logging to ...\n\t/tmp/sys.montor.out\n\t/var/tmp/sys.monitor.log")
 	while true do
 		local hout = io.open("/tmp/sys.monitor.out", "w")
 		local hlog = io.open("/var/tmp/sys.monitor.log", "a")
@@ -152,14 +156,14 @@ function Co:logger()
 			hout:write(string.format(fmt, k, v), "\n")
 		end
 		hout:close()
-		hlog:write(string.format("T=%d,%.0f,%.0f,%d,%d,%.0f,<%s,%s,%s>\n"
+		hlog:write(string.format("%d,%.0f,%.0f,%d,%d,%.0f,%s,%s,%s,%s\n"
 				, os.time()
 				, num(MTAB['cpu'], 0)
 				, num(MTAB['cpu_temp'], 0)
 				, num(MTAB['gpu_mclk'], 0)
 				, num(MTAB['gpu_temp'], 0)
 				, num(MTAB['mem'], 0)
-				, MTAB['p2'], MTAB['p3'], MTAB['p4']
+				, MTAB['p2_pid'], MTAB['p2_pcpu'], MTAB['p2_pmem'], MTAB['p2_name']
 			))
 		hlog:close()
 		coroutine.yield()
