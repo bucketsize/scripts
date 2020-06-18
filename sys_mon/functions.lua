@@ -63,10 +63,33 @@ function Fn:vol_usage()
 end
 
 -- TEMP --
+local coretemp_files = {
+    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input',
+    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input',
+    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input',
+}
+function Fn:coretemp_usage()
+    local ts = {}
+    for i,v in ipairs(coretemp_files) do
+        local handle = io.open(v, "r")
+	    local result = handle:read("*l")
+	    handle:close()
+        ts[i] = tonumber(result)
+    end
+    return ts
+end
+
 function Fn:senors_usage_ryzen3_2200g()
 	local result = Util:exec("sensors")
 	local tcpu = string.match(result, "Tdie:%s++(%d+.%d+)°C")
 	local tgpu = string.match(result, "edge:%s++(%d+.%d+)°C")
+	return tonumber(tcpu),tonumber(tgpu)
+end
+
+function Fn:senors_usage_i3()
+	local result = Util:exec("sensors")
+	local tcpu = string.match(result, "CPU:%s++(%d+.%d+)°C")
+	local tgpu = string.match(result, "GPU:%s++(%d+.%d+)°C")
 	return tonumber(tcpu),tonumber(tgpu)
 end
 
