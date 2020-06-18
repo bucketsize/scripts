@@ -22,6 +22,23 @@ function Fn:cpu_usage()
 	return s1,z1
 end
 
+local cpufreq_files = {
+	'/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq',
+	'/sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq',
+	'/sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq',
+	'/sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq'
+}
+function Fn:cpu_freq()
+	local freq={}
+	for i,v in ipairs(cpufreq_files) do 
+		local handle = io.open(v, "r")
+		local result = handle:read("*l")
+		handle:close()
+		freq[i]=tonumber(result)
+	end
+	return freq
+end
+
 -- MEM --
 function Fn:mem_usage()
 	local result = Util:read("/proc/meminfo")

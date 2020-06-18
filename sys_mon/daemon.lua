@@ -14,6 +14,10 @@ local Fmt={
 	cpu="%s: %3.0f",
 	cpu_level="%s: %.0f",
 	cpu_temp="%s: %.0f",
+	cpu0="%s: %.0f",
+	cpu1="%s: %.0f",
+	cpu2="%s: %.0f",
+	cpu3="%s: %.0f",
 	mem="%s: %3.0f",
 	mem_level="%s: %.0f",
 	vol="%s: %3.0f",
@@ -34,7 +38,24 @@ local Fmt={
 	p2_pmem="%s: %s",
 	p2_name="%s: %s",
 }
-local ORen = {'cpu','cpu_temp','gpu_mclk','gpu_temp','mem','vol','net_tx','net_rx','p2_pid','p2_pcpu','p2_pmem','p2_name'}
+local ORen = {
+	'cpu',
+	'cpu_temp',
+	'cpu0',
+	'cpu1',
+	'cpu2',
+	'cpu3',
+	'gpu_mclk',
+	'gpu_temp',
+	'mem',
+	'vol',
+	'net_tx',
+	'net_rx',
+	'p2_pid',
+	'p2_pcpu',
+	'p2_pmem',
+	'p2_name'
+}
 
 local Co={}
 
@@ -48,6 +69,15 @@ function Co:cpu_usage()
 		MTAB['cpu'] = c*100
 		MTAB['cpu_level'] = c*5
 		Al:check('cpu', c*100)
+		coroutine.yield()
+	end
+end
+function Co:cpu_freq()
+	while true do
+		local freq=Fn:cpu_freq()
+		for i,v in ipairs(freq) do
+			MTAB['cpu'..tostring(i-1)] = v/1000
+		end
 		coroutine.yield()
 	end
 end
