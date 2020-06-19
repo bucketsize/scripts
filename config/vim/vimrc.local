@@ -10,7 +10,6 @@ set bomb
 set binary
 set tabstop=2
 set shiftwidth=2
-silent! colorscheme desert
 
 " rooter
 let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']
@@ -18,7 +17,7 @@ let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']
 " autocomplete
 " c-x c-n
 set completeopt-=preview
-set completeopt+=longest,menuone,noinsert,noselect
+set completeopt+=longest,menuone,noinsert
 set shortmess+=c
 
 augroup OmniCompletionSetup
@@ -31,8 +30,9 @@ augroup OmniCompletionSetup
     autocmd FileType html       set omnifunc=htmlcomplete#CompleteTags
     autocmd FileType css        set omnifunc=csscomplete#CompleteCSS
     autocmd FileType xml        set omnifunc=xmlcomplete#CompleteTags
-    autocmd FileType java         set omnifunc=javacomplete#Complete
+    autocmd FileType java       set omnifunc=javacomplete#Complete
 augroup END
+
 " asynccomplete
 let g:asyncomplete_auto_popup = 0
 let g:asyncomplete_remove_duplicates = 1
@@ -74,5 +74,11 @@ augroup vimrc-javascript
   autocmd!
   autocmd FileType javascript set tabstop=4|set shiftwidth=4|set noexpandtab softtabstop=4 "jb
 augroup END
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " JB:CUSTOM |<--

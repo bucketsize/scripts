@@ -1,12 +1,15 @@
-[submodule "config/awesome/config/awesome/copycats"]
-	path = config/awesome/config/awesome/copycats
-	url = https://github.com/lcpz/awesome-copycats.git
-[submodule "config/awesome/copycats"]
-	path = config/awesome/copycats
-	url = https://github.com/lcpz/awesome-copycats.git
-[submodule "config/awesome/my/awesome-switcher"]
-	path = config/awesome/my/awesome-switcher
+[submodule "config/awesome/lib/awesome-switcher"]
+	path = config/awesome/lib/awesome-switcher
 	url = https://github.com/berlam/awesome-switcher.git
-[submodule "config/awesome/my/awesome-wm-widgets"]
-	path = config/awesome/my/awesome-wm-widgets
-	url = https://github.com/streetturtle/awesome-wm-widgets.git
+[submodule "config/awesome/lib/awesome-freedesktop"]
+	path = config/awesome/lib/awesome-freedesktop
+	url = https://github.com/lcpz/awesome-freedesktop.git
+[submodule "tint2-executors"]
+	path = tint2-executors
+	url = https://github.com/nwg-piotr/tint2-executors.git
+[submodule "config/tint2/tint2-executors"]
+	path = config/tint2/tint2-executors
+	url = https://github.com/bucketsize/tint2-executors.git
+[submodule "config/conky/conkybar"]
+	path = config/conky/conkybar
+	url = https://github.com/gmhafiz/conkybar.git

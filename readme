@@ -5,3 +5,98 @@ ssh-keygen -t rsa -b 4096 -C "bucket.size@gmail.com"
 ssh-add ~/.ssh/id_rsa
 
 git remote set-url origin ssh://git@github.com/bucketsize/scripts.git
+
+git submodule add [URL to Git repo]
+git submodule init
+
+git submodule deinit -f mymodule
+rm .git/modules/mymodule -rf
+git rm mymodule -rf
+
+$HOME/.config/gtk-3.0/settings.ini
+----- begin of file ------
+  [Settings]
+  gtk-theme-name = oxygen-gtk
+----- end of file -----
+
+
+mtpfs
+First edit your /etc/fuse.conf and uncomment the following line:
+user_allow_other
+
+Mount your device on ~/mnt:
+mtpfs -o allow_other ~/mnt
+
+--hwdec=API
+v4l2-ctl --set-ctrl=gain=00
+v4l2-ctl --set-ctrl=exposure_auto=1
+v4l2-ctl --set-ctrl=exposure_absolute=10
+v4l2-ctl --set-ctrl=white_balance_temperature_auto=1
+v4l2-ctl --set-ctrl=white_balance_temperature=6001
+
+# previous boot-*all log
+journalctl -b-1
+
+# install grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# 2020-03-27 suspend-resume bug kerne; 5.x onwards
+# workaround with kernel param
+amggpu.dc=0
+
+# steam from flatpak
+flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak --user install flathub com.valvesoftware.Steam
+flatpak run com.valvesoftware.Steam
+
+# expose fs to flatpak
+flatpak --user override com.valvesoftware.Steam --filesystem=$HOME
+flatpak --user override com.valvesoftware.Steam --filesystem=/mnt/f1aa
+
+# run a flatpak
+flatpak list
+flatpak run com.valvesoftware.Steam
+
+# awesome testing
+Xephyr :1 -ac -br -noreset -screen 1152x720 &
+DISPLAY=:1.0 awesome
+
+#bulk rename files
+for i in $files; do j=$(echo $i | grep -Po '(?<=id=)(.+?)(?=&)'); echo $j; mv "$i" $j -v ; done
+
+# install AUR package
+git clone [the package], cd [the package], makepkg -si
+
+# run with proton
+python3 /mnt/f1aa/data/SteamLibrary/steamapps/common/Proton 4.11/proton waitforexitandrun /mnt/f1aa/data/SteamLibrary/steamapps/common/Planet Zoo/PlanetZoo.exe
+
+# initrd image: current - default, fallback
+mkinitcpio -p linux
+
+# initrd image: all
+mkinitcpio -P
+
+RADV_PERFTEST=aco
+PYTHONIOENCODING=utf-8
+DXVK_STATE_CACHE=0
+PROTON_NO_ESYNC=1
+PROTON_USE_WINED3D11=1 %command%
+
+DXVK_HUD=devinfo,fps,memory,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
+DXVK_HUD=fps,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
+
+# lua pattern matching
+.	  all characters
+%a	letters
+%c	control characters
+%d	digits
+%l	lower case letters
+%p	punctuation characters
+%s	space characters
+%u	upper case letters
+%w	alphanumeric characters
+%x	hexadecimal digits
+%z	the character with representation 0
+
+
+
