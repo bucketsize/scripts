@@ -1,61 +1,44 @@
 #!/usr/bin/env lua
--- sys.mond.lua test
--- sys.mond.lua
 
-package.path = package.path .. ';/home/jb/scripts/?.lua;/home/jb/scripts/sys_mon/?.lua'
+package.path = package.path .. '?.lua;../?.lua'
 local socket = require("socket")
 local Util = require("util")
 local Fn = require("functions")
 local Al = require("alerts")
 
+local Fmt = Util:newT()
+Fmt['cpu']="%3.0f"
+Fmt['cpu_level']="%.0f"
+Fmt['cpu_temp']="%.0f"
+Fmt['cpu0']="%.0f"
+Fmt['cpu1']="%.0f"
+Fmt['cpu2']="%.0f"
+Fmt['cpu3']="%.0f"
+Fmt['mem']="%3.0f"
+Fmt['mem_level']="%.0f"
+Fmt['vol']="%3.0f"
+Fmt['vol_level']="%.0f"
+Fmt['gpu_temp']="%d"
+Fmt['gpu_sclk']="%4d"
+Fmt['gpu_mclk']="%4d"
+Fmt['Tdie']="%.0f"
+Fmt['net_gateway']="%s"
+Fmt['net_device']="%s"
+Fmt['net_proto']="%s"
+Fmt['net_tx']="%d"
+Fmt['net_rx']="%d"
+Fmt['net_ts']="%4.0f"
+Fmt['net_rs']="%4.0f"
+Fmt['p2_pid']="%s"
+Fmt['p2_pcpu']="%s"
+Fmt['p2_pmem']="%s"
+Fmt['p2_name']="%s"
+
 local EPOC=2
 local MTAB={}
-local Fmt={
-	cpu="%s: %3.0f",
-	cpu_level="%s: %.0f",
-	cpu_temp="%s: %.0f",
-	cpu0="%s: %.0f",
-	cpu1="%s: %.0f",
-	cpu2="%s: %.0f",
-	cpu3="%s: %.0f",
-	mem="%s: %3.0f",
-	mem_level="%s: %.0f",
-	vol="%s: %3.0f",
-	vol_level="%s: %.0f",
-	gpu_temp="%s: %d",
-	gpu_sclk="%s: %d",
-	gpu_mclk="%s: %d",
-	sensors="%s: %.0f",
-	net_gateway="%s: %s",
-	net_device="%s: %s",
-	net_proto="%s: %s",
-	net_tx="%s: %d",
-	net_rx="%s: %d",
-	net_ts="%s: %.0f",
-	net_rs="%s: %.0f",
-	p2_pid="%s: %s",
-	p2_pcpu="%s: %s",
-	p2_pmem="%s: %s",
-	p2_name="%s: %s",
-}
-local ORen = {
-	'cpu',
-	'cpu_temp',
-	'cpu0',
-	'cpu1',
-	'cpu2',
-	'cpu3',
-	'gpu_mclk',
-	'gpu_temp',
-	'mem',
-	'vol',
-	'net_tx',
-	'net_rx',
-	'p2_pid',
-	'p2_pcpu',
-	'p2_pmem',
-	'p2_name'
-}
+for i,k in Fmt:ipairs() do
+	MTAB[k] = 0
+end
 
 local Co={}
 
@@ -118,11 +101,19 @@ function Co:vol_usage()
 end
 
 -- TEMP --
-function Co:tem_usage()
+function Co:cputemp_usage()
 	while true do
-		local tcpu,_=Fn:senors_usage_ryzen3_2200g()
-		MTAB['cpu_temp'] = tcpu
-		Al:check('cpu_temp', tcpu)
+		local cputs = Fn:cputemp_usage()
+		for i,v in pairs(cputs) do
+			MTAB[i] = v / 1000
+			Al:check('cpu_temp', MTAB[i])
+		end
+		MTAB['cpu_temp'] = cputs['Tdie'] / 1000
+		coroutine.yield()
+	end
+end
+function Co:gpu_usage_amdgpu()
+	while true do
 		local tgpu,gmf,gsf=Fn:gpu_usage_amdgpu()
 		--print('->', tgpu,gmf,gsf)
 		MTAB['gpu_temp'] = tgpu
@@ -172,29 +163,19 @@ end
 
 -- Log to '/tmp/sys.montor.out' --
 function Co:logger()
-	print("logging to ...\n\t/tmp/sys.montor.out\n\t/var/tmp/sys.monitor.log")
 	while true do
-		local hout = io.open("/tmp/sys.monitor.out", "w")
-		local hlog = io.open("/var/tmp/sys.monitor.log", "a")
-		for i,k in ipairs(ORen) do
+		local hout = io.open("/tmp/sys_mon.out", "w")
+		local hlog = io.open("/var/tmp/sys_mon.log", "a")
+		hlog:write(os.date("%Y-%m-%dT%H:%M:%S+05:30"), ',')
+		for i,k in Fmt:ipairs() do
 			local fmt = Fmt[k]
 			local v = MTAB[k]
-			if v == nil then
-				v = 0
-				fmt = "%s: %d"
-			end
-			hout:write(string.format(fmt, k, v), "\n")
+			--print("-> ", k, v, type(v))
+			hout:write(k,': ',string.format(fmt, v), "\n")
+			hlog:write(string.format(fmt, v), ",")
 		end
 		hout:close()
-		hlog:write(string.format("%d,%.0f,%.0f,%d,%d,%.0f,%s,%s,%s,%s\n"
-				, os.time()
-				, num(MTAB['cpu'], 0)
-				, num(MTAB['cpu_temp'], 0)
-				, num(MTAB['gpu_mclk'], 0)
-				, num(MTAB['gpu_temp'], 0)
-				, num(MTAB['mem'], 0)
-				, MTAB['p2_pid'], MTAB['p2_pcpu'], MTAB['p2_pmem'], MTAB['p2_name']
-			))
+		hlog:write('\n')
 		hlog:close()
 		coroutine.yield()
 	end

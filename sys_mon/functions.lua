@@ -2,7 +2,7 @@
 -- sys.mond.lua test
 -- sys.mond.lua
 
-package.path = package.path .. ';/home/jb/scripts/?.lua'
+package.path = package.path .. '?.lua;../?.lua'
 local Util = require("util")
 
 local Fn={}
@@ -22,15 +22,13 @@ function Fn:cpu_usage()
 	return s1,z1
 end
 
-local cpufreq_files = {
-	'/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq',
-	'/sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq',
-	'/sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq',
-	'/sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq'
-}
+local cpufreq_files={}
+Util:exec_stream("ls /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq", function(f)
+	table.insert(cpufreq_files,f)
+end)
 function Fn:cpu_freq()
 	local freq={}
-	for i,v in ipairs(cpufreq_files) do 
+	for i,v in ipairs(cpufreq_files) do
 		local handle = io.open(v, "r")
 		local result = handle:read("*l")
 		handle:close()
@@ -80,36 +78,24 @@ function Fn:vol_usage()
 end
 
 -- TEMP --
-local coretemp_files = {
-    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input',
-    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input',
-    '/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input',
-}
-function Fn:coretemp_usage()
-    local ts = {}
-    for i,v in ipairs(coretemp_files) do
-        local handle = io.open(v, "r")
-	    local result = handle:read("*l")
-	    handle:close()
-        ts[i] = tonumber(result)
-    end
-    return ts
+local hwmons={}
+Util:exec_stream("ls /sys/class/hwmon/hwmon*/temp*_label", function(f)
+	local d = string.gsub(Util:read(f, 'r'), '%c', '', 1)
+	local h = string.gsub(f, 'label', 'input', 1)
+	--print('--> cpuT',h)
+	hwmons[d] = h
+end)
+function Fn:cputemp_usage()
+	local ts = {}
+	for i,v in pairs(hwmons) do
+		local handle = io.open(v, "r")
+		local result = handle:read("*l")
+		handle:close()
+		ts[i] = tonumber(result)
+		--print('--> cpuT',i,result)
+	end
+	return ts
 end
-
-function Fn:senors_usage_ryzen3_2200g()
-	local result = Util:exec("sensors")
-	local tcpu = string.match(result, "Tdie:%s++(%d+.%d+)°C")
-	local tgpu = string.match(result, "edge:%s++(%d+.%d+)°C")
-	return tonumber(tcpu),tonumber(tgpu)
-end
-
-function Fn:senors_usage_i3()
-	local result = Util:exec("sensors")
-	local tcpu = string.match(result, "CPU:%s++(%d+.%d+)°C")
-	local tgpu = string.match(result, "GPU:%s++(%d+.%d+)°C")
-	return tonumber(tcpu),tonumber(tgpu)
-end
-
 
 function Fn:gpu_usage_amdgpu()
 	local result = Util:read("/sys/kernel/debug/dri/0/amdgpu_pm_info")
@@ -134,7 +120,7 @@ function Fn:net_usage()
 		table.insert(t, i)
 	end
 
-	return gw,dev,proto,t[1],t[9]
+	return gw,dev,proto,tonumber(t[1]),tonumber(t[9])
 end
 
 -- BAT --
