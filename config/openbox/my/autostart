@@ -13,6 +13,7 @@ stopAll(){
 	killall tint2
 	killall conky
 	killall lx-polkit
+	killall skhkd
 	xautolock -exit
 	killall light-locker
 }
@@ -22,13 +23,13 @@ startAll(){
 	tint2 &
 	conky &
 	lx-polkit &
+	sxhkd &
 	xautolock \
 		-time 5 -locker "light-locker-command --lock" \
 		-killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'" \
 		-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'" &
 	light-locker --lock-on-suspend --lock-on-lid &
 	~/scripts/xdg/x.wallpaper.sh &
-	~/scripts/xdg/sys.mond.lua &
 }
 case $i in
     stop)

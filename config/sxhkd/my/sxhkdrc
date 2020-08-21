@@ -1,75 +1,47 @@
-/* XF86Audio{Prev,Next} */
-/*     mplayer -q {prev,next} */
-
-/* @XF86LaunchA */
-/*     scrot -s -e 'ristretto $f' */
-
-/* super + shift + equal */
-/*     sxiv -rt "$HOME/image" */
-
-/* XF86LaunchB */
-/*     xdotool selectwindow | xsel -bi */
-
-/* super + {h,j,k,l} */
-/*     bspc node -f {west,south,north,east} */
-
-/* super + alt + {0-9} */
-/*     mpc -q seek {0-9}0% */
-
-/* super + {alt,ctrl,alt + ctrl} + XF86Eject */
-/*     sudo systemctl {suspend,reboot,poweroff} */
-
-/* super + {_,shift + }{h,j,k,l} */
-/*     bspc node -{f,s} {west,south,north,east} */
-
-/* {_,shift + ,super + }XF86MonBrightness{Down,Up} */
-/*     bright {-1,-10,min,+1,+10,max} */
-
-/* super + o ; {e,w,m} */
-/*     {gvim,firefox,thunderbird} */
-
-/* super + alt + control + {h,j,k,l} ; {0-9} */
-/*     bspc node @{west,south,north,east} -r 0.{0-9} */
-
-/* super + alt + p */
-/*     bspc config focus_follows_pointer {true,false} */
-
+// launcher
 super + r
-    source ~/scripts/common.sh && xrun
-
+	dmenu_run
 super + e
-    source ~/scripts/common.sh && xeditor
-
+	leafpad
 super + t
-    source ~/scripts/common.sh && xterminal
-
+	lxterminal
 super + f
-    source ~/scripts/common.sh && xfilemanager
+	pcmanfm
 
+// lockscreen
 super + l
-    ~/scripts/i3lock-fancy
+	~/scripts/xdg/x.lock-i3.sh
 
+// screenshot
 Print
-    source ~/scripts/common.sh && xscreenshot
-
+	scrot -e 'mv $f ~/Pictures/'
 control + Print
-    source ~/scripts/common.sh && xscreenshot_prompt
-
+	scrot -s -e 'mv $f ~/Pictures/'
 control + alt + Delete
-    source ~/scripts/common.sh && handle_power
-
+  notify-send 'bonkers!'
 control + super + x
-    xkill
+  xkill
 
-super + Right
-    xdotool getactivewindow windowmove 50% 0% windowsize 50% 92%
+// volume
+control + bracketright
+	pactl set-sink-volume @DEFAULT_SINK@ +10%
+control + bracketleft
+	pactl set-sink-volume @DEFAULT_SINK@ -10%
+control + backslash
+	pactl set-sink-mute   @DEFAULT_SINK@ toggle
+@XF86AudioRaiseVolume
+	pactl set-sink-volume @DEFAULT_SINK@ +10%
+@XF86AudioLowerVolume
+	pactl set-sink-volume @DEFAULT_SINK@ -10%
+@XF86AudioMute
+	pactl set-sink-mute   @DEFAULT_SINK@ toggle
 
+// window placement
 super + Left
-    xdotool getactivewindow windowmove 0% 0% windowsize 50% 92%
-
+  xdotool getactivewindow windowmove 03% 02% windowsize 48% 92%
+super + Right
+  xdotool getactivewindow windowmove 52% 02% windowsize 48% 92%
 super + Up
-    xdotool getactivewindow windowmove 0% 0% windowsize 100% 92%
-
+  xdotool getactivewindow windowmove 04% 04% windowsize 92% 92%
 super + Down
-    xdotool getactivewindow windowmove 20% 20% windowsize 60% 60%
-    /* xdotool getactivewindow windowminimize */
+  xdotool getactivewindow windowmove 20% 20% windowsize 60% 60%
