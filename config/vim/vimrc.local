@@ -10,6 +10,8 @@ set bomb
 set binary
 set tabstop=2
 set shiftwidth=2
+set guioptions-=m
+set guioptions-=r
 
 " rooter
 let g:rooter_patterns = ['Rakefile', 'build.gradle', 'package.json', 'pom.xml']

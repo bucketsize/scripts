@@ -1,6 +1,4 @@
 #!/usr/bin/env lua
--- sys.mond.lua test
--- sys.mond.lua
 
 package.path = package.path .. '?.lua;../?.lua'
 local Util = require("util")
@@ -30,9 +28,11 @@ function Fn:cpu_freq()
 	local freq={}
 	for i,v in ipairs(cpufreq_files) do
 		local handle = io.open(v, "r")
-		local result = handle:read("*l")
-		handle:close()
-		freq[i]=tonumber(result)
+		if not handle == nil then
+			local result = handle:read("*l")
+			handle:close()
+			freq[i]=tonumber(result)
+		end
 	end
 	return freq
 end
@@ -65,7 +65,7 @@ end
 -- VOL --
 function Fn:vol_usage()
 	local result = Util:exec("pactl list sinks 2>&1")
-	local vol = string.match(result, "Volume:(.*)balance")
+	local vol = string.match(result, "Volume:(.*)balance") -- TODO: optimize
 	if vol == nil then
 		return 0
 	end
@@ -99,10 +99,13 @@ end
 
 function Fn:gpu_usage_amdgpu()
 	local result = Util:read("/sys/kernel/debug/dri/0/amdgpu_pm_info")
-	local tgpu = string.match(result, "GPU Temperature: (%d+) C")
-	local mclk = string.match(result, "%s+(%d+) MHz%s+%ZMCLK")
-	local sclk = string.match(result, "%s+(%d+) MHz%s+%ZSCLK")
-	return tonumber(tgpu),tonumber(mclk),tonumber(sclk)
+	if not result == nil then
+		local tgpu = string.match(result, "GPU Temperature: (%d+) C")
+		local mclk = string.match(result, "%s+(%d+) MHz%s+%ZMCLK")
+		local sclk = string.match(result, "%s+(%d+) MHz%s+%ZSCLK")
+		return tonumber(tgpu),tonumber(mclk),tonumber(sclk)
+	end
+	return 0,0,0
 end
 
 -- NET --

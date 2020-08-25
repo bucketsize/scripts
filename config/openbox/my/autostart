@@ -12,7 +12,8 @@ stopAll(){
 	killall dunst
 	killall tint2
 	killall conky
-	killall lx-polkit
+	killall lxpolkit
+	killall lxclipboard
 	killall skhkd
 	xautolock -exit
 	killall light-locker
@@ -22,15 +23,17 @@ startAll(){
 	dunst &
 	tint2 &
 	conky &
-	lx-polkit &
+	lxpolkit &
+	lxclipboard &
 	sxhkd &
 	xautolock \
-		-time 5 -locker "light-locker-command --lock" \
+		-time 5 -locker "~/scripts/sys_ctl/ctl.lua cmd scr_lock" \
 		-killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'" \
 		-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'" &
-	light-locker --lock-on-suspend --lock-on-lid &
+	~/scripts/sys_ctl/ctl.lua cmd scr_lock_on_lid &
 	~/scripts/xdg/x.wallpaper.sh &
 }
+
 case $i in
     stop)
         stopAll
