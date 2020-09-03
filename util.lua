@@ -29,6 +29,11 @@ function Util:exec_stream(cmd, fn)
 		fn(l)
 	end
 end
+function Util:printTable(t)
+	for i,v in ipairs(t) do
+		print(i .. ': ' .. v)
+	end
+end
 
 --[[
    LUA 5.1 compatible

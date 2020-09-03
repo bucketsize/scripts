@@ -1,9 +1,11 @@
 #!/usr/bin/env lua
 
 package.path = package.path .. '?.lua;../?.lua'
-local Util = require("util")
+local Util = require('util')
+local Shell = require('shell')
+local Proc = require('process')
 
-local Fn={}
+local Fn = {}
 
 -- CPU --
 function Fn:cpu_usage()
@@ -39,10 +41,28 @@ end
 
 -- MEM --
 function Fn:mem_usage()
-	local result = Util:read("/proc/meminfo")
-	local mtotl = string.match(result, "MemTotal:%s+(%d+) kB")
-	local mfree = string.match(result, "MemFree:%s+(%d+) kB")
-	return 1-mfree/mtotl
+	local rf,rt,sf,st
+	Proc.pipe()
+		.add(Shell.cat("/proc/meminfo"))
+		.add(Proc.branch()
+			.add(Shell.grep("MemTotal:%s+(%d+) kB"))
+			.add(Shell.grep("MemFree:%s+(%d+) kB"))
+			.add(Shell.grep("SwapTotal:%s+(%d+) kB"))
+			.add(Shell.grep("SwapFree:%s+(%d+) kB"))
+			.build())
+		.add(Proc.cull())
+		.add(Proc.map(function(x)
+			if not (x[1]==nil) then rt=x[1][1]
+			elseif not (x[2]==nil) then rf=x[2][1]
+			elseif not (x[3]==nil) then st=x[3][1]
+			elseif not (x[4]==nil) then sf=x[4][1]
+			end
+			return x
+		end))
+		.add(Shell.echo())
+		.run()
+	
+	return 1-rf/rt, 1-sf/st
 end
 
 function Fn:ps_top()
@@ -64,17 +84,19 @@ function Fn:ps_top()
 end
 -- VOL --
 function Fn:vol_usage()
-	local result = Util:exec("pactl list sinks 2>&1")
-	local vol = string.match(result, "Volume:(.*)balance") -- TODO: optimize
-	if vol == nil then
-		return 0
-	end
-	volt=0
-	for v in string.gmatch(vol, "/%s+(%d+)") do
-		volt=volt+v
-	end
-	volt=volt/2
-	return volt
+	local v = Proc.pipe()
+		.add(Shell.exec('pactl list sinks 2>&1'))
+		.add(Shell.grep('Volume: f.*'))
+		.add(Proc.map(function(s)
+			vol=0
+			for v in string.gmatch(s[1], "/%s+(%d+)") do
+				vol=vol+v
+			end
+			vol=vol/2
+			return vol
+		end))
+		.run()
+		return v
 end
 
 -- TEMP --
@@ -110,11 +132,12 @@ end
 
 -- NET --
 function Fn:net_usage()
-	local net_if_pat = "default via (%d+.%d+.%d+.%d+) dev (%w+) proto (%w+)"
-	local result = Util:exec("ip route")
-	local gw,dev,proto = string.match(result, net_if_pat)
+	local r = Proc.pipe()
+		.add(Shell.exec('ip route'))
+		.add(Shell.grep('default via (%d+.%d+.%d+.%d+) dev (%w+) proto (%w+)'))
+		.run()
 
-	local net_stat_pat = dev .. ": (.+)%c"
+	local net_stat_pat = r[2] .. ": (.+)%c"
 	local r2 = Util:read("/proc/net/dev", "r")
 	local r3 = string.match(r2, net_stat_pat)
 
@@ -123,7 +146,7 @@ function Fn:net_usage()
 		table.insert(t, i)
 	end
 
-	return gw,dev,proto,tonumber(t[1]),tonumber(t[9])
+	return r[1],r[2],r[3],tonumber(t[1]),tonumber(t[9])
 end
 
 -- BAT --
@@ -143,8 +166,12 @@ function Fn:bat_usage()
 	return r1, r2
 end
 
-for k,fn in pairs(Fn) do
-	print(k, fn())
+if arg[1] == nil then
+	for k,fn in pairs(Fn) do
+		print(k, fn())
+	end
+else
+	print(Fn[arg[1]]())
 end
 
 return Fn
