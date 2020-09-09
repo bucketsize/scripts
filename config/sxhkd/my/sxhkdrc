@@ -66,3 +66,19 @@ super + m
 
 super + alt + m
 	~/scripts/sys_ctl/ctl.lua cmd win_small
+
+control + alt + 1
+	~/scripts/sys_ctl/ctl.lua cmd dtop_viga
+
+control + alt + 2
+	~/scripts/sys_ctl/ctl.lua cmd dtop_hdmi
+
+control + alt + 3
+	~/scripts/sys_ctl/ctl.lua cmd dtop_extn
+
+control + alt + 4
+	~/scripts/sys_ctl/ctl.lua cmd kb_led_on
+
+control + alt + 5
+	~/scripts/sys_ctl/ctl.lua cmd kb_led_off
+
