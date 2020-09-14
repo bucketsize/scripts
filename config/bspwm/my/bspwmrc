@@ -1,0 +1,65 @@
+#! /bin/sh
+
+bspc monitor HDMI-A-0 -d VI VII VIII IX X
+bspc monitor DisplayPort-0 -d I II III IV V
+
+bspc config border_width         2
+bspc config window_gap           8
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a Firefox  desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Conky state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+# start other stuff
+start(){
+	log=/var/tmp/ob-`echo "$2" | sed 's/[/~. ]/-/g'`.log
+	(sleep $1 && $2 1>$log 2>$log ) &
+}
+
+stop(){
+	if [ $2 == 'xautolock' ]; then
+		(sleep $1 && xautolock -exit) &
+	else
+		(sleep $1 && killall $2) &
+	fi
+}
+
+stopAll(){
+	stop 1 picom
+	stop 1 dunst
+	stop 2 skhkd
+	stop 2 lxpolkit
+	stop 2 lxclipboard
+	stop 3 xautolock
+	stop 3 light-locker
+	stop 3 conky
+}
+startAll(){
+	start 1 ~/scripts/xdg/x.wallpaper.sh
+	start 1 picom
+	start 2 dunst
+	start 3 sxhkd -c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc
+	start 4 lxpolkit
+	start 4 lxclipboard
+	start 5 xautolock \
+	 -time 5 -locker "~/scripts/sys_ctl/ctl.lua cmd scr_lock" \
+	 -killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'" \
+	 -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'"
+	start 5 ~/scripts/sys_ctl/ctl.lua cmd scr_lock_on_lid
+	start 5 ~/scripts/sys_ctl/ctl.lua cmd dtop_viga
+	start 5 ~/scripts/sys_ctl/ctl.lua fun pa_set_default
+	start 5 conky
+}
+
+stopAll
+sleep 1
+startAll
+

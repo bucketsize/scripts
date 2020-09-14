@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. '?.lua;../?.lua'
+package.path = package.path .. '?.lua;../?.lua;lib/?.lua;../lib/?.lua;../../lib/?.lua'
+
 local Util = require('util')
 local Shell = require('shell')
 local Proc = require('process')
@@ -96,7 +97,12 @@ function Fn:vol_usage()
 			return vol
 		end))
 		.run()
-		return v
+	local iv = Proc.pipe()
+		.add(Shell.exec('pacmd list-sink-inputs'))
+		.add(Shell.grep('state: RUNNING.*'))
+		--.add(Shell.echo())
+		.run()
+	return v, not (iv == nil)
 end
 
 -- TEMP --
@@ -168,10 +174,10 @@ end
 
 if arg[1] == nil then
 	for k,fn in pairs(Fn) do
-		print(k, fn())
+		print('0> ' .. k, fn())
 	end
 else
-	print(Fn[arg[1]]())
+	print(arg[1]..'> ', Fn[arg[1]]())
 end
 
 return Fn

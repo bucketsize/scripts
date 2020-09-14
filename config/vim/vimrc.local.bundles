@@ -19,6 +19,7 @@ Plug 'ryanolsonx/vim-lsp-typescript'
 " haskell
 let $PATH = $PATH . ':' . expand('~/.cabal/bin')
 Plug 'eagletmt/ghcmod-vim'
+Plug 'Shougo/vimproc.vim'
 
 " lua
 Plug 'wolfgangmehner/lua-support'

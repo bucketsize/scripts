@@ -1,0 +1,19 @@
+// window placement
+super + Left
+	~/scripts/sys_ctl/ctl.lua cmd win_left
+
+super + Right
+	~/scripts/sys_ctl/ctl.lua cmd win_right
+
+super + Up
+	~/scripts/sys_ctl/ctl.lua cmd win_max
+
+super + Down
+	~/scripts/sys_ctl/ctl.lua cmd win_unmax
+
+super + m
+	~/scripts/sys_ctl/ctl.lua cmd win_big
+
+super + alt + m
+	~/scripts/sys_ctl/ctl.lua cmd win_small
+

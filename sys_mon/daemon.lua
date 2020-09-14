@@ -1,8 +1,12 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. '?.lua;../?.lua'
+package.path = package.path .. '?.lua;../?.lua;lib/?.lua;../lib/?.lua;../../lib/?.lua'
+
+local Util = require('util')
+local Sh = require('shell')
+local Pr = require('process')
+
 local socket = require("socket")
-local Util = require("util")
 local Fn = require("functions")
 local Al = require("alerts")
 
@@ -16,6 +20,7 @@ Fmt['cpu2']="%.0f"
 Fmt['cpu3']="%.0f"
 Fmt['mem']="%3.0f"
 Fmt['mem_level']="%.0f"
+Fmt['snd_live']="%s"
 Fmt['vol']="%3.0f"
 Fmt['vol_level']="%.0f"
 Fmt['gpu_temp']="%d"
@@ -93,9 +98,10 @@ end
 -- VOL --
 function Co:vol_usage()
 	while true do
-		local v=Fn:vol_usage()
+		local v, s = Fn:vol_usage()
 		MTAB['vol'] = v
 		MTAB['vol_level'] = v*0.05
+		MTAB['snd_live'] = s
 		coroutine.yield()
 	end
 end
@@ -166,6 +172,7 @@ function Co:logger()
 	while true do
 		local hout = io.open("/tmp/sys_mon.out", "w")
 		local hlog = io.open("/var/tmp/sys_mon.log", "a")
+		hout:write('\ntime: ', os.date("%Y-%m-%dT%H:%M:%S+05:30"), '\n')
 		hlog:write(os.date("%Y-%m-%dT%H:%M:%S+05:30"), ',')
 		for i,k in Fmt:ipairs() do
 			local fmt = Fmt[k]
@@ -193,11 +200,11 @@ function Cmd:start()
 		for k,coInst in pairs(CoInst) do
 			local status = coroutine.status(coInst)
 			if status == 'dead' then
-				print(k, status)
+				print('co dead> ' .. k, status)
 			end
 			local ok,res = coroutine.resume(coInst)
 			if not ok then
-				print(k, ret, res)
+				print('co bad> ' .. k, ret, res)
 			end
 		end
 		socket.sleep(EPOC)

@@ -1,16 +1,6 @@
 // launcher
-
 super + r
 	dmenu_run -l 10
-
-super + e
-	leafpad
-
-super + t
-	lxterminal
-
-super + f
-	pcmanfm
 
 // lockscreen
 super + l
@@ -48,25 +38,6 @@ control + backslash
 @XF86AudioMute
 	~/scripts/sys_ctl/ctl.lua cmd vol_mute
 
-// window placement
-super + Left
-	~/scripts/sys_ctl/ctl.lua cmd win_left
-
-super + Right
-	~/scripts/sys_ctl/ctl.lua cmd win_right
-
-super + Up
-	~/scripts/sys_ctl/ctl.lua cmd win_max
-
-super + Down
-	~/scripts/sys_ctl/ctl.lua cmd win_unmax
-
-super + m
-	~/scripts/sys_ctl/ctl.lua cmd win_big
-
-super + alt + m
-	~/scripts/sys_ctl/ctl.lua cmd win_small
-
 control + alt + 1
 	~/scripts/sys_ctl/ctl.lua cmd dtop_viga
 
@@ -81,4 +52,7 @@ control + alt + 4
 
 control + alt + 5
 	~/scripts/sys_ctl/ctl.lua cmd kb_led_off
+
+
+
 
