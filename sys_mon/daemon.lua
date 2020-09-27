@@ -1,14 +1,17 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. '?.lua;../?.lua;lib/?.lua;../lib/?.lua;../../lib/?.lua'
+package.path = package.path
+	.. '?.lua;'
+	.. 'scripts/lib/?.lua;'
+	.. 'scripts/sys_mon/?.lua;'
+
+local socket = require("socket")
 
 local Util = require('util')
 local Sh = require('shell')
 local Pr = require('process')
-
-local socket = require("socket")
-local Fn = require("functions")
-local Al = require("alerts")
+local Fn = require('functions')
+local Al = require('alerts')
 
 local Fmt = Util:newT()
 Fmt['cpu']="%3.0f"

@@ -4,7 +4,7 @@
 # Backgrounds
 # Background 1: Panel
 rounded = 0
-border_width = 1
+border_width = 0
 border_sides = LR
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -17,7 +17,7 @@ border_color_pressed = #555555 80
 
 # Background 2: Default task, Iconified task, Tooltip
 rounded = 0
-border_width = 2
+border_width = 0
 border_sides =
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -30,20 +30,20 @@ border_color_pressed = #cccccc 80
 
 # Background 3: Active task
 rounded = 0
-border_width = 2
+border_width = 0
 border_sides = L
 border_content_tint_weight = 0
 background_content_tint_weight = 0
 background_color = #777777 40
 border_color = #cccccc 40
-background_color_hover = #777777 60
-border_color_hover = #cccccc 60
-background_color_pressed = #777777 40
-border_color_pressed = #cccccc 80
+background_color_hover = #777777 30
+border_color_hover = #cccccc 30
+background_color_pressed = #777777 20
+border_color_pressed = #cccccc 20
 
 # Background 4: Urgent task
 rounded = 0
-border_width = 2
+border_width = 0
 border_sides = B
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -55,7 +55,7 @@ background_color_pressed = #777777 40
 border_color_pressed = #777777 80
 
 # Background 5:
-rounded = 2
+rounded = 0
 border_width = 1
 border_sides = TBLR
 border_content_tint_weight = 0
@@ -69,7 +69,7 @@ border_color_pressed = #999999 100
 
 # Background 6: Inactive desktop name
 rounded = 2
-border_width = 1
+border_width = 0
 border_sides = TBLR
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -82,7 +82,7 @@ border_color_pressed = #777777 30
 
 # Background 7: Active desktop name
 rounded = 0
-border_width = 1
+border_width = 0
 border_sides = TB
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -109,6 +109,8 @@ border_color_pressed = #777777 30
 #-------------------------------------
 # Panel
 panel_items = TEEEEES
+panel_layer = top
+strut_policy = follow_size
 panel_size = 64% 42
 panel_margin = 0 0
 panel_padding = 8 0 0
@@ -116,14 +118,12 @@ panel_background_id = 1
 wm_menu = 1
 panel_dock = 0
 panel_position = center left vertical
-panel_layer = bottom
 panel_monitor = all
 panel_shrink = 0
 autohide = 0
 autohide_show_timeout = 0
 autohide_hide_timeout = 0.5
 autohide_height = 2
-strut_policy = follow_size
 panel_window_name = tint2
 disable_transparency = 0
 mouse_effects = 1
@@ -137,7 +137,7 @@ scale_relative_to_screen_height = 0
 # Taskbar
 taskbar_mode = single_desktop
 taskbar_hide_if_empty = 0
-taskbar_padding = 0 0 2
+taskbar_padding = 0 0 0
 taskbar_background_id = 0
 taskbar_active_background_id = 0
 taskbar_name = 0
@@ -241,25 +241,25 @@ tooltip_font = Sans 10
 
 #-------------------------------------
 # Executor 1
-execp = new
-execp_command = ~/scripts/xdg/sys.param.lua net_device
-execp_interval = 5
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_lclick_command =
-execp_rclick_command =
-execp_mclick_command =
-execp_uwheel_command =
-execp_dwheel_command =
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 10 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua net_device
+# execp_interval = 5
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_lclick_command =
+# execp_rclick_command =
+# execp_mclick_command =
+# execp_uwheel_command =
+# execp_dwheel_command =
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 10 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 
 #-------------------------------------
 # Executor 1.5
@@ -330,47 +330,47 @@ execp_icon_h = 16
 
 #-------------------------------------
 # Executor 3
-execp = new
-execp_command = ~/scripts/xdg/sys.param.lua vol
-execp_interval = 2
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_tooltip = Scroll ↓↑, middle click to mute
-execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-volume.sh
-execp_rclick_command = rof pavucontrol
-execp_mclick_command = amixer -c1 set Master toggle -q
-execp_uwheel_command = amixer -c1 set Master 5%+ unmute -q
-execp_dwheel_command = amixer -c1 set Master 5%- -q
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 2 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua vol
+# execp_interval = 2
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_tooltip = Scroll ↓↑, middle click to mute
+# execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-volume.sh
+# execp_rclick_command = rof pavucontrol
+# execp_mclick_command = amixer -c1 set Master toggle -q
+# execp_uwheel_command = amixer -c1 set Master 5%+ unmute -q
+# execp_dwheel_command = amixer -c1 set Master 5%- -q
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 2 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 
 #-------------------------------------
 # Executor 4
-execp = new
-execp_command = ~/scripts/xdg/sys.param.lua bri
-execp_interval = 2
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_tooltip = Scroll ↓↑
-execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-brightness.sh
-execp_rclick_command = rof arandr
-execp_mclick_command = 
-execp_uwheel_command = xbacklight +5
-execp_dwheel_command = xbacklight -5
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 2 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua bri
+# execp_interval = 2
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_tooltip = Scroll ↓↑
+# execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-brightness.sh
+# execp_rclick_command = rof arandr
+# execp_mclick_command = 
+# execp_uwheel_command = xbacklight +5
+# execp_dwheel_command = xbacklight -5
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 2 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 

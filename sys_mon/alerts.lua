@@ -1,6 +1,10 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. ';/home/jb/scripts/?.lua'
+package.path = package.path
+	.. '?.lua;'
+	.. 'scripts/lib/?.lua;'
+	.. 'scripts/sys_mon/?.lua;'
+
 local Util = require("util")
 
 local Al = {

@@ -1,6 +1,9 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. '?.lua;../?.lua;lib/?.lua;../lib/?.lua;../../lib/?.lua'
+package.path = package.path
+	.. '?.lua;'
+	.. 'scripts/lib/?.lua;'
+	.. 'scripts/sys_mon/?.lua;'
 
 local Util = require('util')
 local Shell = require('shell')
@@ -60,7 +63,7 @@ function Fn:mem_usage()
 			end
 			return x
 		end))
-		.add(Shell.echo())
+		-- .add(Shell.echo())
 		.run()
 	
 	return 1-rf/rt, 1-sf/st

@@ -1,6 +1,9 @@
 #!/usr/bin/env lua
 
-package.path = package.path .. '?.lua;../?.lua;lib/?.lua;../lib/?.lua'
+package.path = package.path
+	.. '?.lua;'
+	.. 'scripts/lib/?.lua;'
+	.. 'scripts/sys_mon/?.lua;'
 
 local Sh = require('shell')
 local Pr = require('process')
@@ -38,19 +41,31 @@ local Cmds = {
 }
 
 local Funs = {}
-function Funs:scr_lock_on()
+function Funs:scr_lock_if()
 	local iv = Pr.pipe()
-	.add(Sh.exec('pacmd list-sink-inputs'))
-	.add(Sh.grep('state: RUNNING.*'))
-	.add(Sh.echo())
-	.run()
+		.add(Sh.exec('pacmd list-sink-inputs'))
+		.add(Sh.grep('state: RUNNING.*'))
+		.add(Sh.echo())
+		.run()
+	print("audio live:", iv)
   if iv == nil then
 		return Cmds['scr_lock']
 	end
 end
-
+function Funs:pa_sinks_name()
+	local iv = Pr.pipe()
+		.add(Sh.exec('pacmd list-sinks'))
+		.add(Sh.grep('name: <(.+)>'))
+		.add(Sh.echo())
+		.run()
+end
 function Funs:pa_set_default()
-	return 'pacmd set-default-sink 2'
+	local iv = Pr.pipe()
+		.add(Sh.exec('pacmd list-sinks'))
+		.add(Sh.grep('name: <(.+analog.stereo)>'))
+		.add(Sh.echo())
+		.run()
+	return 'pacmd set-default-sink '..iv[1]
 end
 
 local Fn = {}

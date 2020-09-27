@@ -1,4 +1,8 @@
-package.path = package.path .. '?.lua;../?.lua'
+package.path = package.path
+	.. '?.lua;'
+	.. 'scripts/lib/?.lua;'
+	.. 'scripts/sys_mon/?.lua;'
+
 local Util = require('util')
 local Process = require('process')
 
