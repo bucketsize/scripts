@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Exec=sh -c "sleep 2; ~/scripts/sys_ctl/ctl.lua fun pa_set_default;"
+Name=Audio
+Comment=Autostart audio at login

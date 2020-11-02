@@ -1,9 +1,17 @@
 local Util={}
+function Util:file_exists(file)
+	local h = io.open(file, "r")
+	if h == nil then
+		return false
+	end
+	h:close()
+	return true
+end
 function Util:read(filename)
 	local h = io.open(filename, "r")
 	local r
 	if h == nil then
-		r = ""
+		r = nil
 	else
 		r = h:read("*a")
 		h:close()
@@ -29,9 +37,36 @@ function Util:exec_stream(cmd, fn)
 		fn(l)
 	end
 end
-function Util:printTable(t)
+function Util:stream_file(cmd, fn)
+	local h = io.open(cmd, 'r')
+	while true do
+		local l = h:read("*line")
+		if l == nil then break end
+		fn(l)
+	end
+end
+function Util:split(str, pat)
+	local arr = {}
+	for i in string.gmatch(str, pat) do
+		table.insert(arr, i)
+	end
+	return arr
+end
+
+
+function Util:printITable(t)
 	for i,v in ipairs(t) do
-		print(i .. ': ' .. v)
+		print(i .. ': ', v)
+	end
+end
+function Util:printOTable(t)
+	for i,v in pairs(t) do
+		if type(v) == 'table' then 
+			print(i ..':')
+			Util:printOTable(v)
+		else
+			print(i .. ': ', v)
+		end
 	end
 end
 
@@ -92,6 +127,8 @@ function Util:newT( t )
    end
    return setmetatable( t or {},mt )
 end
+Util.PSV_PAT='([%a%s%d-+_{}./]+)|'
+Util.FILENAME_PAT='/([%a%d%s+=-_\\.\\]*)$'
 -- CHILLCODE™
 
 
@@ -103,5 +140,13 @@ end
 -- print(r)
 -- local s = string.match(r, "status:%s(%w+)%c")
 -- print('|' .. s ..'|')
+
+-----------
+-- TESTS --
+-----------
+function test_split()
+	local ss = Util:split("|jah { 11 | 97 | k5jk|-|+| 1 | |sk-dj|/mnt/foo bar - 1.mp4|", Util.PSV_PAT)
+	Util:printTable(ss)
+end
 
 return Util

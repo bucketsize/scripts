@@ -16,6 +16,7 @@ function Fn:cpu_usage()
 	local handle = io.open("/proc/stat", "r")
 	local result = handle:read("*l")
 	handle:close()
+	print('-> result: ', result)
 	local t,s1,z1,i={},0,0,0
 	for d in string.gmatch(result, "%d+") do
 		s1=s1+d

@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Exec=sh -c "sleep 2; tint2;"
+Name=tint2
+Comment=Autostart tint2 at login

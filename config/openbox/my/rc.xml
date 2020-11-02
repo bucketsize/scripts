@@ -42,7 +42,7 @@ Copy the file to $HOME/.config/openbox/ instead. -->
 			'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>Onyx-Citrus</name>
+    <name>AdwaitaBox</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
 				available characters are NDSLIMC, each can occur at most once.
@@ -58,20 +58,20 @@ Copy the file to $HOME/.config/openbox/ instead. -->
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
       <name>sans</name>
-      <size>8</size>
+      <size>10</size>
       <!-- font size in points -->
-      <weight>bold</weight>
+      <weight>Bold</weight>
       <!-- 'bold' or 'normal' -->
-      <slant>normal</slant>
+      <slant>Normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
       <name>sans</name>
-      <size>8</size>
+      <size>10</size>
       <!-- font size in points -->
-      <weight>bold</weight>
+      <weight>Bold</weight>
       <!-- 'bold' or 'normal' -->
-      <slant>normal</slant>
+      <slant>Normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuHeader">
@@ -159,7 +159,7 @@ Copy the file to $HOME/.config/openbox/ instead. -->
     <right>0</right>
   </margins>
   <dock>
-    <position>TopLeft</position>
+    <position>Left</position>
     <!-- (Top|Bottom)(Left|Right|)|Top|Bottom|Left|Right|Floating -->
     <floatingX>0</floatingX>
     <floatingY>0</floatingY>

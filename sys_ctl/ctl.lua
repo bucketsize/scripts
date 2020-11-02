@@ -32,9 +32,24 @@ local Cmds = {
 	win_big     = 'xdotool getactivewindow windowmove 04% 04% windowsize 92% 92%',
 	win_small   = 'xdotool getactivewindow windowmove 20% 20% windowsize 70% 50%',
 	
-	dtop_viga   = 'xrandr --output DisplayPort-0 --primary --auto --output HDMI-A-0 --off',
-	dtop_hdmi   = 'xrandr --output HDMI-A-0 --auto --output DisplayPort-0 --off',
-	dtop_extn   = 'xrandr --output DisplayPort-0 --primary --auto --output HDMI-A-0 --auto --right-of DisplayPort-0',
+	dtop_viga   = [[
+		xrandr \
+			--output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal \
+			--output HDMI-A-0 --off \
+			--output DVI-D-0 --off
+	]],
+	dtop_hdmi   = [[
+		xrandr \
+			--output DisplayPort-0 --off \
+			--output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal \
+			--output DVI-D-0 --off
+	]],
+	dtop_extn   = [[
+		xrandr \
+			--output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal --primary \
+			--output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal \
+			--output DVI-D-0 --off
+	]],
 
 	kb_led_on   = 'xset led on',
 	kb_led_off  = 'xset led off',

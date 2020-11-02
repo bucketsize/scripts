@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Exec=sh -c "sleep 2; ~/scripts/sys_mon/daemon.lua;"
+Name=SysMon
+Comment=Autostart sysmon at login

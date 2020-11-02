@@ -1,6 +1,7 @@
+local HOME = os.getenv ( "HOME" )
 package.path = package.path
 	.. '?.lua;'
-	.. 'scripts/lib/?.lua;'
+	.. HOME .. '/lib/?.lua;'
 	.. 'scripts/sys_mon/?.lua;'
 
 local Util = require('util')
