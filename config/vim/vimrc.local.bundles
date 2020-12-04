@@ -17,7 +17,7 @@ Plug 'ryanolsonx/vim-lsp-python'
 Plug 'ryanolsonx/vim-lsp-typescript'
 
 " haskell
-let $PATH = $PATH . ':' . expand('~/.cabal/bin')
+let $PATH = $PATH . ':' . expand('~/.local/bin')
 Plug 'eagletmt/ghcmod-vim'
 Plug 'Shougo/vimproc.vim'
 

@@ -3,7 +3,7 @@
 #-------------------------------------
 # Backgrounds
 # Background 1: Panel
-rounded = 0
+rounded = 8
 border_width = 0
 border_sides = LR
 border_content_tint_weight = 0
@@ -110,7 +110,7 @@ border_color_pressed = #777777 30
 # Panel
 panel_items = TEEEEES
 panel_layer = top
-strut_policy = follow_size
+strut_policy = none
 panel_size = 64% 42
 panel_margin = 0 0
 panel_padding = 8 0 0
@@ -174,7 +174,7 @@ task_active_background_id = 3
 task_urgent_background_id = 4
 task_iconified_background_id = 2
 mouse_left = toggle_iconify
-mouse_middle = none
+mouse_middle = close
 mouse_right = none
 mouse_scroll_up = prev_task
 mouse_scroll_down = next_task
