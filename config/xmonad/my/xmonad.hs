@@ -8,6 +8,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Config.Desktop
 import XMonad.Actions.WindowBringer
 import XMonad.Actions.GridSelect
+import XMonad.Hooks.SetWMName
 
 import Control.Exception
 import Control.Monad
@@ -20,49 +21,43 @@ import qualified Data.Map as M
 
 handleShutdown :: AsyncException -> IO ()
 handleShutdown e = do
-  forM_ oAutostart $ \(s, k) ->
-    spawn k
   throw e
 
+handleStartup :: X ()
 handleStartup = do
-  forM_ oAutostart $ \(s, k) ->
-    putStrLn ("start " ++ s) >> spawn k
-  forM_ oAutostart $ \(s, k) ->
-    putStrLn ("kill " ++ k)  >> spawn s
+  spawn "~/scripts/config/xmonad/autostart.sh"
+  setWMName "LG3D"
 
 main = do
   catch start handleShutdown
 
 start = do
-  handleStartup
-  xmproc <- spawnPipe "xmobar ~/scripts/config/xmobar/xmobarrc"
+  -- handleStartup
+  xmproc <- spawnPipe "xmobar"
   xmonad $ docks desktopConfig
     { terminal          = "sakura"
     , focusFollowsMouse = True
     , borderWidth       = 1
     , modMask           = mod1Mask
-    , workspaces        = ["1", "2"]
+    , workspaces        = ["1", "2", "3", "4"]
     -- normalBorderColor = myNormalBorderColor
     -- focusedBorderColor = myFocusedBorderColor
-    -- key bindings
     -- keys = myKeys
     -- mouseBindings = myMouseBindings
-    -- hooks layouts
     , layoutHook        = avoidStruts $ layoutHook desktopConfig
     , manageHook        = oManageHook
     -- handleEventHook = myEventHook
-    -- logHook = myLogHook
-    -- , startupHook       = handleStartup
+    , startupHook       = handleStartup
     , logHook           = dynamicLogWithPP xmobarPP
         { ppOutput = hPutStrLn xmproc
         , ppTitle  = xmobarColor "green" "" . shorten 50
         }
     }
       `additionalKeysP` oAddlKeysP
-      `additionalKeys`oAddlKeys
 
 dmenuArgs = ["-l", "10"]
 
+-- https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Util-EZConfig.html#v:mkKeymap
 oAddlKeysP =
   [ ("C-]",                    spawn vol_up)
   , ("C-[",                    spawn vol_down)
@@ -70,23 +65,18 @@ oAddlKeysP =
   , ("<XF86AudioRaiseVolume>", spawn vol_up)
   , ("<XF86AudioLowerVolume>", spawn vol_down)
   , ("<XF86AudioMute>",        spawn vol_mute)
-  , ("M-w",                    goToSelected defaultGSConfig)
-  ]
-
-oAddlKeys =
-  [ ((0,                        xK_Insert), pasteSelection)
-  , ((0,                        xK_Print),  spawn scr_cap)
-  , ((controlMask,              xK_Print),  spawn scr_cap_sel)
-  , ((mod4Mask,                 xK_r),      spawn "dmenu_run -l 10")
-  , ((mod4Mask,                 xK_q),      spawn "xmonad --recompile && xmonad --restart")
-  , ((mod4Mask,                 xK_l),      spawn scr_lock)
-  , ((mod4Mask,                 xK_w),      gotoMenuArgs dmenuArgs)
-  , ((mod4Mask,                 xK_b),      bringMenu)
-  , ((controlMask .|. mod1Mask, xK_1),      spawn dtop_viga)
-  , ((controlMask .|. mod1Mask, xK_2),      spawn dtop_hdmi)
-  , ((controlMask .|. mod1Mask, xK_3),      spawn dtop_extn)
-  , ((controlMask .|. mod1Mask, xK_4),      spawn kb_led_on)
-  , ((controlMask .|. mod1Mask, xK_5),      spawn kb_led_off)
+  , ("M-q",                    spawn "xmonad --recompile && xmonad --restart")
+  , ("M-l",                    spawn scr_lock)
+  , ("M4-r",                    spawn "dmenu_run -l 10")
+  , ("M4-w",                    gotoMenuArgs dmenuArgs)
+  , ("M-<KP_Tab>",             goToSelected defaultGSConfig)
+  , ("<Print>",                spawn scr_cap)
+  , ("C-<Print>",              spawn scr_cap_sel)
+  , ("C-M-1",                  spawn dtop_viga)
+  , ("C-M-2",                  spawn dtop_hdmi)
+  , ("C-M-3",                  spawn dtop_extn)
+  , ("C-M-4",                  spawn kb_led_on)
+  , ("C-M-5",                  spawn kb_led_off)
   ]
 
 oManageHook = composeAll
@@ -104,43 +94,6 @@ oManageHook = composeAll
   , resource  =? "desktop_window" --> doIgnore
   ]
     <+> manageDocks
-
--- startup
-oAutostart =
-  [ ( "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x191970 --height 20;"
-    , "killall trayer"
-    )
-  , ( "nm-applet --sm-disable;"
-    , "killall nm-applet"
-    )
-  , ( "sleep 2; ~/scripts/sys_ctl/ctl.lua fun pa_set_default;"
-    , ""
-    )
-  , ( "sleep 2; ~/scripts/sys_ctl/ctl.lua cmd dtop_viga;"
-    , ""
-    )
-  , ( "sleep 2; dunst;"
-    , "killall dunst"
-    )
-  , ( "sleep 1; light-locker --lock-on-suspend --lock-on-lid;"
-    , "killall light-locker"
-    )
-  , ( "sleep 1; xautolock"
-      ++ " -time 3 -locker \"~/scripts/sys_ctl/ctl.lua fun scr_lock_if\""
-      ++ " -killtime 10 -killer \"notify-send -u critical -t 10000 -- 'Killing system ...'\""
-      ++ " -notify 30 -notifier \"notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'\";"
-    , "killall xautolock"
-    )
-  , ( "sleep 1; picom -cb;"
-    , "killall picom"
-    )
-  , ( "sleep 2; ~/scripts/sys_mon/daemon.lua;"
-    , "pkill -f daemon.lua"
-    )
-  , ( "sleep 3; ~/scripts/xdg/x.wallpaper.sh cycle;"
-    , ""
-    )
-  ]
 
 -- commands
 vol_up      = "pactl set-sink-volume @DEFAULT_SINK@ +10%"

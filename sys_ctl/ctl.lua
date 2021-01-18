@@ -53,6 +53,12 @@ local Cmds = {
 
 	kb_led_on   = 'xset led on',
 	kb_led_off  = 'xset led off',
+	autolockd_xautolock   = [[
+		xautolock
+			-time 3 -locker "~/scripts/sys_ctl/ctl.lua fun scr_lock_if"
+			-killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'"
+			-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'";
+	]]
 }
 
 local Funs = {}

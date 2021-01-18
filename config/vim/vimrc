@@ -55,10 +55,6 @@ Plug 'tpope/vim-fugitive'
 " language support
 Plug 'scrooloose/syntastic'
 Plug 'sheerun/vim-polyglot'
-if v:version >= 704
-  "" Snippets
-  Plug 'SirVer/ultisnips'
-endif
 Plug 'honza/vim-snippets'
 
 " search
