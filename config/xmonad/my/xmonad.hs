@@ -15,9 +15,48 @@ import Control.Monad
 import Data.Monoid
 import System.IO
 import System.Exit
+import Text.Printf
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
+
+-- commands
+-- pulseaudio
+vol_up      = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
+vol_down    = "pactl set-sink-volume @DEFAULT_SINK@ -10%"
+vol_mute    = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+vol_unmute  = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+
+-- i3 lock
+scr_lock    = "sh ~/scripts/xdg/x.lock-i3.sh"
+
+-- imagemagik
+scr_cap     = "import -window root ~/Pictures/$(date +%Y%m%dT%H%M%S).png"
+scr_cap_sel = "import ~/Pictures/$(date +%Y%m%dT%H%M%S).png"
+
+kb_led_on   = "xset led on"
+kb_led_off  = "xset led off"
+
+data Monitor = Monitor
+  { output :: String
+  , mode :: String
+  , position :: String
+  }
+
+monitor00 = Monitor
+  { output = "DisplayPort-0"
+  , mode   = "1280x720"
+  , position   = "0x0"
+  }
+
+monitor01 = Monitor
+  { output = "HDMI-A-0"
+  , mode   = "1280x720"
+  , position   = "1280x0"
+  }
+
+monitorUp   m = printf "xrandr --output %s --mode %s --pos %s --rotate normal" (output m) (mode m) (position m)
+monitorDown m = printf "xrandr --output %s --off" (output m)
 
 handleShutdown :: AsyncException -> IO ()
 handleShutdown e = do
@@ -26,16 +65,15 @@ handleShutdown e = do
 handleStartup :: X ()
 handleStartup = do
   spawn "~/scripts/config/xmonad/autostart.sh"
-  setWMName "LG3D"
+  setWMName "LG3D" -- java compat
 
 main = do
   catch start handleShutdown
 
 start = do
-  -- handleStartup
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks desktopConfig
-    { terminal          = "sakura"
+    { terminal          = "st.2"
     , focusFollowsMouse = True
     , borderWidth       = 1
     , modMask           = mod1Mask
@@ -67,14 +105,14 @@ oAddlKeysP =
   , ("<XF86AudioMute>",        spawn vol_mute)
   , ("M-q",                    spawn "xmonad --recompile && xmonad --restart")
   , ("M-l",                    spawn scr_lock)
-  , ("M4-r",                    spawn "dmenu_run -l 10")
-  , ("M4-w",                    gotoMenuArgs dmenuArgs)
+  , ("M4-r",                   spawn "dmenu_run -l 10")
+  , ("M4-w",                   gotoMenuArgs dmenuArgs)
   , ("M-<KP_Tab>",             goToSelected defaultGSConfig)
+  , ("M-<F4>",                 kill)
   , ("<Print>",                spawn scr_cap)
   , ("C-<Print>",              spawn scr_cap_sel)
-  , ("C-M-1",                  spawn dtop_viga)
-  , ("C-M-2",                  spawn dtop_hdmi)
-  , ("C-M-3",                  spawn dtop_extn)
+  , ("C-M-2",                  spawn (monitorUp   monitor01))
+  , ("C-M-3",                  spawn (monitorDown monitor01))
   , ("C-M-4",                  spawn kb_led_on)
   , ("C-M-5",                  spawn kb_led_off)
   ]
@@ -95,32 +133,3 @@ oManageHook = composeAll
   ]
     <+> manageDocks
 
--- commands
-vol_up      = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
-vol_down    = "pactl set-sink-volume @DEFAULT_SINK@ -10%"
-vol_mute    = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-vol_unmute  = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-
-scr_lock    = "light-locker-command --lock"
-scr_lock_on = "light-locker --lock-on-suspend --lock-on-lid"
-
-scr_cap     = "import -window root ~/Pictures/$(date +%Y%m%dT%H%M%S).png"
-scr_cap_sel = "import ~/Pictures/$(date +%Y%m%dT%H%M%S).png"
-
-kb_led_on   = "xset led on"
-kb_led_off  = "xset led off"
-
-pref_mode   = "1280x720"
-
-dtop_viga   = "xrandr"
-              ++ " --output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal"
-              ++ " --output HDMI-A-0 --off"
-              ++ " --output DVI-D-0 --off"
-dtop_hdmi   = "xrandr"
-              ++ " --output DisplayPort-0 --off"
-              ++ " --output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal"
-              ++ " --output DVI-D-0 --off"
-dtop_extn   = "xrandr"
-              ++ " --output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal --primary"
-              ++ " --output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal"
-              ++ " --output DVI-D-0 --off"

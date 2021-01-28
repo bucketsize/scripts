@@ -33,5 +33,5 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%VOBL% | %StdinReader% }{ c:%cpu%, m:%memory%, s:%swap% | %enp6s0% | <fc=#ee9a00>%date%</fc>"
+       , template = "%StdinReader% }{ c:%cpu%, m:%memory%, s:%swap% | %enp6s0% | %VOBL% | <fc=#ee9a00>%date%</fc> "
        }
