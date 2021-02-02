@@ -10,6 +10,12 @@ import XMonad.Actions.WindowBringer
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.SetWMName
 
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Grid
+import XMonad.Layout.TwoPane
+import XMonad.Layout.NoBorders
+import XMonad.Layout.WindowNavigation
+
 import Control.Exception
 import Control.Monad
 import Data.Monoid
@@ -17,8 +23,19 @@ import System.IO
 import System.Exit
 import Text.Printf
 
+import DBus.Notify -- cabal install dbus fdo-notify
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
+
+notifySend summary body = do
+  client <- connectSession
+  let hello = blankNote {summary=summary
+    ,body=(Just $ Text body)
+    ,appImage=(Just $ Icon "dialog-information")
+    }
+  notification <- notify client hello
+  return 0
 
 -- commands
 -- pulseaudio
@@ -37,41 +54,26 @@ scr_cap_sel = "import ~/Pictures/$(date +%Y%m%dT%H%M%S).png"
 kb_led_on   = "xset led on"
 kb_led_off  = "xset led off"
 
-data Monitor = Monitor
-  { output :: String
-  , mode :: String
-  , position :: String
-  }
+monitor00 = Monitor { output="DisplayPort-0", mode="1280x720", position= "0x0" }
+monitor01 = Monitor { output="HDMI-A-0", mode="1280x720", position= "1280x0"  }
 
-monitor00 = Monitor
-  { output = "DisplayPort-0"
-  , mode   = "1280x720"
-  , position   = "0x0"
-  }
-
-monitor01 = Monitor
-  { output = "HDMI-A-0"
-  , mode   = "1280x720"
-  , position   = "1280x0"
-  }
-
-monitorUp   m = printf "xrandr --output %s --mode %s --pos %s --rotate normal" (output m) (mode m) (position m)
-monitorDown m = printf "xrandr --output %s --off" (output m)
-
-handleShutdown :: AsyncException -> IO ()
-handleShutdown e = do
-  throw e
-
-handleStartup :: X ()
-handleStartup = do
-  spawn "~/scripts/config/xmonad/autostart.sh"
-  setWMName "LG3D" -- java compat
+autostarts =
+  [("video", monitorUp monitor00 ++ " --primary; " ++ monitorDown monitor01)
+  ,("compositer", "picom -cb")
+  ,("wallpaper", "~/scripts/xdg/x.wallpaper.sh cycle")
+  ,("notifyd", "dunst")
+  ,("systray", "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x000000 --height 20")
+  ,("nmapplet", "nm-applet --sm-disable")
+  ,("audio", "~/scripts/sys_ctl/ctl.lua fun pa_set_default")
+  ,("autolock", "~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock")
+  ,("sysmon", "~/scripts/sys_mon/daemon.lua")
+  ]
 
 main = do
   catch start handleShutdown
 
 start = do
-  xmproc <- spawnPipe "xmobar"
+  xmobar <- spawnPipe "~/.cabal/bin/xmobar"
   xmonad $ docks desktopConfig
     { terminal          = "st.2"
     , focusFollowsMouse = True
@@ -82,14 +84,11 @@ start = do
     -- focusedBorderColor = myFocusedBorderColor
     -- keys = myKeys
     -- mouseBindings = myMouseBindings
-    , layoutHook        = avoidStruts $ layoutHook desktopConfig
+    , layoutHook        = oLayoutHook
     , manageHook        = oManageHook
     -- handleEventHook = myEventHook
     , startupHook       = handleStartup
-    , logHook           = dynamicLogWithPP xmobarPP
-        { ppOutput = hPutStrLn xmproc
-        , ppTitle  = xmobarColor "green" "" . shorten 50
-        }
+    , logHook           = oLogHook xmobar
     }
       `additionalKeysP` oAddlKeysP
 
@@ -132,4 +131,42 @@ oManageHook = composeAll
   , resource  =? "desktop_window" --> doIgnore
   ]
     <+> manageDocks
+
+oLayoutHook =
+      avoidStruts
+          $ configurableNavigation (navigateColor "#00aa00")
+          $ smartBorders
+          $ TwoPane (3/100) (1/2)
+          ||| layoutHook desktopConfig
+
+oLogHook statProc =
+      dynamicLogWithPP xmobarPP
+        { ppOutput = hPutStrLn statProc
+        , ppTitle  = xmobarColor "pink" "" . shorten 50
+        }
+
+handleShutdown :: AsyncException -> IO ()
+handleShutdown e = do
+  throw e
+
+handleStartup :: X ()
+handleStartup = do
+  forM_ autostarts $ \(name, cmd) ->
+    spawn cmd
+  liftIO (notifySend "XMonad" "startup done")
+  setWMName "LG3D" -- java compat
+
+data Monitor = Monitor
+  { output :: String
+  , mode :: String
+  , position :: String
+  }
+
+data Sound = Sound
+  { device :: String
+  , level :: Int
+  }
+
+monitorUp   m = printf "xrandr --output %s --mode %s --pos %s --rotate normal" (output m) (mode m) (position m)
+monitorDown m = printf "xrandr --output %s --off" (output m)
 
