@@ -23,7 +23,7 @@ import System.IO
 import System.Exit
 import Text.Printf
 
-import DBus.Notify -- cabal install dbus fdo-notify
+import DBus.Notify
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
@@ -62,7 +62,7 @@ autostarts =
   ,("compositer", "picom -cb")
   ,("wallpaper", "~/scripts/xdg/x.wallpaper.sh cycle")
   ,("notifyd", "dunst")
-  ,("systray", "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x000000 --height 20")
+  ,("systray", "trayer --edge top --align right --SetDockType false --SetPartialStrut true --expand false --width 10 --transparent true --tint 0x111111 --height 20")
   ,("nmapplet", "nm-applet --sm-disable")
   ,("audio", "~/scripts/sys_ctl/ctl.lua fun pa_set_default")
   ,("autolock", "~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock")
@@ -73,7 +73,7 @@ main = do
   catch start handleShutdown
 
 start = do
-  xmobar <- spawnPipe "~/.cabal/bin/xmobar"
+  xmobar <- spawnPipe "xmobar"
   xmonad $ docks desktopConfig
     { terminal          = "st.2"
     , focusFollowsMouse = True
@@ -106,7 +106,7 @@ oAddlKeysP =
   , ("M-l",                    spawn scr_lock)
   , ("M4-r",                   spawn "dmenu_run -l 10")
   , ("M4-w",                   gotoMenuArgs dmenuArgs)
-  , ("M-<KP_Tab>",             goToSelected defaultGSConfig)
+  -- , ("M-<KP_Tab>",             goToSelected defaultGSConfig)
   , ("M-<F4>",                 kill)
   , ("<Print>",                spawn scr_cap)
   , ("C-<Print>",              spawn scr_cap_sel)
@@ -152,8 +152,8 @@ handleShutdown e = do
 handleStartup :: X ()
 handleStartup = do
   forM_ autostarts $ \(name, cmd) ->
-    spawn cmd
-  liftIO (notifySend "XMonad" "startup done")
+    (spawn cmd) >> liftIO (print ("started" ++ name))
+  liftIO (notifySend "XMonad" "started")
   setWMName "LG3D" -- java compat
 
 data Monitor = Monitor
