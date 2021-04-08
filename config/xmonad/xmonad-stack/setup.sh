@@ -18,6 +18,8 @@ case $1 in
 		ln -s ~/scripts/config/Xresources ~/.Xresources
 		ln -s ~/scripts/config/xmonad/xmonad-stack/ ~/.xmonad
 		ln -s ~/scripts/config/xmobar/my ~/.config/xmobar
+
+		stack install
 		;;
 
 	install-deps)
@@ -30,8 +32,6 @@ case $1 in
 		unzip xmonad.zip
 		unzip xmonad-contrib.zip
 		unzip xmobar.zip
-
-		stack install
 		;;
 
 	clean)

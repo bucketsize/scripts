@@ -1,11 +1,11 @@
-Config { font = "xft:DejaVu Sans Mono:size=10:bold:antialias=true"
+Config { font = "xft:DejaVu Sans Mono:size=9:bold:antialias=true"
        , additionalFonts = []
 			 , alpha = 127
        , borderColor = "black"
        , border = TopB
        , bgColor = "#111111"
        , fgColor = "grey"
-       , position = TopW L 90
+       , position = TopSize L 90 18
        , textOffset = -1
        , iconOffset = -1
        , lowerOnStart = True
@@ -32,12 +32,12 @@ Config { font = "xft:DejaVu Sans Mono:size=10:bold:antialias=true"
 										-- ] 10
 									  -- network activity monitor (dynamic interface resolution)
 										, Run DynNetwork
-												[ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
+												[ "--template" , "<tx> / <rx> kB"
 												, "--Low"      , "1000"       -- units: B/s
 												, "--High"     , "5000"       -- units: B/s
-												, "--low"      , "darkgreen"
-												, "--normal"   , "darkorange"
-												, "--high"     , "darkred"
+												, "--low"      , "green"
+												, "--normal"   , "yellow"
+												, "--high"     , "red"
                         ] 10
                     , Run Cpu ["-t","<total>","-L","3","-H","50","--normal","green","--high","red"] 10
 										, Run Memory ["-t","<usedratio>"] 10

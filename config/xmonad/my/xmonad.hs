@@ -6,15 +6,23 @@ import XMonad.Util.Run(spawnPipe)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Config.Desktop
+import XMonad.Config.Gnome
 import XMonad.Actions.WindowBringer
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Actions.GroupNavigation
 
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Grid
 import XMonad.Layout.TwoPane
 import XMonad.Layout.NoBorders
 import XMonad.Layout.WindowNavigation
+import XMonad.Layout.Spiral
+import Data.Ratio -- this makes the '%' operator available (optional)
+import XMonad.Layout.Spiral
+import XMonad.Layout.Grid
+import XMonad.Layout.Spacing
 
 import Control.Exception
 import Control.Monad
@@ -62,7 +70,7 @@ autostarts =
   ,("compositer", "picom -cb")
   ,("wallpaper", "~/scripts/xdg/x.wallpaper.sh cycle")
   ,("notifyd", "dunst")
-  ,("systray", "trayer --edge top --align right --SetDockType false --SetPartialStrut true --expand false --width 10 --transparent true --tint 0x111111 --height 20")
+  ,("systray", "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x111111 --height 18")
   ,("nmapplet", "nm-applet --sm-disable")
   ,("audio", "~/scripts/sys_ctl/ctl.lua fun pa_set_default")
   ,("autolock", "~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock")
@@ -74,7 +82,7 @@ main = do
 
 start = do
   xmobar <- spawnPipe "xmobar"
-  xmonad $ docks desktopConfig
+  xmonad $ ewmh $ docks gnomeConfig
     { terminal          = "st.2"
     , focusFollowsMouse = True
     , borderWidth       = 1
@@ -88,7 +96,7 @@ start = do
     , manageHook        = oManageHook
     -- handleEventHook = myEventHook
     , startupHook       = handleStartup
-    , logHook           = oLogHook xmobar
+    , logHook           = oLogHook xmobar  >>  historyHook
     }
       `additionalKeysP` oAddlKeysP
 
@@ -132,11 +140,11 @@ oManageHook = composeAll
   ]
     <+> manageDocks
 
-oLayoutHook =
-      avoidStruts
+oLayoutHook = avoidStruts
           $ configurableNavigation (navigateColor "#00aa00")
           $ smartBorders
-          $ TwoPane (3/100) (1/2)
+          $ spacing 4 
+          $ Tall 1 (3/100) (1/2) ||| Grid ||| Full
           ||| layoutHook desktopConfig
 
 oLogHook statProc =
