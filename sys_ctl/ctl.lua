@@ -88,7 +88,31 @@ function Funs:pa_set_default()
 		.run()
 	return 'pacmd set-default-sink '..iv[1]
 end
+function Funs:dmenu_select_window()
+    local ws = {}
+    local wl = ''
+    Pr.pipe()
+    .add(Sh.exec('wmctrl -l'))
+    .add(Sh.grep('(%w+)%s+(%d+)%s+([%w%p]+)%s+(.*)'))
+    .add(Sh.echo())
+    .add(function(arr)
+        ws[arr[4]]=arr[1]
+        return arr
+    end)
+    .add(function(arr)
+        wl = wl .. arr[4] .. '\n'
+    end)
+    .run()
 
+    Pr.pipe()
+    .add(Sh.exec(string.format('echo "%s" | dmenu -l 10', wl)))
+    .add(Sh.echo())
+    .add(function(arr)
+        print(ws[arr])
+        exec('xdotool windowfocus ' .. ws[arr])
+    end)
+    .run()
+end
 local Fn = {}
 function Fn:cmd(key)
 	local cmd = Cmds[key]
@@ -103,7 +127,6 @@ function Fn:fun(key)
 	local cmd = Funs[key]
 	if cmd then
 		cmd = Funs[key]()
-		print('cmd>', cmd)
 		if cmd then
 			exec(cmd)
 		end
