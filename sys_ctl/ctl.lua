@@ -50,7 +50,6 @@ local Cmds = {
 			--output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal \
 			--output DVI-D-0 --off
 	]],
-
 	kb_led_on   = 'xset led on',
 	kb_led_off  = 'xset led off',
 	autolockd_xautolock   = [[
@@ -132,6 +131,16 @@ function Fn:fun(key)
 		end
 	else
 		print('cmd: ', key, 'not mapped')
+	end
+end
+function Fn:help()
+	print(">>Cmd:")
+	for k,v in pairs(Cmds) do
+		print('\t',k)
+	end
+	print(">>Fns:")
+	for k,v in pairs(Funs) do
+		print('\t',k)
 	end
 end
 

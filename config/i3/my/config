@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:monospace 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -42,39 +42,14 @@ bindsym $mod+Shift+q kill
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-# custom keybindings
-bindsym Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap
-bindsym Control+Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap_sel
-bindsym Control+bracketleft exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
-bindsym Control+bracketright exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
-bindsym Control+backslash exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
-bindsym XF86AudioLowerVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
-bindsym XF86AudioRaiseVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
-bindsym XF86AudioMute exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
-
-# start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -l 10
-bindsym $mod+w exec ~/scripts/sys_ctl/ctl.lua fun dmenu_select_window
 
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
-
-# alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
-
-# alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
@@ -133,12 +108,29 @@ bindsym $mod+shift+x move scratchpad
 # bindsym Mod1+Tab workspace next
 # bindsym Mod1+Shift+Tab workspace prev
 
-# reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+l exec ~/scripts/sys_ctl/ctl.lua cmd scr_lock
+
+bindsym $mod+d exec dmenu_run -l 10
+
+bindsym Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap
+bindsym Control+Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap_sel
+
+bindsym Control+bracketleft exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
+bindsym Control+bracketright exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
+bindsym Control+backslash exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
+bindsym XF86AudioLowerVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
+bindsym XF86AudioRaiseVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
+bindsym XF86AudioMute exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
+
+bindsym Control+2 exec ~/scripts/sys_ctl/ctl.lua cmd dtop_extn
+bindsym Control+3 exec ~/scripts/sys_ctl/ctl.lua cmd dtop_viga
+bindsym Control+4 exec ~/scripts/sys_ctl/ctl.lua cmd kb_led_on
+bindsym Control+5 exec ~/scripts/sys_ctl/ctl.lua cmd km_led_off
+
+bindsym $mod+w exec ~/scripts/sys_ctl/ctl.lua fun dmenu_select_window
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -189,25 +181,15 @@ mode "move" {
 
 bindsym $mod+m mode "move"
 
-#bindsym $mod+l exec lock -f Roboto -- scrot -z
-bindsym $mod+Control+l exec slimlock
 
-# scrot & gimp - root
-bindsym --release $mod+Print exec "scrot -e 'mv $f /tmp/ && gimp /tmp/$f'"
-# scrot & gimp - select window or rectangle
-bindsym $mod+p exec "scrot -s -e 'mv $f /tmp/ && gimp /tmp/$f'"
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
-    status_command i3status
+	status_command i3status
 	position top
 }
 
 #--[ EXEC ]--#
-
-exec --no-startup-id setxkbmap se
-exec --no-startup-id xrandr --dpi 144
+exec --no-startup-id setxkbmap us
+exec --no-startup-id xrandr --dpi 200
 exec --no-startup-id ~/scripts/xdg/x.wallpaper.sh cycle
 exec --no-startup-id picom -bc
 exec --no-startup-id dunst
