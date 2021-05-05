@@ -125,8 +125,8 @@ bindsym XF86AudioLowerVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
 bindsym XF86AudioRaiseVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
 bindsym XF86AudioMute exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
 
-bindsym Control+2 exec ~/scripts/sys_ctl/ctl.lua cmd dtop_extn
-bindsym Control+3 exec ~/scripts/sys_ctl/ctl.lua cmd dtop_viga
+bindsym Control+2 exec ~/scripts/sys_ctl/ctl.lua cmd desktop2_on
+bindsym Control+3 exec ~/scripts/sys_ctl/ctl.lua cmd desktop2_off
 bindsym Control+4 exec ~/scripts/sys_ctl/ctl.lua cmd kb_led_on
 bindsym Control+5 exec ~/scripts/sys_ctl/ctl.lua cmd km_led_off
 
@@ -189,8 +189,9 @@ bar {
 
 #--[ EXEC ]--#
 exec --no-startup-id setxkbmap us
-exec --no-startup-id xrandr --dpi 200
 exec --no-startup-id ~/scripts/xdg/x.wallpaper.sh cycle
+exec --no-startup-id ~/scripts/sys_ctl/ctl.lua cmd display1_on
+exec --no-startup-id ~/scripts/sys_ctl/ctl.lua cmd display2_off
 exec --no-startup-id picom -bc
 exec --no-startup-id dunst
 exec --no-startup-id nm-applet --sm-disable

@@ -13,6 +13,29 @@ function exec(cmd)
 	h:close()
 end
 
+DISPLAY1 = {
+	name = 'DisplayPort-0',
+	mode = '1280x720',
+	pos = '0x0'
+}
+DISPLAY2 = {
+	name = 'HDMI-A-0',
+	mode = '1280x720',
+	pos = '1280x0'
+}
+DISPLAY_ON = [[
+		xrandr \
+			--output %s \
+			--mode %s \
+			--rotate normal \
+			--pos %s
+]]
+DISPLAY_OFF = [[
+		xrandr \
+			--output %s \
+			--off
+]]
+
 local Cmds = {
 	vol_up      = 'pactl set-sink-volume @DEFAULT_SINK@ +10%',
 	vol_down    = 'pactl set-sink-volume @DEFAULT_SINK@ -10%',
@@ -24,7 +47,8 @@ local Cmds = {
 	
 	scr_cap     = 'import -window root ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
 	scr_cap_sel = 'import ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
-	
+
+	-- this stuff for openbox / floating win managers
 	win_left    = 'xdotool getactivewindow windowmove 03% 02% windowsize 48% 92%',
 	win_right   = 'xdotool getactivewindow windowmove 52% 02% windowsize 48% 92%',
 	win_max     = 'wmctrl -r :ACTIVE: -b    add,maximized_vert,maximized_horz',
@@ -32,26 +56,13 @@ local Cmds = {
 	win_big     = 'xdotool getactivewindow windowmove 04% 04% windowsize 92% 92%',
 	win_small   = 'xdotool getactivewindow windowmove 20% 20% windowsize 70% 50%',
 	
-	dtop_viga   = [[
-		xrandr \
-			--output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal \
-			--output HDMI-A-0 --off \
-			--output DVI-D-0 --off
-	]],
-	dtop_hdmi   = [[
-		xrandr \
-			--output DisplayPort-0 --off \
-			--output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal \
-			--output DVI-D-0 --off
-	]],
-	dtop_extn   = [[
-		xrandr \
-			--output DisplayPort-0 --mode 1280x720 --pos 0x0 --rotate normal --primary \
-			--output HDMI-A-0 --mode 1280x720 --pos 1280x0 --rotate normal \
-			--output DVI-D-0 --off
-	]],
+	display1_on = string.format(DISPLAY_ON .. ' --primary', DISPLAY1.name, DISPLAY1.mode, DISPLAY1.pos),
+	display2_on = string.format(DISPLAY_ON, DISPLAY2.name, DISPLAY2.mode, DISPLAY2.pos),
+	display2_off = string.format(DISPLAY_OFF, DISPLAY2.name),
+
 	kb_led_on   = 'xset led on',
 	kb_led_off  = 'xset led off',
+
 	autolockd_xautolock   = [[
 		xautolock
 			-time 3 -locker "~/scripts/sys_ctl/ctl.lua fun scr_lock_if"
