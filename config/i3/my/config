@@ -182,6 +182,24 @@ mode "move" {
 bindsym $mod+m mode "move"
 
 
+set $Locker ~/scripts/sys_ctl/ctl.lua cmd scr_lock && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+Pause mode "$mode_system"
+
 bar {
 	status_command i3status
 	position top
@@ -198,6 +216,7 @@ exec --no-startup-id nm-applet --sm-disable
 exec --no-startup-id ~/scripts/sys_ctl/ctl.lua fun pa_set_default
 exec --no-startup-id ~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock
 exec --no-startup-id ~/scripts/sys_mon/daemon.lua
+exec --no-startup-id VBoxClient --clipboard
 
 # exec --no-startup-id /usr/bin/blueman-applet                 # Bluetooth Manager
 

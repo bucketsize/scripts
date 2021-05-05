@@ -42,8 +42,7 @@ local Cmds = {
 	vol_mute    = 'pactl set-sink-mute   @DEFAULT_SINK@ toggle',
 	vol_unmute  = 'pactl set-sink-mute   @DEFAULT_SINK@ toggle',
 	
-	scr_lock    = 'light-locker-command --lock',
-	scr_lock_on = 'light-locker --lock-on-suspend --lock-on-lid',
+	scr_lock    = '~/scripts/xdg/x.lock-i3.sh',
 	
 	scr_cap     = 'import -window root ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
 	scr_cap_sel = 'import ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
@@ -145,11 +144,11 @@ function Fn:fun(key)
 	end
 end
 function Fn:help()
-	print(">>Cmd:")
+	print("cmd")
 	for k,v in pairs(Cmds) do
 		print('\t',k)
 	end
-	print(">>Fns:")
+	print("fun")
 	for k,v in pairs(Funs) do
 		print('\t',k)
 	end
