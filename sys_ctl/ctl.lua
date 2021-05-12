@@ -28,13 +28,11 @@ DISPLAY_ON = [[
 			--output %s \
 			--mode %s \
 			--rotate normal \
-			--pos %s
-]]
+			--pos %s ]]
 DISPLAY_OFF = [[
 		xrandr \
 			--output %s \
-			--off
-]]
+			--off ]]
 
 local Cmds = {
 	vol_up      = 'pactl set-sink-volume @DEFAULT_SINK@ +10%',
