@@ -211,7 +211,7 @@ bar {
 	position top
 	colors {
         background #2f343f
-        statusline #2f343f
+        statusline #eeeeee
         separator  #4b5262
 
         # colour of border, background, and text

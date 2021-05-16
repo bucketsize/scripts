@@ -114,6 +114,12 @@ URxvt*iso14755:               false
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
+! dmenu
+dmenu.selforeground:	    #d8dee9
+dmenu.background:	        #2e3440
+dmenu.selbackground:	    #bf616a
+dmenu.foreground:	        #d8dee9
+
 ! rofi
 rofi.modi:             ssh,window,drun,run
 rofi.sidebar-mode:     true

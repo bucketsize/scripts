@@ -1,3 +1,5 @@
+# install dejavu and font awesome fonts
+
 general {
 	output_format = "i3bar"
 	colors = false
@@ -24,30 +26,30 @@ order += "tztime india"
 #order += "tztime berlin"
 
 wireless wlan0 {
-        format_up = "<span background='#bd93f9'>W^</span><span background='#e5e9f0'> %essid </span>"
-        format_down = "<span background='#bd93f9'>W.</span><span background='#e5e9f0'> Disconnected </span>"
+        format_up = "<span background='#4b5262'></span><span background='#2f343f'> %essid </span>"
+        format_down = "<span background='#4b5262'></span><span background='#2f343f'> =/ </span>"
 }
 
 volume master {
-        format = "<span background='#ff79c6'>.:|</span><span background='#e5e9f0'> %volume </span>"
-        format_muted = "<span background='#ff79c6'>.:|</span><span background='#e5e9f0'> Muted </span>"
+        format = "<span background='#4b5262'></span><span background='#2f343f'> %volume </span>"
+        format_muted = "<span background='#4b5262'></span><span background='#2f343f'> X </span>"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
 }
 
 ethernet enp6s0 {
-        format_up = "<span background='#ff79c6'>E^</span><span background='#e5e9f0'> %ip (%speed) </span>"
-        format_down = "<span background='#ff79c6'>E.</span><span background='#e5e9f0'> down </span>"
+        format_up = "<span background='#4b5262'></span><span background='#2f343f'> %ip </span>"
+        format_down = "<span background='#4b5262'></span><span background='#2f343f'> =/ </span>"
 }
 
 battery 0 {
-        format = "<span background='#ff79c6'>%status</span><span background='#e5e9f0'> %percentage %remaining %emptytime </span>"
-        format_down = "<span background='#ff79c6'>.</span><span background='#e5e9f0'> no battery </span>"
-        status_chr = "⚡ CHR"
-        status_bat = "! BAT"
-        status_unk = "? UNK"
-        status_full = "^ FULL"
+        format = "<span background='#4b5262'>%status</span><span background='#2f343f'> %percentage %remaining %emptytime </span>"
+        format_down = "<span background='#4b5262'></span><span background='#2f343f'> X </span>"
+        status_chr = "+"
+        status_bat = "-"
+        status_unk = "?"
+        status_full = " "
         path = "/sys/class/power_supply/BAT%d/uevent"
         low_threshold = 10
 }
@@ -67,8 +69,9 @@ path_exists VPN {
 }
 
 tztime india {
-		format = "<span background='#8be9fd'>T</span><span background='#e5e9f0'> %time </span>"
-		format_time = "%a %-d %b %H:%M"
+		format = "<span background='#5b5262'></span><span background='#5f343f'> %time </span>"
+		#format_time = "%a %-d %b %H:%M"
+		format_time = "%a|%-d %b,%Y|%H:%M"
 }
 
 tztime berlin {
@@ -77,23 +80,22 @@ tztime berlin {
 }
 
 load {
-				format = "<span background='#50fa7b'>L</span><span background='#e5e9f0'> %5min </span>"
-        #format = "%5min"
+				format = "<span background='#4b5262'></span><span background='#2f343f'> %5min </span>"
 }
 
 cpu_temperature 0 {
-        format = "<span background='#ff5555'>T</span><span background='#e5e9f0'> %degrees °C </span>"
+        format = "<span background='#4b5262'>T</span><span background='#2f343f'> %degrees °C </span>"
         path = "/sys/class/thermal/thermal_zone0/temp"
 }
 
 memory {
-        format = "<span background='#ff5555'>M</span><span background='#e5e9f0'> %used </span>"
+        format = "<span background='#4b5262'></span><span background='#2f343f'> %used </span>"
         threshold_degraded = "10%"
         format_degraded = "MEMORY: %free"
 }
 
 disk "/" {
-        format = "<span background='#f1fa8c'>/</span><span background='#e5e9f0'> %free Free </span>"
+        format = "<span background='#4b5262'></span><span background='#2f343f'>/ %free </span>"
 }
 
 read_file uptime {
