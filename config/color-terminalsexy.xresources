@@ -1,0 +1,37 @@
+! terminal.sexy
+! special
+#define FOREGROUND   #c5c8c6
+#define BACKGROUND   #1d1f21
+#define CURSORCOLOR  #c5c8c6
+
+! BLACK
+#define COLOR0       #282a2e
+#define COLOR8       #373b41
+
+! RED
+#define COLOR1       #a54242
+#define COLOR9       #cc6666
+
+! GREEN
+#define COLOR2       #8c9440
+#define COLOR10      #b5bd68
+
+! YELLOW
+#define COLOR3       #de935f
+#define COLOR11      #f0c674
+
+! BLUE
+#define COLOR4       #5f819d
+#define COLOR12      #81a2be
+
+! MAGENTA
+#define COLOR5       #85678f
+#define COLOR13      #b294bb
+
+! CYAN
+#define COLOR6       #5e8d87
+#define COLOR14      #8abeb7
+
+! WHITE
+#define COLOR7       #707880
+#define COLOR15      #c5c8c6

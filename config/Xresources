@@ -1,7 +1,13 @@
-! Font
-*font:          xft:DejaVu Sans:size=10
+#include "/home/jb/scripts/config/color-cyberpunk.xresources"
 
-! X config
+!#define GFONT -misc-dejavu sans-*-*-*-*-0-100-*-*-p-0-*-*
+#define FONT dejavu sans condensed 10
+#define FONTMONO dejavu sans mono 10
+
+! Global Font
+*font:         FONT
+
+! Xft
 Xft.dpi:       96
 Xft.antialias: true
 Xft.hinting:   true
@@ -9,140 +15,38 @@ Xft.hintstyle: hintslight
 Xft.rgba:      rgb
 Xft.lcdfilter: lcddefault
 
-! cyberpunk !
-/* *.color0:  #181818 */
-/* *.color1:  #282828 */
-/* *.color2:  #383838 */
-/* *.color3:  #585858 */
-/* *.color4:  #b8b8b8 */
-/* *.color5:  #d8d8d8 */
-/* *.color6:  #e8e8e8 */
-/* *.color7:  #f8f8f8 */
-/* *.color8:  #604938 */
-/* *.color9:  #675348 */
-/* *.color10: #AA6640 */
-/* *.color11: #9A6D50 */
-/* *.color12: #4F9692 */
-/* *.color13: #B1875F */
-/* *.color14: #D09339 */
-/* *.color15: #DA9561 */
-
-! gruvbox
-/* *.color0:  #282828 */
-/* *.color8:  #928374 */
-/* *.color1:  #cc241d */
-/* *.color9:  #fb4934 */
-/* *.color2:  #98971a */
-/* *.color10: #b8bb26 */
-/* *.color3:  #d79921 */
-/* *.color11: #fabd2f */
-/* *.color4:  #458588 */
-/* *.color12: #83a598 */
-/* *.color5:  #b16286 */
-/* *.color13: #d3869b */
-/* *.color6:  #689d6a */
-/* *.color14: #8ec07c */
-/* *.color7:  #a89984 */
-/* *.color15: #ebdbb2 */
-
-! terminal.sexy
-! special
-*.foreground:   #c5c8c6
-*.background:   #1d1f21
-*.cursorColor:  #c5c8c6
-
-! black
-*.color0:       #282a2e
-*.color8:       #373b41
-
-! red
-*.color1:       #a54242
-*.color9:       #cc6666
-
-! green
-*.color2:       #8c9440
-*.color10:      #b5bd68
-
-! yellow
-*.color3:       #de935f
-*.color11:      #f0c674
-
-! blue
-*.color4:       #5f819d
-*.color12:      #81a2be
-
-! magenta
-*.color5:       #85678f
-*.color13:      #b294bb
-
-! cyan
-*.color6:       #5e8d87
-*.color14:      #8abeb7
-
-! white
-*.color7:       #707880
-*.color15:      #c5c8c6
-
-! vim: set ft=xdefaults:
-
-! urxvt
-! extensions
-URxvt*perl-ext-common:        default,matcher,vtwheel,clipboard
-! appearance
-URxvt*font:                   xft:DejaVu Sans Mono:size=10
-URxvt.letterSpace:            -1
-URxvt.lineSpace:              0
-URxvt.geometry:               104x24
-URxvt.internalBorder:         8
-URxvt.cursorBlink:            true
-URxvt.cursorUnderline:        false
-URxvt.saveline:               2048
-URxvt.scrollBar:              false
-URxvt.scrollBar_right:        false
-URxvt.scrollWithBuffer:       true
-URxvt.urgentOnBell:           true
-URxvt.depth:                  24
-URxvt.iso14755:               false
-URxvt.transparent:            false
-URxvt.shading:                16
-! url click
-URxvt.url-select.underline:   true
-URxvt.url-launcher:           /usr/bin/firefox
-URxvt.matcher.button:         1
-! copy/paste
-URxvt*iso14755:               false
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+! colors
+*.foreground:  FOREGROUND 
+*.background:  BACKGROUND
+*.cursorColor: CURSORCOLOR
+*.color0:  COLOR0
+*.color1:  COLOR1
+*.color2:  COLOR2
+*.color3:  COLOR3
+*.color4:  COLOR4
+*.color5:  COLOR5
+*.color6:  COLOR6
+*.color7:  COLOR7
+*.color8:  COLOR8
+*.color9:  COLOR9
+*.color10: COLOR10
+*.color11: COLOR11
+*.color12: COLOR12
+*.color13: COLOR13
+*.color14: COLOR14
+*.color15: COLOR15
 
 ! dmenu
-dmenu.selforeground:	    #d8dee9
-dmenu.background:	        #2e3440
-dmenu.selbackground:	    #bf616a
-dmenu.foreground:	        #d8dee9
+dmenu.foreground: COLOR2
+dmenu.background: COLOR9
+dmenu.selforeground: COLOR4	
+dmenu.selbackground: COLOR11
 
-! rofi
-rofi.modi:             ssh,window,drun,run
-rofi.sidebar-mode:     true
-rofi.terminal:         urxvt
-rofi.ssh-client:       ssh
-rofi.ssh-command:      {terminal} -e "{ssh-client} {host}"
-rofi.opacity:          90
-rofi.width:            50
-rofi.lines:            8
-rofi.columns:          1
-rofi.font:             DejaVu Sans Mono 10
-rofi.bw:               2
-rofi.location:         0
-rofi.padding:          20
-rofi.levenshtein-sort: true
-rofi.case-sensitive:   false
-rofi.fuzzy:            false
-rofi.line-margin:      2
-rofi.separator-style:  solid
-rofi.hide-scrollbar:   true
-rofi.markup-rows:      false
-rofi.scrollbar-width:  8
+! emacs
+emacs.fontBackend: xft
+emacs.bitmapIcon: on
+emacs.font: FONTMONO
+emacs.geometry: 90x25
 
-
-! Icons for terminal apps
-URxvt*iconFile: /usr/share/icons/hicolor/128x128/apps/lxterminal.png
+!dunst
+dunst.font: FONT

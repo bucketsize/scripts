@@ -16,19 +16,21 @@ end
 DISPLAY1 = {
 	name = 'DisplayPort-0',
 	mode = '1280x720',
-	pos = '0x0'
+	pos = '0x0',
+	extra_opts = '--primary'
 }
 DISPLAY2 = {
 	name = 'HDMI-A-0',
 	mode = '1280x720',
-	pos = '1280x0'
+	pos = '1280x0',
+	extra_opts = '--set "underscan hborder" 48 --set "underscan vborder" 24'
 }
 DISPLAY_ON = [[
 		xrandr \
 			--output %s \
 			--mode %s \
 			--rotate normal \
-			--pos %s ]]
+			--pos %s %s]]
 DISPLAY_OFF = [[
 		xrandr \
 			--output %s \
@@ -53,8 +55,8 @@ local Cmds = {
 	win_big     = 'xdotool getactivewindow windowmove 04% 04% windowsize 92% 92%',
 	win_small   = 'xdotool getactivewindow windowmove 20% 20% windowsize 70% 50%',
 	
-	display1_on = string.format(DISPLAY_ON .. ' --primary', DISPLAY1.name, DISPLAY1.mode, DISPLAY1.pos),
-	display2_on = string.format(DISPLAY_ON, DISPLAY2.name, DISPLAY2.mode, DISPLAY2.pos),
+	display1_on = string.format(DISPLAY_ON, DISPLAY1.name, DISPLAY1.mode, DISPLAY1.pos, DISPLAY1.extra_opts),
+	display2_on = string.format(DISPLAY_ON, DISPLAY2.name, DISPLAY2.mode, DISPLAY2.pos, DISPLAY2.extra_opts),
 	display2_off = string.format(DISPLAY_OFF, DISPLAY2.name),
 
 	kb_led_on   = 'xset led on',
