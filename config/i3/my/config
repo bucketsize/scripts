@@ -18,7 +18,7 @@ set_from_resource $fbg color9
 set_from_resource $ffg color0
 
 # colour of 	  	    <border> <background> <text> <indicator> <child_border>
-client.focused          $fbg $fbg $ffg $fbg
+client.focused          $fbg $fbg $fg $fbg
 client.focused_inactive $bg $bg $fg $bg
 client.unfocused        $bg $bg $fg $bg
 client.urgent           $bg $bg $ffg $bg
@@ -54,8 +54,7 @@ bindsym $alt+F4 kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -l 10'
-
+bindsym $mod+d exec --no-startup-id dmenu_run -l 10
 
 # change focus
 bindsym $mod+Left focus left
@@ -258,6 +257,7 @@ for_window [class="Blueman-manager"] floating enable
 for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
 for_window [class=URxvt|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+
 
 
 

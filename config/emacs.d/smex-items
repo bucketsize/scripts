@@ -1,16 +1,19 @@
 
 ;; ----- smex-history -----
 (
+ package-reinstall
+ neotree
+ package-install
  cd
  5x5
  arp
  dbx
- dig
- ede
- erc
 )
 
 ;; ----- smex-data -----
 (
  (cd . 1)
+ (package-install . 1)
+ (neotree . 1)
+ (package-reinstall . 2)
 )
