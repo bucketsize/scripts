@@ -1,19 +1,23 @@
 
 ;; ----- smex-history -----
 (
- package-reinstall
+ haskell-mode
+ haskell-interactive-mode
+ customize-group
+ neotree-toggle
  neotree
+ package-reinstall
  package-install
- cd
- 5x5
- arp
- dbx
 )
 
 ;; ----- smex-data -----
 (
  (cd . 1)
  (package-install . 1)
- (neotree . 1)
+ (neotree . 5)
  (package-reinstall . 2)
+ (neotree-toggle . 2)
+ (customize-group . 1)
+ (haskell-interactive-mode . 2)
+ (haskell-mode . 1)
 )

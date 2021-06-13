@@ -22,7 +22,7 @@ client.focused          $fbg $fbg $fg $fbg
 client.focused_inactive $bg $bg $fg $bg
 client.unfocused        $bg $bg $fg $bg
 client.urgent           $bg $bg $ffg $bg
-client.background       $bg 
+client.background       $bg
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -229,7 +229,7 @@ bar {
         # colour of border, background, and text
         focused_workspace	$ffg $fbg $ffg
         active_workspace    $ffg $fbg $ffg
-        inactive_workspace  $bg $bg $fg 
+        inactive_workspace  $bg $bg $fg
         urgent_workspace    #2f343f #ebcb8b #2f343f
   }
 }
@@ -244,7 +244,8 @@ exec --no-startup-id ~/scripts/sys_ctl/ctl.lua fun pa_set_default
 exec --no-startup-id ~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock
 exec --no-startup-id ~/scripts/sys_mon/daemon.lua
 exec --no-startup-id picom
-exec --no-startup-id exec_always --no-startup-id dunst -lb "$bg" -nb "$bg" -cb "$bg" -lf "$fg" -bf "fg" -cf "$fg" -nf "$fg" -fn "ypn envypn 12" -s -geometry "400x60-10+40" -format "<b>%s</b>\n%b" -shrink  -lto 3 -nto 5 -cto 0 -align "left" -transparency 0 -padding 8 -horizontal_padding 8
+exec --no-startup-id exec_always --no-startup-id dunst
+# |dunst args| -lb "$bg" -nb "$bg" -cb "$bg" -lf "$fg" -bf "fg" -cf "$fg" -nf "$fg" -fn "ypn envypn 12" -s -geometry "400x60-10+40" -format "<b>%s</b>\n%b" -shrink  -lto 3 -nto 5 -cto 0 -align "left" -transparency 0 -padding 8 -horizontal_padding 8
 exec --no-startup-id VBoxClient --clipboard
 
 # exec --no-startup-id /usr/bin/blueman-applet                 # Bluetooth Manager
@@ -254,10 +255,6 @@ for_window [class=".*"] border pixel 1
 for_window [title="^floatme$"] floating enable
 for_window [class="Steam" instance="Steam"] floating enable
 for_window [class="Blueman-manager"] floating enable
-for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
+for_window [class=Viewnior|feh|Audacious|File-roller|Xarchiver|Lxappearance|Lxtask|Pavucontrol|XConsole] floating enable
 for_window [class=URxvt|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
-
-
-
-
