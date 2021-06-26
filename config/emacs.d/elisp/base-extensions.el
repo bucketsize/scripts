@@ -31,6 +31,9 @@
 
 (use-package flycheck)
 
+(use-package helm
+  :init
+  (helm-mode 1))
 
 (use-package counsel
   :bind
@@ -66,9 +69,9 @@
 
 (use-package magit
   :config
-  
+
   (setq magit-completing-read-function 'ivy-completing-read)
-  
+
   :bind
   ;; Magic
   ("C-x g s" . magit-status)
@@ -123,9 +126,9 @@
   :config
   (setq projectile-known-projects-file
         (expand-file-name "projectile-bookmarks.eld" temp-dir))
-  
+
   (setq projectile-completion-system 'ivy)
-  
+
   (projectile-global-mode))
 
 (use-package recentf
@@ -177,7 +180,7 @@
 ;; vim-mode configuration
 ;; https://github.com/emacs-evil/evil
 (use-package evil
-	:config 
+	:config
   (evil-mode 1)
   (add-hook 'neotree-mode-hook
               (lambda ()

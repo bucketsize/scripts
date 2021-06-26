@@ -1,23 +1,27 @@
 
 ;; ----- smex-history -----
 (
- haskell-mode
- haskell-interactive-mode
- customize-group
- neotree-toggle
+ lsp-find-definition
  neotree
- package-reinstall
+ neotree-toggle
  package-install
+ package-refresh-contents
+ package-delete
+ eval-buffer
 )
 
 ;; ----- smex-data -----
 (
  (cd . 1)
- (package-install . 1)
- (neotree . 5)
+ (package-install . 5)
+ (neotree . 20)
  (package-reinstall . 2)
- (neotree-toggle . 2)
+ (neotree-toggle . 3)
  (customize-group . 1)
  (haskell-interactive-mode . 2)
  (haskell-mode . 1)
+ (eval-buffer . 1)
+ (package-delete . 1)
+ (package-refresh-contents . 4)
+ (lsp-find-definition . 1)
 )

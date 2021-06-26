@@ -1,13 +1,13 @@
-#include "/home/jb/scripts/config/color-cyberpunk.xresources"
+#include "/home/jb/scripts/config/colors-terminal.sexy-5"
 
-!#define GFONT -misc-dejavu sans-*-*-*-*-0-100-*-*-p-0-*-*
-#define FONT dejavu sans condensed 10
-#define FONTMONO dejavu sans mono 10
+#define FONT xft:dejavu sans:condensed:size=12
+#define FONTMONO xft:dejavu sans mono:size=12
+#define FONTMONO_ dejavu sans mono 12
 
-! Global Font
+!global Font
 *font:         FONT
 
-! Xft
+!xft
 Xft.dpi:       96
 Xft.antialias: true
 Xft.hinting:   true
@@ -15,38 +15,22 @@ Xft.hintstyle: hintslight
 Xft.rgba:      rgb
 Xft.lcdfilter: lcddefault
 
-! colors
-*.foreground:  FOREGROUND 
-*.background:  BACKGROUND
-*.cursorColor: CURSORCOLOR
-*.color0:  COLOR0
-*.color1:  COLOR1
-*.color2:  COLOR2
-*.color3:  COLOR3
-*.color4:  COLOR4
-*.color5:  COLOR5
-*.color6:  COLOR6
-*.color7:  COLOR7
-*.color8:  COLOR8
-*.color9:  COLOR9
-*.color10: COLOR10
-*.color11: COLOR11
-*.color12: COLOR12
-*.color13: COLOR13
-*.color14: COLOR14
-*.color15: COLOR15
-
-! dmenu
-dmenu.foreground: COLOR2
-dmenu.background: COLOR9
-dmenu.selforeground: COLOR4	
-dmenu.selbackground: COLOR11
-
-! emacs
+!emacs
 emacs.fontBackend: xft
 emacs.bitmapIcon: on
-emacs.font: FONTMONO
+emacs.font: FONTMONO_
 emacs.geometry: 90x25
 
 !dunst
 dunst.font: FONT
+
+!xterm
+xterm*faceName: FONTMONO
+
+!urxvt
+URxvt.letterSpace: -1
+URxvt*scrollBar: false
+URxvt*fading: 30
+URxvt*font: FONTMONO
+URxvt*buffered: true
+URxvt*print-pipe: cat > $HOME/$(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
