@@ -23,7 +23,7 @@ DISPLAY2 = {
 	name = 'HDMI-A-0',
 	mode = '1280x720',
 	pos = '1280x0',
-	extra_opts = '--set "underscan hborder" 48 --set "underscan vborder" 24'
+	extra_opts = '--set underscan on --set "underscan hborder" 48 --set "underscan vborder" 24'
 }
 DISPLAY_ON = [[
 		xrandr \

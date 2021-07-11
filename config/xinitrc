@@ -3,8 +3,7 @@ xhost +
 
 export XDG_SESSION_TYPE=x11
 export GDK_BACKEND=x11
-export XDG_CURRENT_DESKTOP=GNOME-Classic:GNOME
-export GNOME_SHELL_SESSION_MODE=classic
+export XDG_CURRENT_DESKTOP=GNOME
 
 ~/scripts/config/autostart.sh
 
