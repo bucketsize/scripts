@@ -50,12 +50,12 @@ startAll(){
 	start 4 lxpolkit
 	start 4 lxclipboard
 	start 5 xautolock \
-	 -time 5 -locker "~/scripts/sys_ctl/ctl.lua cmd scr_lock" \
+	 -time 5 -locker "~/scripts/sys_mon/control.lua cmd scr_lock" \
 	 -killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'" \
 	 -notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'"
-	start 5 ~/scripts/sys_ctl/ctl.lua cmd scr_lock_on_lid
-	start 5 ~/scripts/sys_ctl/ctl.lua cmd dtop_viga
-	start 5 ~/scripts/sys_ctl/ctl.lua fun pa_set_default
+	start 5 ~/scripts/sys_mon/control.lua cmd scr_lock_on_lid
+	start 5 ~/scripts/sys_mon/control.lua cmd dtop_viga
+	start 5 ~/scripts/sys_mon/control.lua fun pa_set_default
 	start 5 conky
 }
 

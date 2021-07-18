@@ -14,6 +14,7 @@ local Fn = require('functions')
 local Al = require('alerts')
 
 local Fmt = Util:newT()
+Fmt['time']="%s"
 Fmt['cpu']="%3.0f"
 Fmt['cpu_level']="%.0f"
 Fmt['cpu_temp']="%.0f"
@@ -26,6 +27,9 @@ Fmt['mem_level']="%.0f"
 Fmt['snd_live']="%s"
 Fmt['vol']="%3.0f"
 Fmt['vol_level']="%.0f"
+Fmt['gpu_mem']="%4f"
+Fmt['gpu_mem_used']="%4f"
+Fmt['gpu_mem_used_pc']="%3.0f"
 Fmt['gpu_temp']="%d"
 Fmt['gpu_sclk']="%4d"
 Fmt['gpu_mclk']="%4d"
@@ -33,14 +37,23 @@ Fmt['Tdie']="%.0f"
 Fmt['net_gateway']="%s"
 Fmt['net_device']="%s"
 Fmt['net_proto']="%s"
-Fmt['net_tx']="%d"
-Fmt['net_rx']="%d"
+Fmt['net_tx']="%f"
+Fmt['net_rx']="%f"
 Fmt['net_ts']="%4.0f"
 Fmt['net_rs']="%4.0f"
 Fmt['p2_pid']="%s"
 Fmt['p2_pcpu']="%s"
 Fmt['p2_pmem']="%s"
 Fmt['p2_name']="%s"
+Fmt['cpu1_volt']="%s"
+Fmt['cpu1_freq']="%s"
+Fmt['cpu_fan']="%s"
+Fmt['discio']="%d"
+Fmt['discio_r']="%d"
+Fmt['discio_w']="%d"
+Fmt['fs_free']="%s"
+Fmt['battery_status']="%s"
+Fmt['battery']="%d"
 
 local EPOC=2
 local MTAB={}
@@ -60,6 +73,15 @@ function Co:cpu_usage()
 		MTAB['cpu'] = c*100
 		MTAB['cpu_level'] = c*5
 		Al:check('cpu', c*100)
+		coroutine.yield()
+	end
+end
+function Co:disc_usage()
+	while true do
+		local r,w=Fn:disc_usage()
+		MTAB['discio_r'] = math.floor(r / 1000)
+		MTAB['discio_w'] = math.floor(w / 1000)
+		MTAB['discio'] = math.floor((r+w) / 1000)
 		coroutine.yield()
 	end
 end
@@ -83,7 +105,7 @@ function Co:mem_usage()
 	end
 end
 
--- MEM --
+-- PS --
 function Co:ps_top()
 	while true do
 		local m=Fn:ps_top()
@@ -123,8 +145,12 @@ function Co:cputemp_usage()
 end
 function Co:gpu_usage_amdgpu()
 	while true do
-		local tgpu,gmf,gsf=Fn:gpu_usage_amdgpu()
-		--print('->', tgpu,gmf,gsf)
+		local vram,vram_used,tgpu,gmf,gsf=Fn:gpu_usage_amdgpu()
+		-- print('->', vram,vram_used,tgpu,gmf,gsf)
+		MTAB['gpu_mem'] = vram / 1000000
+		MTAB['gpu_mem_used'] = vram_used / 1000000
+		MTAB['gpu_mem_used_pc'] = vram_used * 100 / vram
+		MTAB['gpu_temp'] = tgpu
 		MTAB['gpu_temp'] = tgpu
 		MTAB['gpu_mclk'] = gmf
 		MTAB['gpu_sclk'] = gsf
@@ -143,10 +169,10 @@ function Co:net_usage()
 		MTAB['net_gateway']=gw
 		MTAB['net_device']=dev
 		MTAB['net_proto']=proto
-		MTAB['net_tx']=tx
-		MTAB['net_rx']=rx
-		MTAB['net_ts']=ts
-		MTAB['net_rs']=rs
+		MTAB['net_tx']=tx/100
+		MTAB['net_rx']=rx/100
+		MTAB['net_ts']=ts/100
+		MTAB['net_rs']=rs/100
 
 		coroutine.yield()
 	end
@@ -156,8 +182,8 @@ end
 function Co:bat_usage()
 	while true do
 		local level,status=Fn:bat_usage()
-		MTAB['bat_status']=status
-		MTAB['bat_level']=level
+		MTAB['battery_status']=status
+		MTAB['battery']=level
 		coroutine.yield()
 	end
 end
@@ -180,7 +206,7 @@ function Co:logger()
 		for i,k in Fmt:ipairs() do
 			local fmt = Fmt[k]
 			local v = MTAB[k]
-			--print("-> ", k, v, type(v))
+			print("-> ", k, v, type(v))
 			hout:write(k,': ',string.format(fmt, v), "\n")
 			hlog:write(string.format(fmt, v), ",")
 		end
@@ -191,28 +217,34 @@ function Co:logger()
 	end
 end
 
+function Co:cachemtab()
+	while true do
+		local cachec = require("cachec")
+		for i,k in Fmt:ipairs() do
+			local fmt = Fmt[k]
+			local v = MTAB[k]
+			cachec:put(k, string.format(fmt, v), "string")
+		end
+		coroutine.yield()
+	end
+end
+
 -- START --
-Cmd={}
-CoInst={}
+local CoInst={}
+local Cmd={}
 function Cmd:start()
 	for k,co in pairs(Co) do
-		CoInst[k] = coroutine.create(co)
-		print('created co:', k)
+		Util:start_co(CoInst, k, co)
 	end
 	while true do
+		MTAB['time'] = os.date("%Y-%m-%dT%H:%M:%S+05:30")
 		for k,coInst in pairs(CoInst) do
-			local status = coroutine.status(coInst)
-			if status == 'dead' then
-				print('co dead> ' .. k, status)
-			end
-			local ok,res = coroutine.resume(coInst)
-			if not ok then
-				print('co bad> ' .. k, ret, res)
-			end
+			Util:run_co(k, coInst)
 		end
 		socket.sleep(EPOC)
 	end
 end
+
 
 if arg[1] == nil then
 	Cmd['start']()

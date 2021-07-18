@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
-Exec=sh -c "sleep 2; ~/scripts/sys_ctl/ctl.lua cmd dtop_viga;"
+Exec=sh -c "sleep 2; ~/scripts/sys_mon/control.lua cmd dtop_viga;"
 Name=Display
 Comment=Autostart display at login

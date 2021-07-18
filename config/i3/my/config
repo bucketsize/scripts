@@ -123,19 +123,19 @@ bindsym $mod+shift+x move scratchpad
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+l exec ~/scripts/sys_ctl/ctl.lua cmd scr_lock
+bindsym $mod+l exec ~/scripts/sys_mon/control.lua cmd scr_lock
 
 #bindsym $mod+d exec dmenu_run -l 10
 
-bindsym Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap
-bindsym Control+Print exec ~/scripts/sys_ctl/ctl.lua cmd scr_cap_sel
+bindsym Print exec ~/scripts/sys_mon/control.lua cmd scr_cap
+bindsym Control+Print exec ~/scripts/sys_mon/control.lua cmd scr_cap_sel
 
-bindsym Control+bracketleft exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
-bindsym Control+bracketright exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
-bindsym Control+backslash exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
-bindsym XF86AudioLowerVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_down
-bindsym XF86AudioRaiseVolume exec ~/scripts/sys_ctl/ctl.lua cmd vol_up
-bindsym XF86AudioMute exec ~/scripts/sys_ctl/ctl.lua cmd vol_mute
+bindsym Control+bracketleft exec ~/scripts/sys_mon/control.lua cmd vol_down
+bindsym Control+bracketright exec ~/scripts/sys_mon/control.lua cmd vol_up
+bindsym Control+backslash exec ~/scripts/sys_mon/control.lua cmd vol_mute
+bindsym XF86AudioLowerVolume exec ~/scripts/sys_mon/control.lua cmd vol_down
+bindsym XF86AudioRaiseVolume exec ~/scripts/sys_mon/control.lua cmd vol_up
+bindsym XF86AudioMute exec ~/scripts/sys_mon/control.lua cmd vol_mute
 
 # music control
 bindsym XF86AudioNext exec mpc next
@@ -143,12 +143,12 @@ bindsym XF86AudioPrev exec mpc prev
 bindsym XF86AudioPlay exec mpc toggle
 bindsym XF86AudioStop exec mpc stop
 
-bindsym Control+2 exec ~/scripts/sys_ctl/ctl.lua cmd display2_on
-bindsym Control+3 exec ~/scripts/sys_ctl/ctl.lua cmd display2_off
-bindsym Control+4 exec ~/scripts/sys_ctl/ctl.lua cmd kb_led_on
-bindsym Control+5 exec ~/scripts/sys_ctl/ctl.lua cmd kb_led_off
+bindsym Control+2 exec ~/scripts/sys_mon/control.lua cmd display2_on
+bindsym Control+3 exec ~/scripts/sys_mon/control.lua cmd display2_off
+bindsym Control+4 exec ~/scripts/sys_mon/control.lua cmd kb_led_on
+bindsym Control+5 exec ~/scripts/sys_mon/control.lua cmd kb_led_off
 
-bindsym $mod+w exec ~/scripts/sys_ctl/ctl.lua fun dmenu_select_window
+bindsym $mod+w exec ~/scripts/sys_mon/control.lua fun dmenu_select_window
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -200,7 +200,7 @@ mode "move" {
 bindsym $mod+m mode "move"
 
 
-set $Locker ~/scripts/sys_ctl/ctl.lua cmd scr_lock && sleep 1
+set $Locker ~/scripts/sys_mon/control.lua cmd scr_lock && sleep 1
 
 set $mode_system System (l)ock, l(o)gout, (s)uspend, (h)ibernate, (r)eboot, shut(d)own
 mode "$mode_system" {
@@ -219,7 +219,7 @@ mode "$mode_system" {
 bindsym $mod+Shift+e mode "$mode_system"
 
 bar {
-	status_command i3status
+	status_command $HOME/scripts/sys_mon/i3bar_out.lua
 	position top
 	colors {
         background $bg
@@ -239,6 +239,6 @@ for_window [class=".*"] border pixel 1
 for_window [title="^floatme$"] floating enable
 for_window [class="Steam" instance="Steam"] floating enable
 for_window [class="Blueman-manager"] floating enable
-for_window [class=Viewnior|Audacious|File-roller|Xarchiver|Lxappearance|Lxtask|Pavucontrol|XConsole|Pidgin|Lxrandr|Arandr] floating enable
+for_window [class=Viewnior|Audacious|File-roller|Xarchiver|Lxappearance|Lxtask|Pavucontrol|XConsole|Pidgin|Lxrandr|Arandr|Conky] floating enable
 for_window [class=URxvt|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus

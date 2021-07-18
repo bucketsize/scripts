@@ -16,7 +16,7 @@ function Fn:cpu_usage()
 	local handle = io.open("/proc/stat", "r")
 	local result = handle:read("*l")
 	handle:close()
-	print('-> result: ', result)
+	-- print('-> result: ', result)
 	local t,s1,z1,i={},0,0,0
 	for d in string.gmatch(result, "%d+") do
 		s1=s1+d
@@ -25,6 +25,19 @@ function Fn:cpu_usage()
 	end
 	z1=t[3]
 	return s1,z1
+end
+
+function Fn:disc_usage()
+	local handle = io.open("/sys/block/sda/stat", "r")
+	local result = handle:read("*l")
+	handle:close()
+	local v={}
+	local i=1
+	for d in string.gmatch(result, "%d+") do
+		v[tostring(i)] = d
+		i=i+1
+	end
+	return v['1'], v['5']
 end
 
 local cpufreq_files={}
@@ -130,14 +143,18 @@ function Fn:cputemp_usage()
 end
 
 function Fn:gpu_usage_amdgpu()
+	local vram_used = tonumber(Util:read("/sys/class/drm/card0/device/mem_info_vram_used"))
+	local vram = tonumber(Util:read("/sys/class/drm/card0/device/mem_info_vram_total"))
+	local tgpu=0
+	local clkm=0
+	local	clks=0
 	local result = Util:read("/sys/kernel/debug/dri/0/amdgpu_pm_info")
-	if not result == nil then
+	if not (result == nil) then
 		local tgpu = string.match(result, "GPU Temperature: (%d+) C")
-		local mclk = string.match(result, "%s+(%d+) MHz%s+%ZMCLK")
-		local sclk = string.match(result, "%s+(%d+) MHz%s+%ZSCLK")
-		return tonumber(tgpu),tonumber(mclk),tonumber(sclk)
+		local clkm = string.match(result, "%s+(%d+) MHz%s+%ZMCLK")
+		local clks = string.match(result, "%s+(%d+) MHz%s+%ZSCLK")
 	end
-	return 0,0,0
+	return vram, vram_used, tonumber(tgpu),tonumber(clkm),tonumber(clks)
 end
 
 -- NET --
@@ -146,6 +163,10 @@ function Fn:net_usage()
 		.add(Shell.exec('ip route'))
 		.add(Shell.grep('default via (%d+.%d+.%d+.%d+) dev (%w+) proto (%w+)'))
 		.run()
+
+	if r == nil then
+		return "?", "?", "?",0,0
+	end
 
 	local net_stat_pat = r[2] .. ": (.+)%c"
 	local r2 = Util:read("/proc/net/dev", "r")
@@ -161,19 +182,17 @@ end
 
 -- BAT --
 function Fn:bat_usage()
-	local r1 = Util:read("/sys/class/power_supply/BAT0/capacity")
-	if r1 == "" then
-		r1 = -1
-	else
-		r1 = tonumber(r1)
+	local cap = Util:read("/sys/class/power_supply/BAT0/capacity")
+	if cap == nil or cap == "" then
+		cap = "0"
 	end
 
-	local r2 = Util:read("/sys/class/power_supply/BAT0/status")
-	if r2 == "" then
-		r2 = "AC"
+	local status = Util:read("/sys/class/power_supply/BAT0/status")
+	if status == nil or status == "" then
+		status = "AC"
 	end
 
-	return r1, r2
+	return tonumber(cap), status
 end
 
 if arg[1] == nil then

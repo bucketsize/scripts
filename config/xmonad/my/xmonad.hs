@@ -72,8 +72,8 @@ autostarts =
   ,("notifyd", "dunst")
   ,("systray", "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x111111 --height 18")
   ,("nmapplet", "nm-applet --sm-disable")
-  ,("audio", "~/scripts/sys_ctl/ctl.lua fun pa_set_default")
-  ,("autolock", "~/scripts/sys_ctl/ctl.lua cmd autolockd_xautolock")
+  ,("audio", "~/scripts/sys_mon/control.lua fun pa_set_default")
+  ,("autolock", "~/scripts/sys_mon/control.lua cmd autolockd_xautolock")
   ,("sysmon", "~/scripts/sys_mon/daemon.lua")
   ]
 

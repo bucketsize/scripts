@@ -4,14 +4,14 @@ super + r
 
 // lockscreen
 super + l
-	~/scripts/sys_ctl/ctl.lua cmd scr_lock
+	~/scripts/sys_mon/control.lua cmd scr_lock
 
 // screenshot
 Print
-	~/scripts/sys_ctl/ctl.lua cmd scr_cap
+	~/scripts/sys_mon/control.lua cmd scr_cap
 
 control + Print
-	~/scripts/sys_ctl/ctl.lua cmd scr_cap_sel
+	~/scripts/sys_mon/control.lua cmd scr_cap_sel
 
 control + alt + Delete
   notify-send 'bonkers!'
@@ -21,37 +21,37 @@ control + super + x
 
 // volume
 control + bracketright
-	~/scripts/sys_ctl/ctl.lua cmd vol_up
+	~/scripts/sys_mon/control.lua cmd vol_up
 
 control + bracketleft
-	~/scripts/sys_ctl/ctl.lua cmd vol_down
+	~/scripts/sys_mon/control.lua cmd vol_down
 
 control + backslash
-	~/scripts/sys_ctl/ctl.lua cmd vol_mute
+	~/scripts/sys_mon/control.lua cmd vol_mute
 
 @XF86AudioRaiseVolume
-	~/scripts/sys_ctl/ctl.lua cmd vol_up
+	~/scripts/sys_mon/control.lua cmd vol_up
 
 @XF86AudioLowerVolume
-	~/scripts/sys_ctl/ctl.lua cmd vol_down
+	~/scripts/sys_mon/control.lua cmd vol_down
 
 @XF86AudioMute
-	~/scripts/sys_ctl/ctl.lua cmd vol_mute
+	~/scripts/sys_mon/control.lua cmd vol_mute
 
 control + alt + 1
-	~/scripts/sys_ctl/ctl.lua cmd dtop_viga
+	~/scripts/sys_mon/control.lua cmd dtop_viga
 
 control + alt + 2
-	~/scripts/sys_ctl/ctl.lua cmd dtop_hdmi
+	~/scripts/sys_mon/control.lua cmd dtop_hdmi
 
 control + alt + 3
-	~/scripts/sys_ctl/ctl.lua cmd dtop_extn
+	~/scripts/sys_mon/control.lua cmd dtop_extn
 
 control + alt + 4
-	~/scripts/sys_ctl/ctl.lua cmd kb_led_on
+	~/scripts/sys_mon/control.lua cmd kb_led_on
 
 control + alt + 5
-	~/scripts/sys_ctl/ctl.lua cmd kb_led_off
+	~/scripts/sys_mon/control.lua cmd kb_led_off
 
 
 

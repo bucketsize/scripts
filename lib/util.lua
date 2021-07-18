@@ -1,4 +1,18 @@
 local Util={}
+function Util:start_co(coCache, k, co)
+	coCache[k] = coroutine.create(co)
+	print('created co:', k)
+end
+function Util:run_co(k, coInst)
+	local status = coroutine.status(coInst)
+	if status == 'dead' then
+		print('co dead> ' .. k, status)
+	end
+	local ok,res = coroutine.resume(coInst)
+	if not ok then
+		print('co bad> ' .. k, ret, res)
+	end
+end
 function Util:file_exists(file)
 	local h = io.open(file, "r")
 	if h == nil then
@@ -75,8 +89,7 @@ end
    
    Ordered Table
    keys added will be also be stored in a metatable to recall the insertion oder
-   metakeys can be seen with for i,k in ( <this>:ipairs()  or ipairs( <this>._korder ) ) do
-   ipairs( ) is a bit faster
+   metakeys can be seen with for i,k in ( <this>:ipairs()  or ipairs( <this>._korder ) ) do ipairs( ) is a bit faster
    
    variable names inside __index shouldn't be added, if so you must delete these again to access the metavariable
    or change the metavariable names, except for the 'del' command. thats the reason why one cannot change its value
@@ -107,8 +120,7 @@ function Util:newT( t )
       end,
       -- to be able to delete entries we must write a delete function
       del = function( self,key )
-         if self[key] then
-            self[key] = nil
+         if self[key] then self[key] = nil
             for i,k in ipairs( self._korder ) do
                if k == key then
                   table.remove( self._korder, i )
