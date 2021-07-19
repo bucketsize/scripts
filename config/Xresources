@@ -1,8 +1,8 @@
 #include "/home/jb/scripts/config/colors-terminal.sexy-5"
 
-#define FONT xft:dejavu sans:condensed:size=12
-#define FONTMONO xft:dejavu sans mono:size=12
-#define FONTMONO_ dejavu sans mono 12
+#define FONT xft:dejavu sans:condensed:size=10
+#define FONTMONO xft:dejavu sans mono:size=10
+#define FONTMONO_ dejavu sans mono 10
 
 !global Font
 *font:         FONT

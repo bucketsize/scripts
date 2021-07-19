@@ -1,8 +1,8 @@
 
 ;; ----- smex-history -----
 (
- lsp-find-definition
  neotree
+ lsp-find-definition
  neotree-toggle
  package-install
  package-refresh-contents
@@ -14,7 +14,7 @@
 (
  (cd . 1)
  (package-install . 5)
- (neotree . 20)
+ (neotree . 26)
  (package-reinstall . 2)
  (neotree-toggle . 3)
  (customize-group . 1)

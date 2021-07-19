@@ -19,3 +19,4 @@
 (require 'lang-haskell-lsp)
 (require 'lang-racket)
 (require 'lang-c)
+(require 'lang-lua)

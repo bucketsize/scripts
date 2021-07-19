@@ -118,5 +118,7 @@ DXVK_HUD=fps,gpuload RADV_PERFTEST=aco PROTON_LOG=1 %command%
 %y	two-digit year (98) [00-99]
 %%	the character `%´
 
-
+## openweathermap
+rainshine
+16704e3405a0cb1a1ae1b7917e4ff2fd
 

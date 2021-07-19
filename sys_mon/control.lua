@@ -1,5 +1,9 @@
 #!/usr/bin/env lua
 
+local version = _VERSION:match("%d+%.%d+")
+package.path  = '.luarocks/share/lua/' .. version .. '/?.lua;lua_modules/share/lua/' .. version .. '/?/init.lua;' .. package.path
+package.cpath = '.luarocks/lib/lua/' .. version .. '/?.so;' .. package.cpath
+
 package.path = package.path
 	.. '?.lua;'
 	.. 'scripts/lib/?.lua;'
@@ -7,11 +11,6 @@ package.path = package.path
 
 local Sh = require('shell')
 local Pr = require('process')
-
-function exec(cmd)
-	local h = io.popen(cmd)
-	h:close()
-end
 
 DISPLAY1 = {
 	name = 'DisplayPort-0',
@@ -41,9 +40,9 @@ local Cmds = {
 	vol_down    = 'pactl set-sink-volume @DEFAULT_SINK@ -10%',
 	vol_mute    = 'pactl set-sink-mute   @DEFAULT_SINK@ toggle',
 	vol_unmute  = 'pactl set-sink-mute   @DEFAULT_SINK@ toggle',
-	
+
 	scr_lock    = '~/scripts/xdg/x.lock-i3.sh',
-	
+
 	scr_cap     = 'import -window root ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
 	scr_cap_sel = 'import ~/Pictures/$(date +%Y%m%dT%H%M%S).png',
 
@@ -54,7 +53,7 @@ local Cmds = {
 	win_unmax   = 'wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz',
 	win_big     = 'xdotool getactivewindow windowmove 04% 04% windowsize 92% 92%',
 	win_small   = 'xdotool getactivewindow windowmove 20% 20% windowsize 70% 50%',
-	
+
 	display1_on = string.format(DISPLAY_ON, DISPLAY1.name, DISPLAY1.mode, DISPLAY1.pos, DISPLAY1.extra_opts),
 	display2_on = string.format(DISPLAY_ON, DISPLAY2.name, DISPLAY2.mode, DISPLAY2.pos, DISPLAY2.extra_opts),
 	display2_off = string.format(DISPLAY_OFF, DISPLAY2.name),
@@ -69,6 +68,11 @@ local Cmds = {
 			-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'";
 	]]
 }
+
+function exec(cmd)
+	local h = io.popen(cmd)
+	h:close()
+end
 
 local Funs = {}
 function Funs:scr_lock_if()
@@ -122,6 +126,11 @@ function Funs:dmenu_select_window()
     end)
     .run()
 end
+
+function Funs:get_wallpaper()
+end
+
+------------------------------------------------------
 local Fn = {}
 function Fn:cmd(key)
 	local cmd = Cmds[key]

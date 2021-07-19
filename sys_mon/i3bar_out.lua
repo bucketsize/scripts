@@ -8,43 +8,66 @@ package.path = package.path
 local socket = require("socket")
 local cachec = require("cachec")
 local util = require("util")
+local formats = require("formats")
 
 local Sym ={
 	cpu = "",
-	gpu = "",
-	mem = "",
-	eth = "",
+	gpu = "",
+	mem = "",
+	eth = "",
 	wifi = "",
 	disc = "",
 	clock = "",
 	battery = "",
 	snd = "",
-	snd_mute = "",
-	disabled = ""
+	snd_mute = "",
+	disabled = "",
+	temperature = "",
 }
+
+function if_else(p, o1, o2)
+   if p then
+      return o1
+   else
+      return o2
+   end
+end
 
 function co_i3bar_out()
 	print('{"version":1}')
 	print('[')
 	print('[],')
 	while true do
-		local mtab = cachec:getAll()
-		print('[')
-		-- print(string.format([[{"full_text": "[net %d %d]"},]], mtab['net_ts'], mtab['net_rs']))
-		print(string.format([[{"full_text": "| %s %d"},]], Sym['cpu'], mtab['cpu']))
-		-- print(string.format([[{"full_text": "%d MHz"},]], mtab['cpu1_freq']))
-		-- print(string.format([[{"full_text": "%d V"},]], mtab['cpu1_volt']))
-		-- print(string.format([[{"full_text": "%d rpm]"},]], mtab['cpu_fan']))
-		print(string.format([[{"full_text": "%d C"},]], mtab['cpu_temp']))
-		print(string.format([[{"full_text": "| %s %d"},]], Sym['mem'], mtab['mem']))
-		print(string.format([[{"full_text": "vram %d"},]], mtab['gpu_mem_used_pc']))
-		print(string.format([[{"full_text": "| %s %d"},]], Sym['disc'], mtab['discio']))
-		print(string.format([[{"full_text": "/ %d]"},]], mtab['fs_free']))
-		print(string.format([[{"full_text": "| %s %s %d"},]], Sym['battery'], mtab['battery_status'], mtab['battery']))
-		print(string.format([[{"full_text": "| %s %d"},]], Sym['snd'], mtab['vol']))
-		print(string.format([[{"full_text": "| %s %s"}]], Sym['clock'], os.date("%a %b %d, %Y | %H:%M")))
-		print('],')
-		coroutine.yield()
+	   local otab = cachec:getAll()
+	   local mtab = {}
+	   for k,v in pairs(otab) do
+	      if not (formats[k] == nil) then
+		 mtab[k]=string.format(formats[k], v)
+	      end
+	   end
+	   print(string.format([[[
+    {"full_text": "%s C %s"},
+    {"full_text": "| %s%s"},
+    {"full_text": "| %s %s C"},
+    {"full_text": "| %s %s"},
+    {"full_text": "| %s %s"},
+    {"full_text": "| %s %s %s free"},
+    {"full_text": "| %s %s"},
+    {"full_text": "| %s %s %s"},
+    {"full_text": "| %s %s"},
+    {"full_text": "| %s %s"}
+],]]
+		, mtab['weather_temperature'], mtab['weather_summary']
+		, Sym['eth'], if_else(mtab['net_gateway']=="?", Sym['disabled'], "")
+		, Sym['cpu'], mtab['cpu']
+		, Sym['temperature'], mtab['cpu_temp']
+		, Sym['mem'], mtab['mem']
+		, Sym['gpu'], mtab['gpu_mem_used_pc']
+		, Sym['disc'], mtab['discio'], mtab['fs_free']
+		, Sym['battery'], mtab['battery_status'], mtab['battery']
+		, Sym['snd'], mtab['vol']
+		, Sym['clock'], os.date("%a %b %d, %Y | %H:%M")))
+	   coroutine.yield()
 	end
 end
 
