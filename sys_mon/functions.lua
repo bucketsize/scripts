@@ -212,8 +212,9 @@ function Fn:weather()
    if headers:get ":status" ~= "200" then
       error(body)
    end
+   print("-> weather: \n", body)
    local res = json.decode(body)
-   local temperature = 0;
+   local temperature = tonumber(res["main"]["temp"]) - 273.15
    local summary = res["weather"][1]["description"]
    local humidity = tonumber(res["main"]["humidity"])
    return temperature, humidity, summary

@@ -46,26 +46,24 @@ function co_i3bar_out()
 	      end
 	   end
 	   print(string.format([[[
-    {"full_text": "%s C %s"},
+    {"full_text": "%sC %sH %s"},
     {"full_text": "| %s%s"},
-    {"full_text": "| %s %s C"},
     {"full_text": "| %s %s"},
-    {"full_text": "| %s %s"},
-    {"full_text": "| %s %s %s free"},
-    {"full_text": "| %s %s"},
+    {"full_text": "%s %s"},
+    {"full_text": "| %s s%s-v%s"},
     {"full_text": "| %s %s %s"},
     {"full_text": "| %s %s"},
+    {"full_text": "| %s %s %s"},
     {"full_text": "| %s %s"}
 ],]]
-		, mtab['weather_temperature'], mtab['weather_summary']
+		, mtab['weather_temperature'], mtab['weather_humidity'], mtab['weather_summary']
 		, Sym['eth'], if_else(mtab['net_gateway']=="?", Sym['disabled'], "")
 		, Sym['cpu'], mtab['cpu']
 		, Sym['temperature'], mtab['cpu_temp']
-		, Sym['mem'], mtab['mem']
-		, Sym['gpu'], mtab['gpu_mem_used_pc']
+		, Sym['mem'], mtab['mem'], mtab['gpu_mem_used_pc']
 		, Sym['disc'], mtab['discio'], mtab['fs_free']
-		, Sym['battery'], mtab['battery_status'], mtab['battery']
 		, Sym['snd'], mtab['vol']
+		, Sym['battery'], mtab['battery_status'], mtab['battery']
 		, Sym['clock'], os.date("%a %b %d, %Y | %H:%M")))
 	   coroutine.yield()
 	end

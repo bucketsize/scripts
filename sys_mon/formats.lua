@@ -48,8 +48,8 @@ Fmt['discio_w']="%d"
 Fmt['fs_free']="%s"
 Fmt['battery_status']="%s"
 Fmt['battery']="%d"
-Fmt['weather_temperature']="%d"
-Fmt['weather_humidity']="%d"
+Fmt['weather_temperature']="%.1f"
+Fmt['weather_humidity']="%.1f"
 Fmt['weather_summary']="%s"
 
 return Fmt
