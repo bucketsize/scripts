@@ -32,6 +32,7 @@ function Co:cpu_usage()
       s0,z0=s,z
       MTAB['cpu'] = c*100
       MTAB['cpu_level'] = c*5
+      MTAB['time'] = os.date("%Y-%m-%dT%H:%M:%S+05:30")
       Al:check('cpu', c*100)
       coroutine.yield()
    end
@@ -178,7 +179,7 @@ function Co:logger()
       for i,k in Fmt:ipairs() do
 	 local fmt = Fmt[k]
 	 local v = MTAB[k]
-	 print("-> ", k, v, type(v))
+	 --print("-> ", k, v, type(v))
 	 hout:write(k,': ',string.format(fmt, v), "\n")
 	 hlog:write(string.format(fmt, v), ",")
       end
@@ -202,26 +203,17 @@ function Co:cachemtab()
 end
 
 -----------------------------------------------------------------
-local CoInst={}
 local Cmd={}
 function Cmd:start()
    for k,co in pairs(Co) do
-      Util:start_co(CoInst, k, co)
+      local inst = coroutine.create(co)
+      local intv = Util:if_else(Coi[k]==nil, 2, Coi[k])
+      print('co/', k, intv)
+      Util.Timer:tick(intv, function()
+			 Util:run_co(k, inst)
+      end)
    end
-   while true do
-      MTAB['time'] = os.date("%Y-%m-%dT%H:%M:%S+05:30")
-      for k,coInst in pairs(CoInst) do
-	 local nE = 2
-	 if not (Coi[k] == nil) then
-	    nE = Coi[k]
-	 end
-	 if (Coi.n % nE) == 0 then
-	    Util:run_co(k, coInst)
-	 end
-	 Coi.n = Coi.n + 1
-      end
-      socket.sleep(EPOC)
-   end
+   Util.Timer:start()
 end
 
 

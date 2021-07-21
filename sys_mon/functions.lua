@@ -210,7 +210,8 @@ function Fn:weather()
 				  :go())
    local body = assert(stream:get_body_as_string())
    if headers:get ":status" ~= "200" then
-      error(body)
+      print("OpenWeatherApi Error:", body)
+      return 0,0,"?"
    end
    print("-> weather: \n", body)
    local res = json.decode(body)
