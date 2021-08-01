@@ -1,14 +1,17 @@
 #!/bin/sh
 
+# local typed k,v store
+(sleep 1; ~/scripts/sys_mon/cached.lua > /var/tmp/cached.log) &
+(sleep 2; ~/scripts/sys_mon/daemon.lua > /var/tmp/daemon.log) &
+
 # dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
-(sleep 1; dbus-launch --sh-syntax --exit-with-session) &
-(sleep 2; dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY) &
+(sleep 1; dbus-launch --sh-syntax --exit-with-session)
+(sleep 2; dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY)
 
 # apply wallpaper after screen set
-#(sleep 3; ~/scripts/sys_mon/control.lua cmd display1_on; ~/scripts/sys_mon/control.lua cmd display2_off; ~/scripts/xdg/x.wallpaper.sh cycle) &
+(sleep 3; ~/scripts/sys_mon/control.lua fun setup_video)
 (sleep 3; ~/scripts/xdg/x.wallpaper.sh cycle) &
 
-(sleep 4; ~/scripts/sys_mon/control.lua fun pa_set_default) &
 (sleep 4; ~/scripts/sys_mon/control.lua cmd autolockd_xautolock) &
 (sleep 5; picom) &
 (sleep 5; dunst) &

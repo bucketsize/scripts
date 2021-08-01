@@ -52,7 +52,10 @@ function Client:getAll()
    tcp:close()
    return mtab
 end
+
+------------------------------
 function test()
+	----------------------------
    for i=1,5,1 do
       Client:put('key1'..tostring(i), i, "integer")
       print(Client:get('key1'..tostring(i)))

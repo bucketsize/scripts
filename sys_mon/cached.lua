@@ -1,3 +1,5 @@
+#!/usr/bin/env lua
+
 local socket = require("socket")
 local server = assert(socket.bind("*", 51515))
 local tcp = assert(socket.tcp())

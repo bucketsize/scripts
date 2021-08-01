@@ -1,13 +1,13 @@
 
 ;; ----- smex-history -----
 (
+ comment-region
  neotree-refresh
  neotree-create-node
  neotree
  lsp-find-definition
  neotree-toggle
  package-install
- package-refresh-contents
 )
 
 ;; ----- smex-data -----
@@ -25,5 +25,6 @@
  (package-refresh-contents . 4)
  (lsp-find-definition . 1)
  (neotree-create-node . 2)
- (neotree-refresh . 1)
+ (neotree-refresh . 3)
+ (comment-region . 3)
 )
