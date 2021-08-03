@@ -1,15 +1,7 @@
-local version = _VERSION:match("%d+%.%d+")
-package.path  = '.luarocks/share/lua/' .. version .. '/?.lua;lua_modules/share/lua/' .. version .. '/?/init.lua;' .. package.path
-package.cpath = '.luarocks/lib/lua/' .. version .. '/?.so;' .. package.cpath
-
-package.path = package.path
-	.. '?.lua;'
-	.. 'scripts/lib/?.lua;'
-	.. 'scripts/sys_mon/?.lua;'
-
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
+local Cmds = require('control_cmds')
 
 function pa_sinks()
 	local iv = Pr.pipe()
@@ -34,7 +26,7 @@ function Funs:tmenu_select_pa_sinks()
 	.run()
 end
 function Funs:dmenu_select_pa_sinks()
-	Util:exec("urxvt -title popeye -e ~/scripts/sys_mon/control.lua fun tmenu_select_pa_sinks")
+	Util:exec(Cmds['popeye'] .. " tmenu_select_pa_sinks")
 end
 
 return Funs

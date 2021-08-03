@@ -10,5 +10,5 @@ package.cpath = package.cpath
 package.path = package.path
        .. '?.lua;'
        .. 'scripts/lib/?.lua;'
-       .. 'scripts/sys_mon/?.lua;'
+       .. 'scripts/sys_ctl/?.lua;'
 

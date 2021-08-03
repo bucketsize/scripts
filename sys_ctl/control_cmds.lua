@@ -25,7 +25,9 @@ local Cmds = {
 			-time 3 -locker "~/scripts/sys_mon/control.lua fun scr_lock_if"
 			-killtime 10 -killer "notify-send -u critical -t 10000 -- 'Killing system ...'"
 			-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'";
-	]]
+	]],
+
+	popeye = 'urxvt -title popeye -geometry 64x16 -e ~/scripts/sys_ctl/control.lua fun'
 }
 
 return Cmds

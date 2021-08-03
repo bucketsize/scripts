@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
-require('paths')
+require('sys_ctl_paths')
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')

@@ -1,6 +1,7 @@
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
+local Cmds = require('control_cmds')
 
 DISPLAYS = {
 	{
@@ -150,7 +151,7 @@ function Funs:tmenu_setup_video()
 end
 
 function Funs:dmenu_setup_video()
-	Util:exec("urxvt -title popeye -e ~/scripts/sys_mon/control.lua fun tmenu_setup_video")
+	Util:exec(Cmds['popeye'] .. " tmenu_setup_video")
 end
 
 return Funs

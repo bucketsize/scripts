@@ -27,7 +27,7 @@ function Funs:tmenu_select_window()
 	.run()
 end
 function Funs:dmenu_select_window()
-	Util:exec("urxvt -title popeye -e ~/scripts/sys_mon/control.lua fun tmenu_select_window")
+	Util:exec(Cmds['popeye'] .. " tmenu_select_window")
 end
 function Funs:tmenu_run()
 	Pr.pipe()
@@ -43,7 +43,7 @@ function Funs:tmenu_run()
 	.run()
 end
 function Funs:dmenu_run()
-	Util:exec("urxvt -title popeye -e ~/scripts/sys_mon/control.lua fun tmenu_run")
+	Util:exec(Cmds['popeye'] .. " tmenu_run")
 end
 function Funs:scr_lock_if()
 	local iv = Pr.pipe()
@@ -79,7 +79,8 @@ function Funs:tmenu_exit()
 	.run()
 end
 function Funs:dmenu_exit()
-	Util:exec("urxvt -title popeye -e ~/scripts/sys_mon/control.lua fun tmenu_exit")
+	Util:exec(Cmds['popeye'] .. " tmenu_exit")
+
 end
 
 return Funs
