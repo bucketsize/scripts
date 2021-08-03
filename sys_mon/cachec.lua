@@ -27,30 +27,32 @@ function Client:get(k)
    return v
 end
 function Client:getAll()
-   tcp:connect(host, port)
-   tcp:send("getAll|BLAH\n")
-   local s, status, partial
-   local mtab={}
-   while true do
-      s, status, partial = tcp:receive('*l')
-      if status == "closed"
-      then break
-      end
-      --print(">> ", s, status, partial)
-      local k, v, ty = s:match("([%w_]+)|([%w%p%s]+)::(.*)")
-
-      if ty == "number" then
-	 mtab[k]=tonumber(v)
-      else
-	 if ty == "integer" then
-	    mtab[k]=math.floor(tonumber(v))
-	 else
-	    mtab[k]=v
-	 end
-      end
-   end
-   tcp:close()
-   return mtab
+	tcp:connect(host, port)
+	tcp:send("getAll|BLAH\n")
+	local s, status, partial
+	local mtab={}
+	while true do
+		s, status, partial = tcp:receive('*l')
+		if status == "closed"
+			then break
+		end
+		--print(">> ", s, status, partial)
+		local k, v, ty = s:match("([%w_]+)|([%w%p%s]+)::(.*)")
+		if k == nil then 
+			k = 'nothing'
+		end
+		if ty == "number" then
+			mtab[k]=tonumber(v)
+		else
+			if ty == "integer" then
+				mtab[k]=math.floor(tonumber(v))
+			else
+				mtab[k]=v
+			end
+		end
+	end
+	tcp:close()
+	return mtab
 end
 
 ------------------------------

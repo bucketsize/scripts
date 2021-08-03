@@ -176,7 +176,6 @@ mode "resize" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
 mode "move" {
@@ -194,33 +193,8 @@ mode "move" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-
 bindsym $mod+m mode "move"
-
-
-set $Locker ~/scripts/sys_mon/control.lua cmd scr_lock && sleep 1
-
-set $mode_system System \
-(l)ock \
-l(o)gout \
-(s)uspend \
-(h)ibernate \
-(r)eboot \
-shut(d)own
-mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
-    bindsym o exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym d exec --no-startup-id systemctl poweroff -i, mode "default"
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-bindsym $mod+Shift+e mode "$mode_system"
+bindsym $mod+Shift+e exec ~/scripts/sys_mon/control.lua fun dmenu_exit
 
 bar {
 	status_command $HOME/scripts/sys_mon/i3bar_out.lua
@@ -247,3 +221,5 @@ for_window [class="Blueman-manager"] floating enable
 for_window [class=Viewnior|Audacious|File-roller|Xarchiver|Lxappearance|Lxtask|Pavucontrol|XConsole|Pidgin|Lxrandr|Arandr|Conky] floating enable
 for_window [class=URxvt|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+
+exec source ~/scripts/sys_mon/activate

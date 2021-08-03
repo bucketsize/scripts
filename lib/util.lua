@@ -17,15 +17,14 @@ function Util:file_exists(file)
 	return true
 end
 function Util:read(filename)
-	local h = io.open(filename, "r")
-	local r
-	if h == nil then
-		r = nil
-	else
-		r = h:read("*a")
-		h:close()
-	end
+	local h = assert(io.open(filename, "r"))
+	local r = h:read("*a")
+	h:close()
 	return r
+end
+function Util:execl(cmd)
+	local h = io.popen("nohup " .. cmd .. " &")
+	h:close()
 end
 function Util:exec(cmd)
 	local h = io.popen(cmd)
