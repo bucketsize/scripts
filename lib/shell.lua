@@ -1,8 +1,9 @@
+--------------------------------------
 local HOME = os.getenv ( "HOME" )
 package.path = package.path
-	.. '?.lua;'
-	.. HOME .. '/lib/?.lua;'
-	.. 'scripts/sys_mon/?.lua;'
+.. '?.lua;'
+.. HOME .. '/lib/?.lua;'
+--------------------------------------
 
 local Util = require('util')
 local Process = require('process')

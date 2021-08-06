@@ -1,8 +1,0 @@
-#!/bin/sh
-
-$(luarocks path)
-
-export LUA_PATH="$LUA_PATH;$HOME/scripts/lib/?.lua"
-export LUA_PATH="$LUA_PATH;$HOME/scripts/sys_mon/?.lua"
-
-cp sys_ctl_paths.lua ~/

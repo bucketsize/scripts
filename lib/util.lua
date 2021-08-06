@@ -1,6 +1,36 @@
 local socket = require("socket")
 
 local Util={}
+function Util:map(f, t)
+	local r = {}
+	for k, v in pairs(t) do
+		r[k] = f(v)
+	end
+	return r
+end
+function Util:filter(f, t)
+	local r = {}
+	for k, v in pairs(t) do
+		if f(v) then
+			r[k] = v
+		end
+	end
+	return r
+end
+function Util:fold(f, t, i)
+	local r = i
+	for k, v in pairs(t) do
+		r = f(v, r)
+	end
+	return r
+end
+function Util:f_else(p, fn1, fn2)
+   if p then
+      return fn1()
+   else
+      return fn2()
+   end
+end
 function Util:if_else(p, o1, o2)
    if p then
       return o1
@@ -37,21 +67,23 @@ function Util:exec(cmd)
 	end
 	return r
 end
-function Util:exec_stream(cmd, fn)
-	local h = io.popen(cmd)
+function Util:stream_exec(cmd, fn)
+	local h = assert(io.popen(cmd))
 	while true do
 		local l = h:read("*line")
 		if l == nil then break end
 		fn(l)
 	end
+	h:close()
 end
 function Util:stream_file(cmd, fn)
-	local h = io.open(cmd, 'r')
+	local h = assert(io.open(cmd, 'r'))
 	while true do
 		local l = h:read("*line")
 		if l == nil then break end
 		fn(l)
 	end
+	h:close()
 end
 function Util:split(str, pat)
 	local arr = {}
@@ -192,6 +224,30 @@ function test_timer()
    Util.Timer:start()
 end
 
---test_timer()
+function test_map()
+	local r
+	
+	r = Util:map(function(n) return n*n end, {1,2,3,4})
+	print(r)
+	Util:printOTable(r)
+	
+	r = Util:map(function(n) return n*n end, {one=1,twe=2,tri=3,fuf=4})
+	print(r)
+	Util:printOTable(r)
+	
+	r = Util:filter(function(n) return (n % 2) == 0 end, {1,2,3,4})
+	print(r)
+	Util:printOTable(r)
+	
+	r = Util:fold(function(n, s)
+		s=s+n
+		return s
+	end, {1,2,3,4}, 0)
+	print(r)
+end
+
+if arg[1] == 'test' then
+	test_map()
+end
 
 return Util

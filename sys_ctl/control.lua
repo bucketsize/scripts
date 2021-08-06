@@ -1,6 +1,12 @@
 #!/usr/bin/env lua
 
-require('sys_ctl_paths')
+----------------------------
+package.path = package.path
+.. '?.lua;'
+.. 'scripts/lib/?.lua;'
+.. 'scripts/sys_ctl/?.lua;'
+----------------------------
+
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')

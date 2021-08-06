@@ -2,21 +2,9 @@ local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
 local Cmds = require('control_cmds')
+local Config = require('config')
 
-DISPLAYS = {
-	{
-		name = 'DisplayPort-0',
-		mode = 720,
-		pos = {0,0},
-		extra_opts = '--primary'
-	},
-	{
-		name = 'HDMI-A-0',
-		mode = 720,
-		pos = {1,0},
-		extra_opts = '--set underscan on --set "underscan hborder" 48 --set "underscan vborder" 24'
-	}
-}
+DISPLAYS = Config.displays
 
 DISPLAY_ON = [[
 		xrandr \
@@ -30,30 +18,28 @@ DISPLAY_OFF = [[
 			--off ]]
 
 function xrandr_info()
-	local h = io.popen("xrandr -q")
+	local h = assert(io.popen("xrandr -q"))
 	local ots = {}
 
-	if h then
-		local ot
-		for line in h:lines() do
-			local otc = line:match("^([%w-]+) connected ")
-			if otc then
-				ot = otc
-				if ots[ot] == nil then
-					ots[ot] = {modes={}}
-				end
-			else
-				if not (ot == nil) then
-					local mx, my = string.match(line, "%s+(%d+)x(%d+)")
-					if not (my == nil) then
-						table.insert(ots[ot].modes, {x=mx, y=my})
-						--print(ot, mx, my)
-					end
+	local ot
+	for line in h:lines() do
+		local otc = line:match("^([%w-]+) connected ")
+		if otc then
+			ot = otc
+			if ots[ot] == nil then
+				ots[ot] = {modes={}}
+			end
+		else
+			if not (ot == nil) then
+				local mx, my = string.match(line, "%s+(%d+)x(%d+)")
+				if not (my == nil) then
+					table.insert(ots[ot].modes, {x=mx, y=my})
+					--print(ot, mx, my)
 				end
 			end
 		end
-		h:close()
 	end
+	h:close()
 	return ots
 end
 
@@ -86,17 +72,18 @@ function xrandr_configs()
 		local mode = o.modes[1]
 		for i,m in ipairs(o.modes) do
 			--print("?y", m.x, m.y, d.mode, type(m.y), type(d.mode))
-			if tonumber(m.y) == d.mode then
-				o.name = d.name
-				o.mode = m
-				o.pos = d.pos
-				o.extra_opts = d.extra_opts
-				outgrid[d.pos[1]] = {}
-				outgrid[d.pos[1]][d.pos[2]] = o
+			if (tonumber(m.y) == d.mode.y) and (tonumber(m.x) == d.mode.x) then
 				--print("configure", d.name, d.pos[1], d.pos[2])
+				mode = m
 				break
 			end
 		end
+		o.name = d.name
+		o.mode = mode
+		o.pos = d.pos
+		o.extra_opts = d.extra_opts
+		outgrid[d.pos[1]] = {}
+		outgrid[d.pos[1]][d.pos[2]] = o
 	end
 
 	local outsetup, outgrid_ctl = {}, {}

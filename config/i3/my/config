@@ -14,14 +14,28 @@ set $alt Mod1
 
 set_from_resource $fg foreground
 set_from_resource $bg background
-set_from_resource $fbg color9
-set_from_resource $ffg color0
+set_from_resource $blac1 color0
+set_from_resource $blac2 color8
+set_from_resource $rote1 color1
+set_from_resource $rote2 color9
+set_from_resource $gree1 color2
+set_from_resource $gree2 color10
+set_from_resource $yell1 color3
+set_from_resource $yell2 color11
+set_from_resource $blue1 color4
+set_from_resource $blue2 color12
+set_from_resource $mage1 color5
+set_from_resource $mage2 color13
+set_from_resource $cyan1 color6
+set_from_resource $cyan2 color14
+set_from_resource $whit1 color7
+set_from_resource $whit2 color15
 
 # colour of 	  	    <border> <background> <text> <indicator> <child_border>
-client.focused          $fbg $fbg $fg $fbg
-client.focused_inactive $bg $bg $fg $bg
-client.unfocused        $bg $bg $fg $bg
-client.urgent           $bg $bg $ffg $bg
+client.focused          $blac2 $blac2 $fg $yell2
+client.focused_inactive $blac2 $blac1 $fg $yell1
+client.unfocused        $bg $bg $fg $yell1
+client.urgent           $rote1 $bg $fg $yell1
 client.background       $bg
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -205,10 +219,10 @@ bar {
         separator  $bg
 
         # colour of border, background, and text
-        focused_workspace	$ffg $fbg $ffg
-        active_workspace    $ffg $fbg $ffg
+        focused_workspace   $blac2 $blac2 $fg
+        active_workspace    $blak2 $blak2 $fg
         inactive_workspace  $bg $bg $fg
-        urgent_workspace    #2f343f #ebcb8b #2f343f
+        urgent_workspace    $rote2 $rote1 $blac1
   }
 }
 
