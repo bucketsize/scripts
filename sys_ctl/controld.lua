@@ -10,36 +10,42 @@ package.cpath = package.cpath
 package.path = package.path
    .. '?.lua;'
    .. 'scripts/lib/?.lua;'
+   .. 'scripts/sys_ctl/?.lua;'
 ----------------------------------------------------------
 
-local port = 51515
-local Cache = {}
+local Ctrl = require("control")
+local Util = require("util")
 
 local Handler = {
-   put = function(client, so)
-	  local k, v = so:match("([%w_]+)|(.*)")
-	  print(">> put", k, v )
-	  Cache[k] = v
-	  print("<< ok")
+   cmd = function(client, p)
+	  local cmd = Ctrl.Cmds[p]
+	  print("cmd>", p, cmd)
+	  if cmd then
+		 Util:exec(cmd)
+	  else
+		 client:send("bad\n")
+	  end
 	  client:send("ok\n")
    end,
-   get = function(client, so)
-	  local k, v = so:match("([%w_]+)")
-	  print(">> get", k, v )
-	  print("<< ", Cache[k])
-	  if Cache[k] == nil then
-		 client:send("\n")
+   fun = function(client, p)
+	  local cmd = Ctrl.Funs[p]
+	  print("fun>", p)
+	  if cmd then
+		 local rcmd = cmd()
+		 if rcmd then
+			if type(rcmd) == 'table' then
+			   for i,icmd in ipairs(rcmd) do
+				  Util:exec(icmd)
+			   end
+			else
+			   Util:exec(rcmd)
+			end
+		 end
 	  else
-		 client:send(Cache[k].."\n")
+		 client:send("bad\n")
 	  end
-   end,
-   getAll = function(client, so)
-	  print(">> getAll *")
-	  print("<< all")
-	  for k,v in pairs(Cache) do
-		 client:send(string.format("%s|%s\n", k, v))
-	  end
-   end,
+	  client:send("ok\n")
+   end
 }
 
 -----------------------------
@@ -52,5 +58,5 @@ if not (arg[2] == "-") then
 end
 -----------------------------
 
-local CmdServer =  require('cmd_server')
+local CmdServer = require('cmd_server')
 CmdServer:start(host, port, Handler)

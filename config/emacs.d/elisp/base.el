@@ -42,11 +42,14 @@
       highlight-nonselected-windows      nil
       ;; PATH
       exec-path                          (append exec-path '("/usr/local/bin/"))
-      indent-tabs-mode                   nil
       inhibit-startup-message            t
       fringes-outside-margins            t
       x-select-enable-clipboard          t
       use-package-always-ensure          t)
+
+(setq-default
+      indent-tabs-mode                   t
+      tab-width                          4)
 
 ;; Bookmarks
 (setq

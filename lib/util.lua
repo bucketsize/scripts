@@ -8,6 +8,13 @@ function Util:map(f, t)
 	end
 	return r
 end
+function Util:map2(fk, fv, t)
+	local r = {}
+	for k, v in pairs(t) do
+	   r[f(k)] = f(v)
+	end
+	return r
+end
 function Util:filter(f, t)
 	local r = {}
 	for k, v in pairs(t) do
@@ -53,8 +60,11 @@ function Util:read(filename)
 	return r
 end
 function Util:execl(cmd)
-	local h = io.popen("nohup " .. cmd .. " &")
-	h:close()
+
+   local h = assert(
+      io.popen(
+	 string.format("nohup %s 2> /var/tmp/log-exec.err 1> /tmp/log-exec.out &", cmd)))
+   h:close()
 end
 function Util:exec(cmd)
 	local h = io.popen(cmd)
@@ -226,19 +236,19 @@ end
 
 function test_map()
 	local r
-	
+
 	r = Util:map(function(n) return n*n end, {1,2,3,4})
 	print(r)
 	Util:printOTable(r)
-	
+
 	r = Util:map(function(n) return n*n end, {one=1,twe=2,tri=3,fuf=4})
 	print(r)
 	Util:printOTable(r)
-	
+
 	r = Util:filter(function(n) return (n % 2) == 0 end, {1,2,3,4})
 	print(r)
 	Util:printOTable(r)
-	
+
 	r = Util:fold(function(n, s)
 		s=s+n
 		return s

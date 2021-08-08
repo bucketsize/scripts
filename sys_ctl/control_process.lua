@@ -30,17 +30,20 @@ function Funs:dmenu_select_window()
 	Util:exec(Cmds['popeye'] .. " tmenu_select_window")
 end
 function Funs:tmenu_run()
-	Pr.pipe()
-	.add(Sh.exec('ls ~/.local/bin ~/.local/share/flatpak/exports/share/applications /usr/share/applications  | fzy'))
-	.add(function(app)
-		local bin = string.match(app, "(.+).desktop")
-		if not (bin == nil) then
-			Util:execl("gtk-launch "..bin)
-		else
-			Util:execl(app)
-		end
-	end)
-	.run()
+   local list_apps = 'find ~/.local/bin ~/.local/share/flatpak/exports/share/applications /usr/share/applications -type f,l | fzy'
+   Pr.pipe()
+      .add(Sh.exec(list_apps))
+      .add(function(p)
+	    local ps = Util:split(p, "/([%w%s-_\\.]+)")
+	    local app = ps[#ps]
+	    local dapp = string.match(app, "(.+).desktop")
+	    if not (dapp == nil) then
+	       Util:execl("gtk-launch "..dapp)
+	    else
+	       Util:execl(p)
+	    end
+	  end)
+      .run()
 end
 function Funs:dmenu_run()
 	Util:exec(Cmds['popeye'] .. " tmenu_run")

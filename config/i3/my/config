@@ -11,6 +11,7 @@
 
 set $mod Mod4
 set $alt Mod1
+set $gctlc ~/scripts/sys_ctl/lib/controlc.lua
 
 set_from_resource $fg foreground
 set_from_resource $bg background
@@ -68,7 +69,7 @@ bindsym $alt+F4 kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+d exec --no-startup-id exec ~/scripts/sys_ctl/control.lua fun dmenu_run
+bindsym $mod+d exec --no-startup-id exec $gctlc fun dmenu_run
 
 # change focus
 bindsym $mod+Left focus left
@@ -137,17 +138,17 @@ bindsym $mod+shift+x move scratchpad
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+l exec ~/scripts/sys_ctl/control.lua cmd scr_lock
+bindsym $mod+l exec $gctlc cmd scr_lock
 
-bindsym Print exec ~/scripts/sys_ctl/control.lua cmd scr_cap
-bindsym Control+Print exec ~/scripts/sys_ctl/control.lua cmd scr_cap_sel
+bindsym Print exec $gctlc cmd scr_cap
+bindsym Control+Print exec $gctlc cmd scr_cap_sel
 
-bindsym Control+bracketleft exec ~/scripts/sys_ctl/control.lua cmd vol_down
-bindsym Control+bracketright exec ~/scripts/sys_ctl/control.lua cmd vol_up
-bindsym Control+backslash exec ~/scripts/sys_ctl/control.lua cmd vol_mute
-bindsym XF86AudioLowerVolume exec ~/scripts/sys_ctl/control.lua cmd vol_down
-bindsym XF86AudioRaiseVolume exec ~/scripts/sys_ctl/control.lua cmd vol_up
-bindsym XF86AudioMute exec ~/scripts/sys_ctl/control.lua cmd vol_mute
+bindsym Control+bracketleft exec $gctlc cmd vol_down
+bindsym Control+bracketright exec $gctlc cmd vol_up
+bindsym Control+backslash exec $gctlc cmd vol_mute
+bindsym XF86AudioLowerVolume exec $gctlc cmd vol_down
+bindsym XF86AudioRaiseVolume exec $gctlc cmd vol_up
+bindsym XF86AudioMute exec $gctlc cmd vol_mute
 
 # music control
 bindsym XF86AudioNext exec mpc next
@@ -155,12 +156,12 @@ bindsym XF86AudioPrev exec mpc prev
 bindsym XF86AudioPlay exec mpc toggle
 bindsym XF86AudioStop exec mpc stop
 
-bindsym Control+2 exec ~/scripts/sys_ctl/control.lua fun dmenu_setup_video
-bindsym Control+3 exec ~/scripts/sys_ctl/control.lua fun dmenu_select_pa_sinks
-bindsym Control+4 exec ~/scripts/sys_ctl/control.lua cmd kb_led_on
-bindsym Control+5 exec ~/scripts/sys_ctl/control.lua cmd kb_led_off
+bindsym Control+2 exec $gctlc fun dmenu_setup_video
+bindsym Control+3 exec $gctlc fun dmenu_select_pa_sinks
+bindsym Control+4 exec $gctlc cmd kb_led_on
+bindsym Control+5 exec $gctlc cmd kb_led_off
 
-bindsym $mod+w exec ~/scripts/sys_ctl/control.lua fun dmenu_select_window
+bindsym $mod+w exec $gctlc fun dmenu_select_window
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -208,7 +209,7 @@ mode "move" {
   bindsym Escape mode "default"
 }
 bindsym $mod+m mode "move"
-bindsym $mod+Shift+e exec ~/scripts/sys_ctl/control.lua fun dmenu_exit
+bindsym $mod+Shift+e exec $gctlc fun dmenu_exit
 
 bar {
 	status_command $HOME/scripts/sys_mon/i3bar_out.lua

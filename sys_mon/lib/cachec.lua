@@ -6,69 +6,79 @@ package.path = package.path
 .. 'scripts/sys_mon/?.lua;'
 
 local util = require("util")
-local socket = require("socket")
-local host, port = "127.0.0.1", 51515
-local tcp = assert(socket.tcp())
 
 local Client = {}
-function Client:put(k, v, type)
-	tcp:connect(host, port)
-	tcp:send(string.format("put|%s|%s::%s\n", k, tostring(v), type))
-	local s, status, partial = tcp:receive('*l')
-	tcp:close()
+function Client.configure(self, client)
+   self.client = client
 end
-function Client:get(k)
-	tcp:connect(host, port)
-	tcp:send(string.format("get|%s\n", k))
-	local s, status, partial = tcp:receive('*l')
-	--print(">> ", s, status, partial)
-	tcp:close()
+function Client.put(self, k, v, type)
+	local s, status, partial = self.client:send("put", string.format("%s|%s::%s\n", k, tostring(v), type))
+end
+function Client.get(self, k)
+	local s, status, partial = self.client:send("get", string.format("%s\n", k))
 	local v,t = s:match("([%w%p%s]+)::(%w+)")
 	return v
 end
-function Client:getAll()
-	tcp:connect(host, port)
-	tcp:send("getAll|BLAH\n")
-	local s, status, partial
-	local mtab={}
-	while true do
-		s, status, partial = tcp:receive('*l')
-		if status == "closed"
-			then break
-		end
-		--print(">> ", s, status, partial)
-		local k, v, ty = s:match("([%w_]+)|([%w%p%s]+)::(.*)")
-		if k == nil then 
-			k = 'nothing'
-		end
-		if ty == "number" then
-			mtab[k]=tonumber(v)
-		else
-			if ty == "integer" then
-				mtab[k]=math.floor(tonumber(v))
-			else
-				mtab[k]=v
-			end
-		end
-	end
-	tcp:close()
+function Client.getAll(self)
+	local rx = self.client:sendxr("getAll", "BLAH\n")
+	local mtab = util:map(
+	   function(s)
+		  local k, v, ty = s:match("([%w_]+)|([%w%p%s]+)::(.*)")
+		  local r
+		  if k == nil then
+			 k = 'nothing'
+		  end
+		  if ty == "number" then
+			 r=tonumber(v)
+		  else
+			 if ty == "integer" then
+				r=math.floor(tonumber(v))
+			 else
+				r=v
+			 end
+		  end
+		  return r
+	   end, rx)
 	return mtab
 end
 
 ------------------------------
-function test()
+function test_perf(client)
 	----------------------------
+	for i=1,50000,1 do
+		client:put('keyNN'..tostring(i), "hello !wow." .. tostring(i), "string")
+		print(client:get('keyNN'..tostring(i)))
+	end
+end
+function test(client)
 	for i=1,5,1 do
-		Client:put('key1'..tostring(i), i, "integer")
-		print(Client:get('key1'..tostring(i)))
+		client:put('key1'..tostring(i), i, "integer")
+		print(client:get('key1'..tostring(i)))
 	end
 	for i=1,5,1 do
-		Client:put('key2'..tostring(i), "hello !wow." .. tostring(i), "string")
-		print(Client:get('key2'..tostring(i)))
+		client:put('key2'..tostring(i), "hello !wow." .. tostring(i), "string")
+		print(client:get('key2'..tostring(i)))
 	end
-	util:printOTable(Client:getAll())
+	print("getting all ...")
+	util:printOTable(client:getAll())
 end
 
---test()
+-----------------------------
+local host, port = "*", 51515
+if not (arg[1] == "-") then
+   host = arg[1]
+end
+if not (arg[2] == "-") then
+   port = tonumber(arg[2])
+end
+-----------------------------
+
+local CmdClient = require('cmd_client')
+CmdClient:configure(host, port)
+Client:configure(CmdClient)
+
+if arg[3] == 'test' then
+   test(Client)
+end
 
 return Client
