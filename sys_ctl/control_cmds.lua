@@ -1,3 +1,4 @@
+local Config = require("config")
 local Cmds = {
 	vol_up      = 'pactl set-sink-volume @DEFAULT_SINK@ +10%',
 	vol_down    = 'pactl set-sink-volume @DEFAULT_SINK@ -10%',
@@ -27,7 +28,7 @@ local Cmds = {
 			-notify 30 -notifier "notify-send -u critical -t 10000 -- 'Locking system ETA 30s ...'";
 	]],
 
-	popeye = 'urxvt -title popeye -geometry 64x16 -e ~/scripts/sys_ctl/control.lua fun'
+	popeye = Config.pop_term
 }
 
 return Cmds
