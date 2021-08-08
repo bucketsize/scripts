@@ -14,7 +14,7 @@
 (
  (cd . 1)
  (package-install . 5)
- (neotree . 36)
+ (neotree . 38)
  (package-reinstall . 2)
  (neotree-toggle . 3)
  (customize-group . 1)

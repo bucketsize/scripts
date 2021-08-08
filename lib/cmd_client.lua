@@ -20,6 +20,7 @@ local CmdClient = {
 	  self.tcp = tcp
 	  self.host = host
 	  self.port = port
+	  --print("using", self.host, self.port)
    end,
    send = function(self, cmd, p)
 	  self.tcp:connect(self.host, self.port)

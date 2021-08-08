@@ -20,9 +20,9 @@ local CmdServer = {
 	  local server = assert(socket.bind(host, port))
 	  local tcp = assert(socket.tcp())
 	  tcp:listen(10)
-	  print('listening on', port)
 	  self.socket = socket
 	  self.server = server
+	  print('listening on',host, port)
    end,
    handle_client = function(self, client)
 	  local line, err = client:receive("*l")

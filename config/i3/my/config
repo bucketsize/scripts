@@ -11,7 +11,7 @@
 
 set $mod Mod4
 set $alt Mod1
-set $gctlc ~/scripts/sys_ctl/lib/controlc.lua
+set $gctlc ~/scripts/sys_ctl/lib/controlc.lua - -
 
 set_from_resource $fg foreground
 set_from_resource $bg background

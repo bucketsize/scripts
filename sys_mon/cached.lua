@@ -12,7 +12,6 @@ package.path = package.path
    .. 'scripts/lib/?.lua;'
 ----------------------------------------------------------
 
-local port = 51515
 local Cache = {}
 
 local Handler = {

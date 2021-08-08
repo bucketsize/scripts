@@ -21,8 +21,8 @@ function Client.get(self, k)
 end
 function Client.getAll(self)
 	local rx = self.client:sendxr("getAll", "BLAH\n")
-	local mtab = util:map(
-	   function(s)
+	local mtab = util:fold(
+	   function(s, a)
 		  local k, v, ty = s:match("([%w_]+)|([%w%p%s]+)::(.*)")
 		  local r
 		  if k == nil then
@@ -37,8 +37,9 @@ function Client.getAll(self)
 				r=v
 			 end
 		  end
-		  return r
-	   end, rx)
+		  a[k]=r
+		  return a
+	   end, rx, {})
 	return mtab
 end
 
@@ -51,24 +52,26 @@ function test_perf(client)
 	end
 end
 function test(client)
+   for i=1,5,1 do
+	  local k = 'key1'..tostring(i)
+	  client:put(k, i, "integer")
+	  print(k, client:get(k))
+   end
 	for i=1,5,1 do
-		client:put('key1'..tostring(i), i, "integer")
-		print(client:get('key1'..tostring(i)))
-	end
-	for i=1,5,1 do
-		client:put('key2'..tostring(i), "hello !wow." .. tostring(i), "string")
-		print(client:get('key2'..tostring(i)))
+	  local k = 'key2'..tostring(i)
+	  client:put(k, 'wow! ..' .. i, "string")
+	  print(k, client:get(k))
 	end
 	print("getting all ...")
 	util:printOTable(client:getAll())
 end
 
 -----------------------------
-local host, port = "*", 51515
-if not (arg[1] == "-") then
+local host, port = "localhost", 51515
+if arg[1] and not (arg[1] == "-") then
    host = arg[1]
 end
-if not (arg[2] == "-") then
+if arg[1] and not (arg[2] == "-") then
    port = tonumber(arg[2])
 end
 -----------------------------

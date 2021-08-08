@@ -60,13 +60,14 @@ function Util:read(filename)
 	return r
 end
 function Util:execl(cmd)
-
-   local h = assert(
-      io.popen(
-	 string.format("nohup %s 2> /var/tmp/log-exec.err 1> /tmp/log-exec.out &", cmd)))
-   h:close()
+	print("cmd> "..cmd)
+	local h = assert(
+		io.popen(
+		string.format("nohup %s 2> /var/tmp/log-exec.err 1> /tmp/log-exec.out &", cmd)))
+	h:close()
 end
 function Util:exec(cmd)
+	print("cmd> "..cmd)
 	local h = io.popen(cmd)
 	local r
 	if h == nil then

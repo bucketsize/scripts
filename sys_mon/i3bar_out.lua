@@ -51,7 +51,7 @@ function co_i3bar_out()
 		local power = util:if_else(mtab['battery_status'] == "AC"
 			, {icon = Sym["AC"], val = "AC"}
 			, {icon = Sym["battery"], val = mtab["battery"]})
-		local audio = util:if_else(otab['vol'] < 1
+		local audio = util:if_else(otab['vol'] == nil or otab['vol'] < 1
 			, {icon = Sym["snd_mute"], val = ""}
 			, {icon = Sym["snd"], val = mtab["vol"]})
 
