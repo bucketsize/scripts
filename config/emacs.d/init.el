@@ -20,3 +20,4 @@
 (require 'lang-racket)
 (require 'lang-c)
 (require 'lang-lua)
+(require 'lang-julia)

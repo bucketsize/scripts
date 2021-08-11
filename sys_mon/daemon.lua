@@ -26,23 +26,13 @@ local Co = Util:map(function(s)
 	local codef = require('fragments.' .. s)
 	codef.name = s
 	return codef
-end
-, {	"cpu"
-	, "mem"
-	, "cpu_temp"
-	, "net"
-	, "pulseaudio"
-	, "weather"
-})
+end, {"cpu", "mem", "cpu_temp", "net", "pulseaudio", "weather"})
 
 Util:map(function(s)
 	local codef = require('writers.' .. s)
 	codef.name = s
 	table.insert(Co, codef)
-end
-, {	"mcache"
-	, "mlogger"
-})
+end, {"mcache",	"mlogger"})
 
 -----------------------------------------------------------------
 function start()
@@ -50,10 +40,9 @@ function start()
       local inst = coroutine.create(co.co)
       print('co/', co.name, co.ri)
       Util.Timer:tick(co.ri, function()
-				Util:run_co(co.name, inst)
-      end)
+						 Util:run_co(co.name, inst)
+	  end)
    end
    Util.Timer:start()
 end
-
 start()

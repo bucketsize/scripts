@@ -1,5 +1,7 @@
 config/emacs.d/elpa/
 config/emacs.d/private/
+config/emacs.d/.custom.el
+config/emacs.d/smex-items
 
 xmonad-x86_64-linux
 xmonad.errors
