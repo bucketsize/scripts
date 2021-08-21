@@ -1,7 +1,7 @@
 return
    {
-	  pop_term = 'urxvt -title popeye -geometry 64x16 -e ~/scripts/sys_ctl/control.lua fun',
-	  --pop_term = 'termite -t popeye -e ~/scripts/sys_ctl/control.lua fun',
+	  menu_sel = "fzy",
+	  pop_term = 'alacritty -t popeye -o window.dimensions.columns=64 -o window.dimensions.lines=16 -e ~/scripts/sys_ctl/control.lua fun',
 
 	  displays = {
 		 {

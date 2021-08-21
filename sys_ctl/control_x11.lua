@@ -2,9 +2,9 @@ local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
 local Cmds = require('control_cmds')
-local Config = require('config')
+local Cfg = require('config')
 
-DISPLAYS = Config.displays
+DISPLAYS = Cfg.displays
 
 DISPLAY_ON = [[
 		xrandr \
@@ -130,7 +130,7 @@ function Funs:tmenu_setup_video()
 	end
 
 	Pr.pipe()
-	.add(Sh.exec(string.format('echo "%s" | fzy', opts)))
+	.add(Sh.exec(string.format('echo "%s" | %s', opts, Cfg.menu_sel)))
 	.add(function(id)
 		Util:exec(vgridctl[id])
 	end)

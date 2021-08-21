@@ -11,35 +11,25 @@ local Process = require('process')
 local F = {}
 
 function F.cat(path)
-	local h = io.open(path, 'r')
-	return function()
-		if not (h == nil) then
-			local l = h:read("*line")
-			if l == nil then
-				h:close()
-				h = nil
-			end
-			return l
-		else
-			return nil
-		end
-	end
+   local h = assert(io.open(path, 'r'))
+   return function()
+	  local l = h:read("*line")
+	  if l == nil then
+		 h:close()
+	  end
+	  return l
+   end
 end
 
 function F.exec(path)
-	local h = io.popen(path)
-	return function()
-		if not (h == nil) then
-			local l = h:read("*line")
-			if l == nil then
-				h:close()
-				h = nil
-			end
-			return l
-		else
-			return nil
-		end
-	end
+   local h = assert(io.popen(path))
+   return function()
+	  local l = h:read("*line")
+	  if l == nil then
+		 h:close()
+	  end
+	  return l
+   end
 end
 
 function F.grep(patt)

@@ -26,7 +26,7 @@ local Co = Util:map(function(s)
 	local codef = require('fragments.' .. s)
 	codef.name = s
 	return codef
-end, {"cpu", "mem", "cpu_temp", "net", "pulseaudio", "weather"})
+end, {"cpu", "mem", "cpu_temp", "amdgpu", "battery", "net", "pulseaudio", "weather"})
 
 Util:map(function(s)
 	local codef = require('writers.' .. s)

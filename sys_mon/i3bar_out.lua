@@ -60,7 +60,7 @@ function co_i3bar_out()
 				{"full_text": "| %s%s"},
 				{"full_text": "| %s %s"},
 				{"full_text": "%s %s"},
-				{"full_text": "%s %s %s %s"},
+				{"full_text": "%s %s | %s %s"},
 				{"full_text": "| %s %s %s"},
 				{"full_text": "| %s %s"},
 				{"full_text": "| %s %s"},

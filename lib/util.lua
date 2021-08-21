@@ -1,6 +1,61 @@
+----------------------------------------------------------
+local version = _VERSION:match("%d+%.%d+")
+package.path  = package.path
+   .. '.luarocks/share/lua/' .. version .. '/?.lua;'
+package.cpath = package.cpath
+   .. '.luarocks/lib/lua/' .. version .. '/?.so;'
+
+package.path = package.path
+   .. '?.lua;'
+   .. 'scripts/lib/?.lua;'
+----------------------------------------------------------
+
 local socket = require("socket")
+local Ot = require("otable")
 
 local Util={}
+function Util:tofile(file, ot)
+   local h = assert(io.open(file, 'w'))
+   for k, v in ot:opairs() do
+	  h:write(string.format('%s => %s\n', k, v))
+   end
+   h:close()
+end
+function Util:fromfile(file)
+   local h = assert(io.open(file, 'r'))
+   local r = Ot.newT()
+   for l in h:lines() do
+	  local k, v = string.match(l, "(.+) => (.+)")
+	  r[k] = v
+   end
+   h:close()
+   return r
+end
+function Util:segpath(path)
+   function __segpath(a, path)
+	  local l = string.len(path)
+	  local s,f = string.find(path, "/")
+	  if not f then
+		 table.insert(a, path)
+	  else
+		 if f > 1 then
+			local p = string.sub(path, 0, s-1)
+			table.insert(a, p)
+		 end
+		 __segpath(a, string.sub(path, f+1))
+	  end
+   end
+   local a = {}
+   __segpath(a, path)
+   return a
+end
+function Util:reverse(itable)
+   local r = {}
+   for i = #itable,1,-1 do
+	  table.insert(r, itable[i])
+   end
+   return r
+end
 function Util:map(f, t)
 	local r = {}
 	for k, v in pairs(t) do
@@ -11,7 +66,7 @@ end
 function Util:map2(fk, fv, t)
 	local r = {}
 	for k, v in pairs(t) do
-	   r[f(k)] = f(v)
+	   r[fk(k)] = fv(v)
 	end
 	return r
 end
@@ -33,7 +88,7 @@ function Util:fold(f, t, i)
 end
 function Util:f_else(p, fn1, fn2)
    if p then
-      return fn1()
+ fn1()
    else
       return fn2()
    end
@@ -54,21 +109,55 @@ function Util:file_exists(file)
 	return true
 end
 function Util:read(filename)
-	local h = assert(io.open(filename, "r"))
-	local r = h:read("*a")
-	h:close()
-	return r
+   local h = io.open(filename, "r")
+   local r
+   if h then
+	  r = h:read("*a")
+	  h:close()
+   else
+	  r = nil
+   end
+   return r
 end
-function Util:execl(cmd)
-	print("cmd> "..cmd)
-	local h = assert(
-		io.popen(
-		string.format("nohup %s 2> /var/tmp/log-exec.err 1> /tmp/log-exec.out &", cmd)))
-	h:close()
+function Util:log(level, file, msg)
+   local h = assert(io.open(file, "a"))
+   h:write(string.format("%s - %s - %s\n", os.date("%Y-%m-%dT%H:%M:%S+05:30"), level, msg))
+   h:close()
+end
+function Util:grep(file, pattern)
+   local r = Util:stream_file(file,
+							  function(line)
+								 local m = string.match(line, pattern)
+								 if m then
+									return m
+								 end
+   end)
+   for i,v in ipairs(r) do
+	  if not (v == nil) then
+		 return v
+	  end
+   end
+end
+
+local exec_log = "/var/tmp/exec.out"
+function Util:launch(app)
+   local cmd
+   if string.match(app, ".desktop") then
+	  cmd = Util:grep(app, "^Exec=([%w%s-_/]+)")
+   else
+	  cmd = app
+   end
+   cmd = string.format("nohup setsid %s > /dev/null &", cmd, exec_log)
+   Util:log("INFO", exec_log, "exec> "..cmd)
+   local h = assert(io.popen(cmd, "r"))
+   local r = h:read("*a")
+   socket.sleep(1) -- for some reason needed so exit can nohup process to 1
+   h:close()
+   Util:log("INFO", exec_log, "out> "..r)
 end
 function Util:exec(cmd)
-	print("cmd> "..cmd)
-	local h = io.popen(cmd)
+	Util:log("INFO", exec_log, "exec> "..cmd)
+	local h = io.popen(cmd, "r")
 	local r
 	if h == nil then
 		r = ""
@@ -88,13 +177,18 @@ function Util:stream_exec(cmd, fn)
 	h:close()
 end
 function Util:stream_file(cmd, fn)
-	local h = assert(io.open(cmd, 'r'))
-	while true do
-		local l = h:read("*line")
-		if l == nil then break end
-		fn(l)
-	end
-	h:close()
+   local h = assert(io.open(cmd, 'r'))
+   local r = {}
+   while true do
+	  local l = h:read("*line")
+	  if l == nil then break end
+	  local s = fn(l)
+	  if s then
+		 table.insert(r,s)
+	  end
+   end
+   h:close()
+   return r
 end
 function Util:split(str, pat)
 	local arr = {}
@@ -119,61 +213,6 @@ function Util:printOTable(t)
 	end
 end
 
---[[
-   LUA 5.1 compatible
-
-   Ordered Table
-   keys added will be also be stored in a metatable to recall the insertion oder
-   metakeys can be seen with for i,k in ( <this>:ipairs()  or ipairs( <this>._korder ) ) do ipairs( ) is a bit faster
-
-   variable names inside __index shouldn't be added, if so you must delete these again to access the metavariable
-   or change the metavariable names, except for the 'del' command. thats the reason why one cannot change its value
-]]--
-function Util:newT( t )
-   local mt = {}
-   -- set methods
-   mt.__index = {
-      -- set key order table inside __index for faster lookup
-      _korder = {},
-      -- traversal of hidden values
-      hidden = function() return pairs( mt.__index ) end,
-      -- traversal of table ordered: returning index, key
-      ipairs = function( self ) return ipairs( self._korder ) end,
-      -- traversal of table
-      pairs = function( self ) return pairs( self ) end,
-      -- traversal of table ordered: returning key,value
-      opairs = function( self )
-         local i = 0
-         local function iter( self )
-            i = i + 1
-            local k = self._korder[i]
-            if k then
-               return k,self[k]
-            end
-         end
-         return iter,self
-      end,
-      -- to be able to delete entries we must write a delete function
-      del = function( self,key )
-         if self[key] then self[key] = nil
-            for i,k in ipairs( self._korder ) do
-               if k == key then
-                  table.remove( self._korder, i )
-                  return
-               end
-            end
-         end
-      end,
-   }
-   -- set new index handling
-   mt.__newindex = function( self,k,v )
-      if k ~= "del" and v then
-         rawset( self,k,v )
-         table.insert( self._korder, k )
-      end
-   end
-   return setmetatable( t or {},mt )
-end
 Util.PSV_PAT='([%a%s%d-+_{}./]+)|'
 Util.FILENAME_PAT='/([%a%d%s+=-_\\.\\]*)$'
 -- CHILLCODE™

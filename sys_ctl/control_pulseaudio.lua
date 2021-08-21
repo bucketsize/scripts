@@ -1,6 +1,7 @@
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
+local Cfg = require('config')
 local Cmds = require('control_cmds')
 
 function pa_sinks()
@@ -19,7 +20,7 @@ function Funs:tmenu_select_pa_sinks()
 	end
 
 	Pr.pipe()
-	.add(Sh.exec(string.format('echo "%s" | fzy', opts)))
+	.add(Sh.exec(string.format('echo "%s" | %s', opts, Cfg.menu_sel)))
 	.add(function(id)
 		Util:exec('pacmd set-default-sink '..id)
 	end)

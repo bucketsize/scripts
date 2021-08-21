@@ -1,6 +1,8 @@
 local Sh = require('shell')
 local Pr = require('process')
 local Util = require('util')
+local Ot = require('otable')
+local Cfg = require('config')
 local Cmds = require('control_cmds')
 
 local Funs = {}
@@ -20,7 +22,7 @@ function Funs:tmenu_select_window()
 	.run()
 
 	Pr.pipe()
-	.add(Sh.exec(string.format('echo "%s" | fzy', wl)))
+	.add(Sh.exec(string.format('echo "%s" | ' .. Cfg.menu_sel, wl)))
 	.add(function(name)
 		Util:exec('wmctrl -ia ' .. ws[name].id)
 	end)
@@ -29,21 +31,67 @@ end
 function Funs:dmenu_select_window()
 	Util:exec(Cmds['popeye'] .. " tmenu_select_window")
 end
-function Funs:tmenu_run()
-   local list_apps = 'find ~/.local/bin ~/.local/share/flatpak/exports/share/applications /usr/share/applications -type f,l | fzy'
+function Funs:find()
+   local paths = "/usr/local/bin/ ~/.local/bin ~/.local/share/flatpak/exports/share/applications /usr/share/applications"
+   local apps = Ot.newT()
    Pr.pipe()
-      .add(Sh.exec(list_apps))
-      .add(function(p)
-	    local ps = Util:split(p, "/([%w%s-_\\.]+)")
-	    local app = ps[#ps]
-	    local dapp = string.match(app, "(.+).desktop")
-	    if not (dapp == nil) then
-	       Util:execl("gtk-launch "..dapp)
-	    else
-	       Util:execl(p)
-	    end
-	  end)
-      .run()
+	  .add(Sh.exec(string.format('find %s -type f,l', paths)))
+	  .add(Pr.filter(function(x)
+				 if string.match(x, ".desktop") then
+					return false
+				 else
+					return true
+				 end
+		  end))
+	  .add(function(x)
+			local ps = Util:segpath(x)
+			apps[ps[#ps]] = x
+			return x
+		  end)
+	  .run()
+   Pr.pipe()
+	  .add(Sh.exec(string.format('find %s -type f,l -name "*.desktop"', paths)))
+	  .add(function(x)
+			local app = {}
+			Pr.pipe()
+			   .add(Sh.cat(x))
+			   .add(Pr.branch()
+					.add(Sh.grep("Exec=([%w%s-_/]+)"))
+					.add(Sh.grep("Name=([%w%s-_/]+)"))
+					.build())
+			   .add(function(ar)
+					 if ar[1] then
+						app["exec"] = ar[1][1]
+					 end
+					 if ar[2] then
+						app["name"] = ar[2][1]
+					 end
+					 return ar
+				   end)
+			   .run()
+			apps[app.exec .. ": " .. app.name] = app.exec
+			return app
+		  end)
+	  .run()
+   Util:tofile("/tmp/exec-apps.lua", apps)
+end
+
+function Funs:findcached()
+   local apps = Util:fromfile("/tmp/exec-apps.lua")
+   for k, v in apps:opairs() do
+	  print(k)
+   end
+end
+
+function Funs:tmenu_run()
+   local list_apps = '~/scripts/sys_ctl/control.lua fun findcached | ' .. Cfg.menu_sel
+   Pr.pipe()
+	  .add(Sh.exec(list_apps))
+	  .add(function(app)
+			local apps = Util:fromfile("/tmp/exec-apps.lua")
+			Util:launch(apps[app])
+		  end)
+	  .run()
 end
 function Funs:dmenu_run()
 	Util:exec(Cmds['popeye'] .. " tmenu_run")
@@ -75,7 +123,7 @@ function Funs:tmenu_exit()
 	end
 
 	Pr.pipe()
-	.add(Sh.exec(string.format('echo "%s" | fzy', opts)))
+	.add(Sh.exec(string.format('echo "%s" | %s', opts, Cfg.menu_sel)))
 	.add(function(name)
 		Util:exec(exit_with[name])
 	end)
@@ -83,7 +131,6 @@ function Funs:tmenu_exit()
 end
 function Funs:dmenu_exit()
 	Util:exec(Cmds['popeye'] .. " tmenu_exit")
-
 end
 
 return Funs
