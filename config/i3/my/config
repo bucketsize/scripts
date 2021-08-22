@@ -12,7 +12,7 @@
 set $mod Mod4
 set $alt Mod1
 # set $gctlc ~/scripts/sys_ctl/lib/controlc.lua - -
-set $gctlc ~/scripts/sys_ctl/control.lua
+set $gctlc ~/.luarocks/bin/mxctl.control
 
 set_from_resource $fg foreground
 set_from_resource $bg background
@@ -213,7 +213,7 @@ bindsym $mod+m mode "move"
 bindsym $mod+Shift+e exec $gctlc fun dmenu_exit
 
 bar {
-	status_command $HOME/scripts/sys_mon/i3bar_out.lua
+	status_command ~/.luarocks/bin/frmad.i3bar_out
 	position top
 	colors {
         background $bg
