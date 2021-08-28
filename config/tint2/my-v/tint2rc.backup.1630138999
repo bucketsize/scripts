@@ -3,12 +3,12 @@
 #-------------------------------------
 # Backgrounds
 # Background 1: Panel
-rounded = 0
-border_width = 1
+rounded = 8
+border_width = 0
 border_sides = LR
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #000000 20
+background_color = #000000 30
 border_color = #000000 50
 background_color_hover = #000000 80
 border_color_hover = #555555 80
@@ -17,33 +17,33 @@ border_color_pressed = #555555 80
 
 # Background 2: Default task, Iconified task, Tooltip
 rounded = 0
-border_width = 2
+border_width = 0
 border_sides =
 border_content_tint_weight = 0
 background_content_tint_weight = 0
-background_color = #777777 40
+background_color = #444444 40
 border_color = #cccccc 40
-background_color_hover = #777777 60
+background_color_hover = #444444 60
 border_color_hover = #cccccc 60
 background_color_pressed = #777777 40
 border_color_pressed = #cccccc 80
 
 # Background 3: Active task
 rounded = 0
-border_width = 2
-border_sides = B
+border_width = 0
+border_sides = L
 border_content_tint_weight = 0
 background_content_tint_weight = 0
 background_color = #777777 40
 border_color = #cccccc 40
-background_color_hover = #777777 60
-border_color_hover = #cccccc 60
-background_color_pressed = #777777 40
-border_color_pressed = #cccccc 80
+background_color_hover = #777777 30
+border_color_hover = #cccccc 30
+background_color_pressed = #777777 20
+border_color_pressed = #cccccc 20
 
 # Background 4: Urgent task
 rounded = 0
-border_width = 2
+border_width = 0
 border_sides = B
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -55,7 +55,7 @@ background_color_pressed = #777777 40
 border_color_pressed = #777777 80
 
 # Background 5:
-rounded = 2
+rounded = 0
 border_width = 1
 border_sides = TBLR
 border_content_tint_weight = 0
@@ -69,7 +69,7 @@ border_color_pressed = #999999 100
 
 # Background 6: Inactive desktop name
 rounded = 2
-border_width = 1
+border_width = 0
 border_sides = TBLR
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -82,7 +82,7 @@ border_color_pressed = #777777 30
 
 # Background 7: Active desktop name
 rounded = 0
-border_width = 1
+border_width = 0
 border_sides = TB
 border_content_tint_weight = 0
 background_content_tint_weight = 0
@@ -108,23 +108,22 @@ border_color_pressed = #777777 30
 
 #-------------------------------------
 # Panel
-panel_items = LTEEEEES
-panel_size = 100% 24
-panel_margin = 2 2
-panel_padding = 2 2 0
+panel_items = TEEEEES
+panel_layer = normal
+strut_policy = follow_size
+panel_size = 72% 42
+panel_margin = 4 0
+panel_padding = 8 0 0
 panel_background_id = 1
 wm_menu = 1
 panel_dock = 0
-panel_position = bottom center horizontal
-#panel_position = left center vertical
-panel_layer = normal
+panel_position = left bottom vertical
 panel_monitor = all
 panel_shrink = 0
 autohide = 0
 autohide_show_timeout = 0
-autohide_hide_timeout = 0.5
+autohide_hide_timeout = 2
 autohide_height = 2
-strut_policy = follow_size
 panel_window_name = tint2
 disable_transparency = 0
 mouse_effects = 1
@@ -138,14 +137,14 @@ scale_relative_to_screen_height = 0
 # Taskbar
 taskbar_mode = single_desktop
 taskbar_hide_if_empty = 0
-taskbar_padding = 0 0 2
+taskbar_padding = 0 0 0
 taskbar_background_id = 0
 taskbar_active_background_id = 0
-taskbar_name = 1
+taskbar_name = 0
 taskbar_hide_inactive_tasks = 0
 taskbar_hide_different_monitor = 0
 taskbar_hide_different_desktop = 0
-taskbar_always_show_all_desktop_tasks = 0
+taskbar_always_show_all_desktop_tasks = 1
 taskbar_name_padding = 6 3
 taskbar_name_background_id = 6
 taskbar_name_active_background_id = 7
@@ -158,17 +157,17 @@ task_align = left
 
 #-------------------------------------
 # Task
-task_text = 1
+task_text = 0
 task_icon = 1
 task_centered = 0
 urgent_nb_of_blink = 100000
-task_maximum_size = 140 24
+task_maximum_size = 40 40
 task_padding = 4 3 4
 task_font = Sans 10
-task_tooltip = 0
-task_thumbnail = 1
+task_tooltip = 1
+task_thumbnail = 0
 task_thumbnail_size = 210
-task_font_color = #eeeeee 100
+task_font_color = #eeeeee 50
 task_icon_asb = 100 0 0
 task_background_id = 2
 task_active_background_id = 3
@@ -185,22 +184,10 @@ mouse_scroll_down = next_task
 systray_padding = 0 0 2
 systray_background_id = 8
 systray_sort = ascending
-systray_icon_size = 24
+systray_icon_size = 32
 systray_icon_asb = 100 0 0
 systray_monitor = 1
-systray_name_filter = 
-
-#-------------------
-# Launcher
-launcher_padding = 0 0 2
-launcher_background_id = 0
-launcher_icon_background_id = 0
-launcher_icon_size = 22
-launcher_icon_asb = 100 0 0
-launcher_icon_theme_override = 0
-startup_notifications = 1
-launcher_tooltip = 1
-launcher_item_app = /usr/share/applications/gnome-terminal.desktop
+systray_name_filter =
 
 #-------------------------------------
 # Clock
@@ -213,8 +200,8 @@ time2_font = Sans 8
 clock_font_color = #eeeeee 100
 clock_padding = 1 0
 clock_background_id = 8
-clock_tooltip = 
-clock_tooltip_timezone = 
+clock_tooltip =
+clock_tooltip_timezone =
 clock_lclick_command = zenity --calendar --text ""
 clock_rclick_command =
 clock_mclick_command =
@@ -230,16 +217,16 @@ battery_full_cmd = notify-send "Battery Full"
 bat1_font = sans 8
 bat2_font = Sans 8
 battery_font_color = #eeeeee 100
-bat1_format = 
-bat2_format = 
+bat1_format =
+bat2_format =
 battery_padding = 0 0
 battery_background_id = 7
 battery_hide = 101
-battery_lclick_command = 
-battery_rclick_command = 
-battery_mclick_command = 
-battery_uwheel_command = 
-battery_dwheel_command = 
+battery_lclick_command =
+battery_rclick_command =
+battery_mclick_command =
+battery_uwheel_command =
+battery_dwheel_command =
 ac_connected_cmd = notify-send "AC Plugged"
 ac_disconnected_cmd = notify-send "AC Unplugged"
 
@@ -249,35 +236,35 @@ tooltip_show_timeout = 0.5
 tooltip_hide_timeout = 0.1
 tooltip_padding = 2 2
 tooltip_background_id = 2
-tooltip_font_color = #444422 100
+tooltip_font_color = #dddddd 100
 tooltip_font = Sans 10
 
 #-------------------------------------
 # Executor 1
-execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua net_device
-execp_interval = 5
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_lclick_command =
-execp_rclick_command =
-execp_mclick_command =
-execp_uwheel_command =
-execp_dwheel_command =
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 10 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua net_device
+# execp_interval = 5
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_lclick_command =
+# execp_rclick_command =
+# execp_mclick_command =
+# execp_uwheel_command =
+# execp_dwheel_command =
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 10 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 
 #-------------------------------------
 # Executor 1.5
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua mem
+# execp_command = ~/scripts/xdg/sys.param.lua mem
 # execp_interval = 2
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -299,7 +286,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1.6
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua cpu
+# execp_command = ~/scripts/xdg/sys.param.lua cpu
 # execp_interval = 2
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -321,7 +308,7 @@ execp_icon_h = 16
 #-------------------------------------
 # Executor 1
 # execp = new
-# execp_command = ~/scripts/config/tint2/my/param.lua bat
+# execp_command = ~/scripts/xdg/sys.param.lua bat
 # execp_interval = 30
 # execp_has_icon = 1
 # execp_cache_icon = 1
@@ -343,47 +330,47 @@ execp_icon_h = 16
 
 #-------------------------------------
 # Executor 3
-execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua vol
-execp_interval = 2
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_tooltip = Scroll ↓↑, middle click to mute
-execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-volume.sh
-execp_rclick_command = rof pavucontrol
-execp_mclick_command = amixer -c1 set Master toggle -q
-execp_uwheel_command = amixer -c1 set Master 5%+ unmute -q
-execp_dwheel_command = amixer -c1 set Master 5%- -q
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 2 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua vol
+# execp_interval = 2
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_tooltip = Scroll ↓↑, middle click to mute
+# execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-volume.sh
+# execp_rclick_command = rof pavucontrol
+# execp_mclick_command = amixer -c1 set Master toggle -q
+# execp_uwheel_command = amixer -c1 set Master 5%+ unmute -q
+# execp_dwheel_command = amixer -c1 set Master 5%- -q
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 2 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 
 #-------------------------------------
 # Executor 4
-execp = new
-execp_command = ~/scripts/config/tint2/my/param.lua bri
-execp_interval = 2
-execp_has_icon = 1
-execp_cache_icon = 1
-execp_continuous = 0
-execp_markup = 1
-execp_tooltip = Scroll ↓↑
-execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-brightness.sh
-execp_rclick_command = rof arandr
-execp_mclick_command = 
-execp_uwheel_command = xbacklight +5
-execp_dwheel_command = xbacklight -5
-execp_font = Sans 9
-execp_font_color = #eeeeee 100
-execp_padding = 2 0
-execp_background_id = 8
-execp_centered = 0
-execp_icon_w = 16
-execp_icon_h = 16
+# execp = new
+# execp_command = ~/scripts/xdg/sys.param.lua bri
+# execp_interval = 2
+# execp_has_icon = 1
+# execp_cache_icon = 1
+# execp_continuous = 0
+# execp_markup = 1
+# execp_tooltip = Scroll ↓↑
+# execp_lclick_command = rof -P zenity ~/scripts/config/tint2/tint2-executors/zenity-set-brightness.sh
+# execp_rclick_command = rof arandr
+# execp_mclick_command = 
+# execp_uwheel_command = xbacklight +5
+# execp_dwheel_command = xbacklight -5
+# execp_font = Sans 9
+# execp_font_color = #eeeeee 100
+# execp_padding = 2 0
+# execp_background_id = 8
+# execp_centered = 0
+# execp_icon_w = 16
+# execp_icon_h = 16
 

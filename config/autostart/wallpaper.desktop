@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=sh -c "sleep 3; ~/scripts/xdg/x.wallpaper.sh cycle;"
-Name=Wallpaper from bing
-Comment=Autostart wallpaper at login

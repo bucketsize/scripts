@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=sh -c "sleep 1; sxhkd -c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/winrc;"
-Name=sxhkd
-Comment=Autostart sxhkd at login

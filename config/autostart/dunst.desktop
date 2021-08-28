@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=sh -c "sleep 2; dunst;"
-Name=dunst
-Comment=Autostart dunst at login

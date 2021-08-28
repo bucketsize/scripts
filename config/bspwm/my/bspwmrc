@@ -32,3 +32,4 @@ sxhkd -c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc &
 	-F "#aaaaaa" \
 	-B "#000000" &
 
+tint2 &
