@@ -1,58 +1,48 @@
 // launcher
-super + r
-	dmenu_run -l 10
+super + d
+	~/.luarocks/bin/mxctl.control fun dmenu_run
 
 // lockscreen
-super + l
-	~/scripts/sys_mon/control.lua cmd scr_lock
+control + alt + l
+	~/.luarocks/bin/mxctl.control cmd scr_lock
 
 // screenshot
 Print
-	~/scripts/sys_mon/control.lua cmd scr_cap
+	~/.luarocks/bin/mxctl.control cmd scr_cap
 
 control + Print
-	~/scripts/sys_mon/control.lua cmd scr_cap_sel
+	~/.luarocks/bin/mxctl.control cmd scr_cap_sel
 
 control + alt + Delete
-  notify-send 'bonkers!'
-
-control + super + x
-  xkill
+	~/.luarocks/bin/mxctl.control fun dmenu_exit
 
 // volume
 control + bracketright
-	~/scripts/sys_mon/control.lua cmd vol_up
+	~/.luarocks/bin/mxctl.control cmd vol_up
 
 control + bracketleft
-	~/scripts/sys_mon/control.lua cmd vol_down
+	~/.luarocks/bin/mxctl.control cmd vol_down
 
 control + backslash
-	~/scripts/sys_mon/control.lua cmd vol_mute
+	~/.luarocks/bin/mxctl.control cmd vol_mute
 
 @XF86AudioRaiseVolume
-	~/scripts/sys_mon/control.lua cmd vol_up
+	~/.luarocks/bin/mxctl.control cmd vol_up
 
 @XF86AudioLowerVolume
-	~/scripts/sys_mon/control.lua cmd vol_down
+	~/.luarocks/bin/mxctl.control cmd vol_down
 
 @XF86AudioMute
-	~/scripts/sys_mon/control.lua cmd vol_mute
-
-control + alt + 1
-	~/scripts/sys_mon/control.lua cmd dtop_viga
+	~/.luarocks/bin/mxctl.control cmd vol_mute
 
 control + alt + 2
-	~/scripts/sys_mon/control.lua cmd dtop_hdmi
+	~/.luarocks/bin/mxctl.control fun dmenu_setup_video
 
 control + alt + 3
-	~/scripts/sys_mon/control.lua cmd dtop_extn
+	~/.luarocks/bin/mxctl.control fun dmenu_select_pa_sinks
 
 control + alt + 4
-	~/scripts/sys_mon/control.lua cmd kb_led_on
+	~/.luarocks/bin/mxctl.control cmd kb_led_on
 
 control + alt + 5
-	~/scripts/sys_mon/control.lua cmd kb_led_off
-
-
-
-
+	~/.luarocks/bin/mxctl.control cmd kb_led_off

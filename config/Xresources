@@ -1,11 +1,15 @@
 #include "/home/jb/scripts/config/colors-terminal.sexy-5"
 
-#define FONT xft:dejavu sans:condensed:size=10
-#define FONTMONO xft:dejavu sans mono:size=10
-#define FONTMONO_ dejavu sans mono 10
+/* #define FONT 			xft:dejavu sans:condensed:size=10 */
+/* #define FONTMONO 	xft:dejavu sans mono:size=10 */
+/* #define FONTMONO_ dejavu sans mono 10 */
+
+#define FONT 			xft:fira sans:condensed:size=10
+#define FONTMONO 	xft:fira code:size=10
+#define FONTMONO_ fira code 10
 
 !global Font
-*font:         FONT
+!*font:         FONT
 
 !xft
 Xft.dpi:       96
