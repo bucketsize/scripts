@@ -11,8 +11,8 @@ pgrep -x lemonbar > /dev/null \
 	|| ~/.luarocks/bin/frmad.lemonbar_out | lemonbar \
 	-f "Fira Code:size=10" \
 	-f "Font Awesome 5 Free:size=10" \
-	-F "#aaaaaa" \
-	-B "#000000" &
+	-F "#dddddd" \
+	-B "#87000000" &
 
 pgrep -x tint2 > /dev/null \
 	|| tint2 &
