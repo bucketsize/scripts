@@ -21,4 +21,5 @@ export openweathermap_apikey=16704e3405a0cb1a1ae1b7917e4ff2fd
 (sleep 5; clipit) &
 (sleep 5; nm-applet --sm-disable) &
 (sleep 5; setxkbmap us) &
+(sleep 3; xsetroot -cursor_name left_ptr) &
 (sleep 5; VBoxClient --clipboard) &
