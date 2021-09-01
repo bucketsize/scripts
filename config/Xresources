@@ -1,4 +1,4 @@
-#include "/home/jb/scripts/config/colors-terminal.sexy-5"
+#include "/home/pi/scripts/config/colors-terminal.sexy-5"
 
 /* #define FONT 			xft:dejavu sans:condensed:size=10 */
 /* #define FONTMONO 	xft:dejavu sans mono:size=10 */
@@ -37,4 +37,3 @@ URxvt*scrollBar: false
 URxvt*fading: 30
 URxvt*font: FONTMONO
 URxvt*buffered: true
-URxvt*print-pipe: cat > $HOME/$(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))

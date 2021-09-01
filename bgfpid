@@ -1,0 +1,18 @@
+#!/bin/sh
+
+exe=$1
+opt=$2
+
+exe_name=$(basename $exe)
+pid_file=/tmp/$exe_name.pid
+
+if [ -f $pid_file ]; then
+	pgrep -F $pid_file
+	if [ ! $? -eq 1 ]; then
+		echo "process [$exe_name] already running"
+		exit
+	fi
+fi
+
+$exe $opt &
+echo $! > $pid_file

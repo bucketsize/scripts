@@ -210,7 +210,7 @@ endif
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
-set gfn=Monospace\ 10
+set gfn=Fira\ Code\ 10
 
 if has("gui_running")
   if has("gui_mac") || has("gui_macvim")
@@ -553,7 +553,7 @@ let g:airline#extensions#virtualenv#enabled = 1
 
 " Syntax highlight
 " Default highlight is better than polyglot
-let g:polyglot_disabled = ['python']
+" let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
 
 

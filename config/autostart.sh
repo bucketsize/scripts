@@ -19,10 +19,8 @@ sleep 1
 ~/scripts/xdg/x.wallpaper.sh cycle &
 
 ~/.luarocks/bin/mxctl.control cmd autolockd_xautolock &
-(if [ -f /usr/bin/picom ];
-then picom;
-else compton;
-	fi) &
+[   -f /usr/bin/compton ] && (compton   &)
+[ ! -f /usr/bin/picom   ] && (picom &)
 
 sleep 1
 dunst &
@@ -32,6 +30,7 @@ setxkbmap us &
 xsetroot -cursor_name left_ptr &
 
 sleep 1
-(if [ -f /usr/bin/VBoxClient ];
-then VBoxClient --clipboard;
-	fi)	&
+VBoxClient --clipboard &
+~/scripts/bgfpid mpd
+~/scripts/bgfpid ~/local/bin/ympd "--webport 8080"
+
