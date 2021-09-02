@@ -4,18 +4,15 @@
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-pgrep -x sxhkd > /dev/null \
-	|| sxhkd -c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc &
+~/scripts/bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc"
 
-pgrep -x lemonbar > /dev/null \
-	|| ~/.luarocks/bin/frmad.lemonbar_out | lemonbar \
+~/scripts/bgfpid ~/.luarocks/bin/frmad.lemonbar_out '| lemonbar \
 	-f "Fira Code:size=10" \
 	-f "Font Awesome 5 Free:size=10" \
 	-F "#dddddd" \
-	-B "#87000000" &
+	-B "#87000000"'
 
-pgrep -x tint2 > /dev/null \
-	|| tint2 &
+~/scripts/bgfpid tint2
 
 bspc monitor -d 0 1 2 3 4 5 6 7 8 9
 bspc config border_width         2

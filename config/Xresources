@@ -32,8 +32,8 @@ dunst.font: FONT
 xterm*faceName: FONTMONO
 
 !urxvt
-URxvt.letterSpace: -1
 URxvt*scrollBar: false
-URxvt*fading: 30
 URxvt*font: FONTMONO
 URxvt*buffered: true
+URxvt*lineSpace: -1
+URxvt.letterSpace: -1

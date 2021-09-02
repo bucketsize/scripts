@@ -14,5 +14,8 @@ if [ -f $pid_file ]; then
 	fi
 fi
 
-$exe $opt &
+cmd="$exe $opt &"
+echo "> $cmd"
+
+eval $cmd
 echo $! > $pid_file

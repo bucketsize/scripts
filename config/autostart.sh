@@ -7,18 +7,18 @@ sleep 1
 dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
 
 # local typed k,v store
-~/.luarocks/bin/frmad.cached - - 2>&1 > /tmp/frmad.cached.log &
+~/scripts/bgfpid ~/.luarocks/bin/frmad.cached "- - 2>&1 > /tmp/frmad.cached.log"
 
 # monitoring daemon
 sleep 1
-~/.luarocks/bin/frmad.daemon 2>&1 > /tmp/frmad.daemon.log &
+~/scripts/bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
 
 
 # apply wallpaper after screen set
 ~/.luarocks/bin/mxctl.control fun setup_video
 ~/scripts/xdg/x.wallpaper.sh cycle &
 
-~/.luarocks/bin/mxctl.control cmd autolockd_xautolock &
+~/scripts/bgfpid ~/.luarocks/bin/mxctl.control "cmd autolockd_xautolock"
 [   -f /usr/bin/compton ] && (compton   &)
 [ ! -f /usr/bin/picom   ] && (picom &)
 
