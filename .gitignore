@@ -11,6 +11,10 @@ xmonad.o
 .stack*
 *-master
 *.zip
+*.bzip2
+*.xz
+*.gz
+*.tgz
 .uuid
 
 autoload/
