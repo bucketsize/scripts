@@ -1,28 +1,24 @@
-#include "/home/pi/scripts/config/colors-terminal.sexy-5"
+#include "/home/pi/scripts/config/colors-terminal.sexy-4"
 
-/* #define FONT 			xft:dejavu sans:condensed:size=10 */
-/* #define FONTMONO 	xft:dejavu sans mono:size=10 */
-/* #define FONTMONO_ dejavu sans mono 10 */
-
-#define FONT 			xft:fira sans:condensed:size=10
-#define FONTMONO 	xft:fira code:size=10
-#define FONTMONO_ fira code 10
+#define FONT 	 xft:fira sans:condensed:size=9,xft:dejavu sans condensed:size=9
+#define FONTMONO xft:fira code:size=9,xft:dejavu sans mono:size=9
 
 !global Font
-!*font:         FONT
+*font:         FONT
 
 !xft
-Xft.dpi:       96
+Xft.dpi:       110
 Xft.antialias: true
 Xft.hinting:   true
+Xft.autohint:  false
 Xft.hintstyle: hintslight
-Xft.rgba:      rgb
+Xft.rgba:      none
 Xft.lcdfilter: lcddefault
 
 !emacs
-emacs.fontBackend: xft
+!emacs.fontBackend: 
 emacs.bitmapIcon: on
-emacs.font: FONTMONO_
+emacs.font: FONTMONO
 emacs.geometry: 90x25
 
 !dunst

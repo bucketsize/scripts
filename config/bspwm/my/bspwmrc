@@ -18,6 +18,7 @@ bspc rule -a Steam desktop=^5 state=floating follow=on
 bspc rule -a Gpicview state=floating
 bspc rule -a Qiv state=floating
 bspc rule -a Mpv state=floating
+bspc rule -a mpv state=floating
 bspc rule -a vlc state=floating
 bspc rule -a Conky state=floating
 bspc rule -a URxvt state=floating focus=on

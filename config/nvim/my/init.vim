@@ -128,7 +128,7 @@ Plug 'vim-scripts/slimv.vim'
 " lua
 "" Lua Bundle
 Plug 'xolox/vim-lua-ftplugin'
-Plug 'xolox/vim-lua-inspect'
+"Plug 'xolox/vim-lua-inspect'
 
 
 " ocaml
@@ -225,7 +225,7 @@ set ruler
 set number
 
 let no_buffers_menu=1
-colorscheme codedark
+colorscheme elflord 
 
 
 set mousemodel=popup
