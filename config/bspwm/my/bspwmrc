@@ -23,17 +23,20 @@ bspc rule -a vlc state=floating
 bspc rule -a Conky state=floating
 bspc rule -a URxvt state=floating focus=on
 
+export PATH=$HOME/scripts:$PATH
+
+bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc"
+bgfpid ~/.luarocks/bin/frmad.cached "- - 2>&1 > /tmp/frmad.cached.log"
+sleep 1
+bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
+bgfpid ~/.luarocks/bin/frmad.lemonbar_out '| lemonbar 
+    -f "DejaVu Sans Condensed:size=9"
+	-f "Font Awesome 5 Free:size=9"
+	-F "#dddddd"
+	-B "#87000000"'
+bgfpid tint2
+
 # jvm apps
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARENTING=1
-
-~/scripts/bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc"
-
-~/scripts/bgfpid ~/.luarocks/bin/frmad.lemonbar_out '| lemonbar \
-	-f "Fira Code:size=10" \
-	-f "Font Awesome 5 Free:size=10" \
-	-F "#dddddd" \
-	-B "#87000000"'
-
-~/scripts/bgfpid tint2
 

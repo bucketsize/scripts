@@ -6,21 +6,16 @@ dbus-launch --sh-syntax --exit-with-session
 sleep 1
 dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
 
-# local typed k,v store
-~/scripts/bgfpid ~/.luarocks/bin/frmad.cached "- - 2>&1 > /tmp/frmad.cached.log"
-
-# monitoring daemon
-sleep 1
-~/scripts/bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
-
+export PATH=$HOME/scripts:$PATH
 
 # apply wallpaper after screen set
-~/.luarocks/bin/mxctl.control fun setup_video
+. ~/mxctl/env
+mxctl.control fun setup_video
 ~/scripts/xdg/x.wallpaper.sh cycle &
 
-~/scripts/bgfpid ~/.luarocks/bin/mxctl.control "cmd autolockd_xautolock"
-[   -f /usr/bin/compton ] && (compton   &)
-[ ! -f /usr/bin/picom   ] && (picom &)
+bgfpid mxctl.control "cmd autolockd_xautolock"
+[ -f /usr/bin/compton ] && (compton &)
+[ -f /usr/bin/picom   ] && (picom &)
 
 sleep 1
 dunst &
@@ -30,7 +25,6 @@ setxkbmap us &
 xsetroot -cursor_name left_ptr &
 
 sleep 1
+bgfpid mpd
+bgfpid ~/local/bin/ympd "--webport 8080"
 VBoxClient --clipboard &
-~/scripts/bgfpid mpd
-~/scripts/bgfpid ~/local/bin/ympd "--webport 8080"
-
