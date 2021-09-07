@@ -33,3 +33,6 @@ URxvt*font: FONTMONO
 URxvt*buffered: true
 URxvt*lineSpace: -1
 URxvt.letterSpace: -1
+URxvt*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
+
+TVim*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
