@@ -1,10 +1,12 @@
 #!/bin/sh
 
+[ -d /tmp/run ] || mkdir /tmp/run
+
 exe=$1
 opt=$2
 
 exe_name=$(basename $exe)
-pid_file=/tmp/$exe_name.pid
+pid_file=/tmp/run/$exe_name.pid
 
 if [ -f $pid_file ]; then
 	pgrep -F $pid_file

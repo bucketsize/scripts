@@ -21,6 +21,7 @@ bspc rule -a Mpv state=floating
 bspc rule -a mpv state=floating
 bspc rule -a vlc state=floating
 bspc rule -a Conky state=floating
-bspc rule -a :Popeye state=floating focus=on
+bspc rule -a *:Popeye state=floating focus=on
+bspc rule -a Popeye:* state=floating focus=on
 
-~/scripts/autostart.sh
+. $HOME/scripts/config/autostart.sh
