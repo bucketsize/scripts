@@ -5,8 +5,6 @@ export XDG_SESSION_TYPE=x11
 export GDK_BACKEND=x11
 export XDG_CURRENT_DESKTOP=GNOME
 
-~/scripts/config/autostart.sh
-
 #exec gnome-session
 #exec openbox-session
 #exec i3
