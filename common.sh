@@ -1,3 +1,7 @@
+die() {
+    echo "$1"
+    exit 1
+}
 or(){
     if [ "$1" != "" ]; then
         echo "$1"
@@ -7,36 +11,18 @@ or(){
 }
 require(){
     if [ -z "$(which $1)" ]; then
-        echo "missing '$1'"
-        notify-send "missing '$1'" &
+        die "missing '$1'"
     fi
-}
-launch(){
-    if [ ! -d ~/.cache ]; then
-        mkdir ~/.cache
-    fi
-    cmd=$*
-    echo "cmd> $cmd"
-    $cmd 2>$HOME/.cache/xlaunch.err 1>$HOME/.cache/xlaunch.out &
 }
 gsudo(){
     require 'pkexec'
     echo "gsudo $1 > $DISPLAY, $XAUTHORITY"
     pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY $1
 }
-xrun(){
-    require 'dmenu_run'
-    dmenu_run
-}
 rndstr(){
     echo $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')
 }
 rs=$(rndstr)
-die() {
-    echo "$1"
-    exit 1
-}
-
 createdir(){
     dst=$1
     [ -d $dst ] || mkdir -p $dst
@@ -82,4 +68,9 @@ updatelink() {
         rm $dst
     fi
     ln -s $src $dst
+}
+githubfetch() {
+    b=$(echo "$1" | cut -d"/" -f1)
+    r=$(echo "$1" | cut -d"/" -f2)
+    [ -d ~/$r ] || git clone https://github.com/$b/$r.git ~/$r
 }

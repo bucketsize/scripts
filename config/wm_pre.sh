@@ -25,12 +25,11 @@ else
     compton &
 fi
 
-
 # apply wallpaper after screen set
 ~/scripts/xdg/x.wallpaper.sh new &
 
 # locker
-$bgfpid ~/.luarocks/bin/mxctl.control "cmd autolockd_xautolock"
+#$bgfpid ~/.luarocks/bin/mxctl.control "cmd autolockd_xautolock"
 
 # keyboard and mouse
 setxkbmap us
