@@ -225,13 +225,13 @@ set ruler
 set number
 
 let no_buffers_menu=1
-colorscheme elflord 
+"colorscheme elflord 
 
 
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
-set gfn=Fira\ Code\ 10
+set gfn=DejaVu\ Sans\ Book\ 10
 
 if has("gui_running")
   if has("gui_mac") || has("gui_macvim")

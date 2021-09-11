@@ -5,7 +5,7 @@ require 'wget'
 require 'feh'
 require 'xmllint'
 
-WALLPAPERS="$HOME/Wallpapers"
+WALLPAPERS="$HOME/.wlprs"
 WALLPAPER=$WALLPAPERS/wallpaper
 
 get_bing_wallpaper() {

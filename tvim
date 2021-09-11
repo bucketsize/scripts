@@ -1,11 +1,15 @@
 #!/bin/sh
 
 icons="/usr/share/icons/HighContrast/32x32/apps/vim.png"
-icon=""
+terms="urxvt gnome-terminal"
 for icon in $icons; do
     if [ -f $i]; then
-        urxvt -icon $icon -e vim $*
-        exit
+        for term in $terms; do
+            if [ -f "/usr/bin/$term" ]; then
+                $term -icon $icon -e vim $*
+                exit 0
+            fi
+        done
     fi
 done
-urxvt -name tvim -e vim $*
+x-terminal-emulator -name tvim -e vim $*

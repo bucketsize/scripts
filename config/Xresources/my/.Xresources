@@ -1,7 +1,7 @@
-#include "/home/pi/scripts/config/colors-terminal.sexy-4"
+#include "__home/scripts/config/colors-terminal.sexy-4"
 
-#define FONT 	 xft:fira sans:condensed:size=9,xft:dejavu sans condensed:size=9
-#define FONTMONO xft:fira code:size=9,xft:dejavu sans mono:size=9
+#define FONT 	 xft:dejavu sans book:size=9
+#define FONTMONO xft:dejavu sans mono:size=9:style=Book
 
 !global Font
 *font:         FONT
