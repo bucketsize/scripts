@@ -73,4 +73,8 @@ githubfetch() {
     b=$(echo "$1" | cut -d"/" -f1)
     r=$(echo "$1" | cut -d"/" -f2)
     [ -d ~/$r ] || git clone https://github.com/$b/$r.git ~/$r
+		ipwd=$(pwd)
+		cd ~/$r
+		git pull
+		cd $ipwd
 }

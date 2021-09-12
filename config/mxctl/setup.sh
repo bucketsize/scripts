@@ -1,9 +1,12 @@
+echo "setup $(pwd) ..."
+
 checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl pacmd"
 githubfetch bucketsize/minilib
 githubfetch bucketsize/mxctl
 
 ipwd=$(pwd)
-LIBDIR=/usr/lib/$(arch)-linux-gnu
+arch=$(lscpu | grep -Po "(?<=Architecture:).+" |  tr -d " ")
+LIBDIR=/usr/lib/$arch-linux-gnu
 cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR
 cd ~/mxctl && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR 
 cd $ipwd
