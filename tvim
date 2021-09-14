@@ -2,12 +2,20 @@
 
 icons="/usr/share/icons/HighContrast/32x32/apps/vim.png"
 terms="urxvt gnome-terminal"
-for icon in $icons; do
-    if [ -f $i]; then
-        for term in $terms; do
-            if [ -f "/usr/bin/$term" ]; then
-                $term -icon $icon -e vim $*
-                exit 0
+ivims="nvim vim"
+
+for ivim in $ivims; do
+    if [ -f /usr/bin/$ivim ]; then
+        for icon in $icons; do
+            if [ -f $i]; then
+                for term in $terms; do
+                    if [ -f /usr/bin/$term ]; then
+                        cmd="$term -icon $icon -e $ivim $*"
+                        echo "$cmd"
+                        $cmd
+                        exit 0
+                    fi
+                done
             fi
         done
     fi

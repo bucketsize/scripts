@@ -2,6 +2,13 @@
 
 . ~/scripts/common.sh
 
+
+if [ "" == $(grep "\.local\/bin" ~/.bashrc | tr -d "\n") ]; then
+    echo "\n# --"
+    echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
+fi
+
+
 createdir ~/.cache
 createdir ~/.theme
 createdir ~/.wlprs
@@ -15,6 +22,7 @@ createdir ~/.wlprs
 . Xresources/setup.sh
 . frmad/setup.sh
 . mxctl/setup.sh
+. nvim/setup.sh
 
 # phase 2
 # requirefiles "~/.luarocks/bin/frmad.cached
