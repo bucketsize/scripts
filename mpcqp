@@ -1,0 +1,3 @@
+#!/bin/sh
+
+trac=$(mpc listall | fzy) && (mpc clear; mpc add "$trac") &&  mpc play

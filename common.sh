@@ -25,6 +25,7 @@ rndstr(){
 rs=$(rndstr)
 createdir(){
     dst=$1
+    [ -f $dst ] && mv $dst $dst.$rs
     [ -d $dst ] || mkdir -p $dst
 }
 checkpkgs() {
