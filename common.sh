@@ -61,11 +61,13 @@ updatelink() {
     src=$1
     dst=$2
     [ -d $src ] || [ -f $src ] || die "config for $src not found" 
-    if ([ -d $dst ] || [ -f $dst ]) && [ ! -L $dst ]; then
+    if [ -d $dst ] || [ -f $dst ] || [ -L $dst ]; then
+        echo "moving [$dst]"
         mv $dst $dst.$rs
     fi
-    if [ -L $dst ]; then
-        rm $dst
+    if [ ! -d $(dirname $dst) ]; then
+        echo "mkdir [$(dirname $dst)]"
+        mkdir -p $(dirname $dst)
     fi
     ln -s $src $dst
 }

@@ -1,0 +1,1 @@
+checkpkgs "mpd mpc"
