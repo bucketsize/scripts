@@ -25,8 +25,8 @@ install() {
     . mpd/setup.sh
     #. ympd/setup.sh
     . mpv/setup.sh
-    #. frmad/setup.sh
-    #. mxctl/setup.sh
+    . frmad/setup.sh
+    . mxctl/setup.sh
 
     updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 }
