@@ -13,6 +13,7 @@ install() {
     createdir ~/.wlprs
     createdir ~/.local/bin
 
+    . openbox/setup.sh
     . bspwm/setup.sh
     . sxhkd/setup.sh
     . dunst/setup.sh

@@ -1,2 +1,2 @@
 checkpkgs "tint2"
-updatelink ~/scripts/config/tint2/my-v ~/.config/tint2
+updatelink ~/scripts/config/tint2/dashy ~/.config/tint2

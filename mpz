@@ -1,0 +1,31 @@
+#!/bin/sh
+
+comm=$(echo "queue
+queue-play
+play
+pause
+continue" | fzy) 
+
+case $comm in
+    pause)
+        mpc pause
+        exit 0
+        ;;
+    continue)
+        mpc play
+        exit 0
+        ;;
+    queue)
+        trac=$(mpc listall | fzy) 
+        mpc add "$trac"
+        ;;
+    play)
+        trac=$(mpc listall | fzy) 
+        (mpc clear; mpc add "$trac") &&  mpc play
+        ;;
+    queue-play)
+        trac=$(mpc listall | fzy) 
+        mpc add "$trac" &&  mpc play
+        ;;
+esac
+

@@ -2,7 +2,7 @@
 
 bgfpid=~/scripts/bgfpid
 
-$bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc ~/.config/sxhkd/bspwmrc"
+$bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc"
 
 sleep 1
 $bgfpid tint2
