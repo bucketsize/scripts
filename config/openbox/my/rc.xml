@@ -42,7 +42,7 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>Nightmare</name>
+    <name>Tenebris</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -772,11 +772,11 @@
 
   # end of the example
 -->
-      <application name="Popeye">
-        <position>
-          <x>center</x>
-          <y>center</y>
-        </position>
-      </application>
+    <application name="Popeye">
+      <position>
+        <x>center</x>
+        <y>center</y>
+      </position>
+    </application>
   </applications>
 </openbox_config>
