@@ -152,6 +152,16 @@ Plug 'ecomba/vim-ruby-refactoring', {'tag': 'main'}
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
+" fsharp bundle
+Plug 'ionide/Ionide-vim', {
+      \ 'do':  'make fsautocomplete',
+      \}
+
+
+" julia bundle
+Plug 'JuliaEditorSupport/julia-vim'
+
+
 " deoplete autocomplete nice 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -167,11 +177,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'tag': '0.1.155',
     \ 'do': 'bash install.sh',
     \ }
-
-" fsharp
-Plug 'ionide/Ionide-vim', {
-      \ 'do':  'make fsautocomplete',
-      \}
 
 "*****************************************************************************
 "*****************************************************************************

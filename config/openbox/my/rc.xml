@@ -178,6 +178,31 @@
   </dock>
   <keyboard>
     <chainQuitKey>C-g</chainQuitKey>
+        
+    <!-- Keybindings for window resize and move -->
+    <keybind key="C-W-Up">
+        <action name="Maximize"/>
+    </keybind>      
+    <keybind key="C-W-Down">
+        <action name="Unmaximize"/>
+    </keybind>     
+    <keybind key="C-W-Left">
+        <action name="MoveToEdge">
+            <direction>west</direction>
+        </action>
+        <action name="Maximize">    
+            <direction>vertical</direction>
+        </action>    
+    </keybind>
+    <keybind key="C-W-Right">
+        <action name="MoveToEdge">
+            <direction>east</direction>
+        </action>
+        <action name="Maximize">    
+            <direction>vertical</direction>
+        </action>    
+    </keybind>
+    
     <!-- Keybindings for desktop switching -->
     <keybind key="C-A-Left">
       <action name="GoToDesktop">
@@ -254,6 +279,9 @@
     <keybind key="A-F4">
       <action name="Close"/>
     </keybind>
+    <keybind key="W-c">
+      <action name="Close"/>
+    </keybind>
     <keybind key="A-Escape">
       <action name="Lower"/>
       <action name="FocusToBottom"/>
@@ -295,22 +323,22 @@
       </action>
     </keybind>
     <!-- Keybindings for window switching with the arrow keys -->
-    <keybind key="W-S-Right">
+    <keybind key="W-Right">
       <action name="DirectionalCycleWindows">
         <direction>right</direction>
       </action>
     </keybind>
-    <keybind key="W-S-Left">
+    <keybind key="W-Left">
       <action name="DirectionalCycleWindows">
         <direction>left</direction>
       </action>
     </keybind>
-    <keybind key="W-S-Up">
+    <keybind key="W-Up">
       <action name="DirectionalCycleWindows">
         <direction>up</direction>
       </action>
     </keybind>
-    <keybind key="W-S-Down">
+    <keybind key="W-Down">
       <action name="DirectionalCycleWindows">
         <direction>down</direction>
       </action>
@@ -772,11 +800,11 @@
 
   # end of the example
 -->
-    <application name="Popeye">
-      <position>
-        <x>center</x>
-        <y>center</y>
-      </position>
-    </application>
+      <application name="Popeye">
+          <position>
+            <x>center</x>
+            <y>center</y>
+          </position>
+      </application>
   </applications>
 </openbox_config>

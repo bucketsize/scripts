@@ -28,11 +28,12 @@ dunst.font: FONT
 xterm*faceName: FONTMONO
 
 !urxvt
+URxvt.background: #000101
 URxvt*scrollBar: false
 URxvt*font: FONTMONO
 URxvt*buffered: true
 URxvt*lineSpace: -1
 URxvt.letterSpace: -1
-URxvt*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
+URxvt*iconFile: /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
 
-TVim*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
+TVim*iconFile:  /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
