@@ -1,6 +1,6 @@
 #!/bin/sh
 
-icons="/usr/share/icons/HighContrast/32x32/apps/vim.png"
+icons="/usr/share/icons/locolor/32x32/apps/gvim.png"
 terms="urxvt gnome-terminal"
 ivims="nvim vim"
 

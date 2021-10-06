@@ -16,6 +16,8 @@ install() {
     . openbox/setup.sh
     . bspwm/setup.sh
     . sxhkd/setup.sh
+    . fontconfig/setup.sh
+    . gtk/setup.sh
     . dunst/setup.sh
     . tint2/setup.sh
     . picom/setup.sh
@@ -32,7 +34,9 @@ install() {
 }
 
 cleanupstale() {
-    rm ~/.config/{bspwm,compton,dunst,mpd,ympd,mpv,nvim,picom,tint2,sxhkd}.*
+    for i in openbox bspwm compton dunst mpd ympd mpv nvim picom tint2 sxhkd; do
+        rm ~/.config/$i\.*
+    done
 }
 
 case $1 in

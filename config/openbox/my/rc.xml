@@ -180,27 +180,44 @@
     <chainQuitKey>C-g</chainQuitKey>
         
     <!-- Keybindings for window resize and move -->
-    <keybind key="C-W-Up">
-        <action name="Maximize"/>
-    </keybind>      
-    <keybind key="C-W-Down">
-        <action name="Unmaximize"/>
-    </keybind>     
-    <keybind key="C-W-Left">
-        <action name="MoveToEdge">
-            <direction>west</direction>
+    <keybind key="W-S-Left">
+        <action name="Unmaximize" />
+        <action name="MoveResizeTo">
+            <x>0</x>
+            <y>0</y>
+            <width>50%</width>
+            <height>100%</height>
         </action>
-        <action name="Maximize">    
-            <direction>vertical</direction>
-        </action>    
     </keybind>
-    <keybind key="C-W-Right">
-        <action name="MoveToEdge">
-            <direction>east</direction>
+    <keybind key="W-S-Right">
+        <action name="Unmaximize" />
+        <action name="MoveResizeTo">
+            <x>-0</x>
+            <y>0</y>
+            <width>50%</width>
+            <height>100%</height>
         </action>
-        <action name="Maximize">    
-            <direction>vertical</direction>
-        </action>    
+    </keybind>
+    <keybind key="W-S-Up">
+        <action name="Unmaximize" />
+        <action name="MoveResizeTo">
+            <x>0</x>
+            <y>0</y>
+            <width>100%</width>
+            <height>50%</height>
+        </action>
+    </keybind>
+    <keybind key="W-S-Down">
+        <action name="Unmaximize" />
+        <action name="MoveResizeTo">
+            <x>0</x>
+            <y>-0</y>
+            <width>100%</width>
+            <height>50%</height>
+        </action>
+    </keybind>
+    <keybind key="W-C-Up">
+        <action name="Maximize" />
     </keybind>
     
     <!-- Keybindings for desktop switching -->
@@ -252,22 +269,22 @@
         <wrap>no</wrap>
       </action>
     </keybind>
-    <keybind key="W-F1">
+    <keybind key="W-1">
       <action name="GoToDesktop">
         <to>1</to>
       </action>
     </keybind>
-    <keybind key="W-F2">
+    <keybind key="W-2">
       <action name="GoToDesktop">
         <to>2</to>
       </action>
     </keybind>
-    <keybind key="W-F3">
+    <keybind key="W-3">
       <action name="GoToDesktop">
         <to>3</to>
       </action>
     </keybind>
-    <keybind key="W-F4">
+    <keybind key="W-4">
       <action name="GoToDesktop">
         <to>4</to>
       </action>

@@ -15,5 +15,4 @@
 # If you want to use XFCE config tools...
 #
 #xfce-mcs-manager &
-. $HOME/scripts/config/wm_pre.sh
 . $HOME/scripts/config/autostart.sh
