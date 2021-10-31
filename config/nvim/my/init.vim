@@ -44,16 +44,14 @@ Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 
 " Visual
-Plug 'itchyny/lightline.vim'
-Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'frazrepo/vim-rainbow'
-Plug 'wesQ3/vim-windowswap'
-Plug 'ap/vim-buftabline'
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 else
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
 endif
 let g:make = 'gmake'
@@ -61,10 +59,11 @@ if exists('make')
         let g:make = 'make'
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
+Plug 'Shougo/echodoc.vim'
 
 "" Vim-Session
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
+"Plug 'xolox/vim-misc'
+"Plug 'xolox/vim-session'
 
 "" Snippets
 Plug 'SirVer/ultisnips'
@@ -80,17 +79,17 @@ Plug 'ludwig/split-manpage.vim'
 
 
 " elixir
-Plug 'elixir-lang/vim-elixir'
-Plug 'carlosgaldino/elixir-snippets'
+"Plug 'elixir-lang/vim-elixir'
+"Plug 'carlosgaldino/elixir-snippets'
 
 
 " elm
 "" Elm Bundle
-Plug 'elmcast/elm-vim'
+"Plug 'elmcast/elm-vim'
 
 
 " erlang
-Plug 'jimenezrick/vimerl'
+"Plug 'jimenezrick/vimerl'
 
 
 " go
@@ -120,12 +119,12 @@ Plug 'jelera/vim-javascript-syntax'
 
 " lisp
 "" Lisp Bundle
-Plug 'vim-scripts/slimv.vim'
+"Plug 'vim-scripts/slimv.vim'
 
 
 " lua
 "" Lua Bundle
-Plug 'xolox/vim-lua-ftplugin'
+"Plug 'xolox/vim-lua-ftplugin'
 "Plug 'xolox/vim-lua-inspect'
 
 
@@ -141,26 +140,28 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 
 " ruby
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-rake'
-Plug 'tpope/vim-projectionist'
-Plug 'thoughtbot/vim-rspec'
-Plug 'ecomba/vim-ruby-refactoring', {'tag': 'main'}
+"Plug 'tpope/vim-rails'
+"Plug 'tpope/vim-rake'
+"Plug 'tpope/vim-projectionist'
+"Plug 'thoughtbot/vim-rspec'
+"Plug 'ecomba/vim-ruby-refactoring', {'tag': 'main'}
 
 
 " typescript
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
-" fsharp bundle
-Plug 'ionide/Ionide-vim', {
-      \ 'do':  'make fsautocomplete',
-      \}
-
-
 " julia bundle
 Plug 'JuliaEditorSupport/julia-vim'
 
+" lspclient
+"
+" nvim 0.5+
+" Plug 'deoplete-plugins/deoplete-lsp'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 " deoplete autocomplete nice 
 if has('nvim')
@@ -171,20 +172,14 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-" lspconfig
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'tag': '0.1.155',
-    \ 'do': 'bash install.sh',
-    \ }
+"" lsp fsharp
+Plug 'ionide/Ionide-vim', {
+      \ 'do':  'make fsautocomplete',
+      \}
 
 "*****************************************************************************
 "*****************************************************************************
 
-"" Include user's extra bundle
-if filereadable(expand("~/.config/nvim/local_bundles.vim"))
-  source ~/.config/nvim/local_bundles.vim
-endif
 
 call plug#end()
 
@@ -235,10 +230,10 @@ else
 endif
 
 " session management
-let g:session_directory = "~/.config/nvim/session"
-let g:session_autoload = "no"
-let g:session_autosave = "no"
-let g:session_command_aliases = 1
+"let g:session_directory = "~/.config/nvim/session"
+"let g:session_autoload = "no"
+"let g:session_autosave = "no"
+"let g:session_command_aliases = 1
 
 "*****************************************************************************
 "" Visual Settings
@@ -282,7 +277,7 @@ if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
 
-
+let g:rainbow_active = 1
 "*****************************************************************************
 "" Abbreviations
 "*****************************************************************************
@@ -314,7 +309,7 @@ nnoremap <silent> <F3> :NERDTreeToggle<CR>
 nnoremap <silent> <leader>f :Rgrep<CR>
 let Grep_Default_Options = '-IR'
 let Grep_Skip_Files = '*.log *.db'
-let Grep_Skip_Dirs = '.git node_modules'
+let Grep_Skip_Dirs = '.git node_modules build bin'
 
 " terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
@@ -386,10 +381,10 @@ noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
 
 " session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
+"nnoremap <leader>so :OpenSession<Space>
+"nnoremap <leader>ss :SaveSession<Space>
+"nnoremap <leader>sd :DeleteSession<CR>
+"nnoremap <leader>sc :CloseSession<CR>
 
 "" Tabs
 nnoremap <Tab> gt
@@ -434,9 +429,6 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
-
-" ale
-let g:ale_linters = {}
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -506,82 +498,77 @@ autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
 
 " elm
 " elm-vim
-let g:elm_setup_keybindings = 0
-let g:elm_format_autosave = 1
+" let g:elm_setup_keybindings = 0
+" let g:elm_format_autosave = 1
 
 
 " erlang
-let erlang_folding = 1
-let erlang_show_errors = 1
+" let erlang_folding = 1
+" let erlang_show_errors = 1
 
 
 " go
 " vim-go
 " run :GoBuild or :GoTestCompile based on the go file
-function! s:build_go_files()
-  let l:file = expand('%')
-  if l:file =~# '^\f\+_test\.go$'
-    call go#test#Test(0, 1)
-  elseif l:file =~# '^\f\+\.go$'
-    call go#cmd#Build(0)
-  endif
-endfunction
+" function! s:build_go_files()
+"   let l:file = expand('%')
+"   if l:file =~# '^\f\+_test\.go$'
+"     call go#test#Test(0, 1)
+"   elseif l:file =~# '^\f\+\.go$'
+"     call go#cmd#Build(0)
+"   endif
+" endfunction
 
-let g:go_list_type = "quickfix"
-let g:go_fmt_command = "goimports"
-let g:go_fmt_fail_silently = 1
+" let g:go_list_type = "quickfix"
+" let g:go_fmt_command = "goimports"
+" let g:go_fmt_fail_silently = 1
 
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_space_tab_error = 0
-let g:go_highlight_array_whitespace_error = 0
-let g:go_highlight_trailing_whitespace_error = 0
-let g:go_highlight_extra_types = 1
+" let g:go_highlight_types = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_functions = 1
+" let g:go_highlight_methods = 1
+" let g:go_highlight_operators = 1
+" let g:go_highlight_build_constraints = 1
+" let g:go_highlight_structs = 1
+" let g:go_highlight_generate_tags = 1
+" let g:go_highlight_space_tab_error = 0
+" let g:go_highlight_array_whitespace_error = 0
+" let g:go_highlight_trailing_whitespace_error = 0
+" let g:go_highlight_extra_types = 1
 
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+" autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
 
-augroup completion_preview_close
-  autocmd!
-  if v:version > 703 || v:version == 703 && has('patch598')
-    autocmd CompleteDone * if !&previewwindow && &completeopt =~ 'preview' | silent! pclose | endif
-  endif
-augroup END
+" augroup completion_preview_close
+"   autocmd!
+"   if v:version > 703 || v:version == 703 && has('patch598')
+"     autocmd CompleteDone * if !&previewwindow && &completeopt =~ 'preview' | silent! pclose | endif
+"   endif
+" augroup END
 
-augroup go
+" augroup go
 
-  au!
-  au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+"   au!
+"   au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+"   au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+"   au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+"   au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
-  au FileType go nmap <Leader>dd <Plug>(go-def-vertical)
-  au FileType go nmap <Leader>dv <Plug>(go-doc-vertical)
-  au FileType go nmap <Leader>db <Plug>(go-doc-browser)
+"   au FileType go nmap <Leader>dd <Plug>(go-def-vertical)
+"   au FileType go nmap <Leader>dv <Plug>(go-doc-vertical)
+"   au FileType go nmap <Leader>db <Plug>(go-doc-browser)
 
-  au FileType go nmap <leader>r  <Plug>(go-run)
-  au FileType go nmap <leader>t  <Plug>(go-test)
-  au FileType go nmap <Leader>gt <Plug>(go-coverage-toggle)
-  au FileType go nmap <Leader>i <Plug>(go-info)
-  au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
-  au FileType go nmap <C-g> :GoDecls<cr>
-  au FileType go nmap <leader>dr :GoDeclsDir<cr>
-  au FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
-  au FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
-  au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
+"   au FileType go nmap <leader>r  <Plug>(go-run)
+"   au FileType go nmap <leader>t  <Plug>(go-test)
+"   au FileType go nmap <Leader>gt <Plug>(go-coverage-toggle)
+"   au FileType go nmap <Leader>i <Plug>(go-info)
+"   au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+"   au FileType go nmap <C-g> :GoDecls<cr>
+"   au FileType go nmap <leader>dr :GoDeclsDir<cr>
+"   au FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
+"   au FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
+"   au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
 
-augroup END
-
-" ale
-:call extend(g:ale_linters, {
-    \"go": ['golint', 'go vet'], })
-
+" augroup END
 
 " haskell
 let g:haskell_conceal_wide = 1
@@ -616,10 +603,6 @@ augroup END
 " let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 " execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
-" ale
-:call extend(g:ale_linters, {
-    \'ocaml': ['merlin'], })
-
 
 " python
 " vim-python
@@ -641,89 +624,133 @@ let g:jedi#show_call_signatures = "0"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
-" ale
-:call extend(g:ale_linters, {
-    \'python': ['flake8'], })
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+call deoplete#custom#option({
+  \ 'auto_complete_delay': 100,
+  \ })
 
 " Syntax highlight
 let python_highlight_all = 1
 
-
 " ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
+" let g:rubycomplete_buffer_loading = 1
+" let g:rubycomplete_classes_in_global = 1
+" let g:rubycomplete_rails = 1
 
-augroup vimrc-ruby
-  autocmd!
-  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
-  autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
-augroup END
+" augroup vimrc-ruby
+"   autocmd!
+"   autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
+"   autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
+" augroup END
 
-let g:tagbar_type_ruby = {
-    \ 'kinds' : [
-        \ 'm:modules',
-        \ 'c:classes',
-        \ 'd:describes',
-        \ 'C:contexts',
-        \ 'f:methods',
-        \ 'F:singleton methods'
-    \ ]
-\ }
+" let g:tagbar_type_ruby = {
+"     \ 'kinds' : [
+"         \ 'm:modules',
+"         \ 'c:classes',
+"         \ 'd:describes',
+"         \ 'C:contexts',
+"         \ 'f:methods',
+"         \ 'F:singleton methods'
+"     \ ]
+" \ }
 
-" RSpec.vim mappings
-map <Leader>t :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
+" " RSpec.vim mappings
+" map <Leader>t :call RunCurrentSpecFile()<CR>
+" map <Leader>s :call RunNearestSpec()<CR>
+" map <Leader>l :call RunLastSpec()<CR>
+" map <Leader>a :call RunAllSpecs()<CR>
 
-" For ruby refactory
-if has('nvim')
-  runtime! macros/matchit.vim
-else
-  packadd! matchit
-endif
+" " For ruby refactory
+" if has('nvim')
+"   runtime! macros/matchit.vim
+" else
+"   packadd! matchit
+" endif
 
-" Ruby refactory
-nnoremap <leader>rap  :RAddParameter<cr>
-nnoremap <leader>rcpc :RConvertPostConditional<cr>
-nnoremap <leader>rel  :RExtractLet<cr>
-vnoremap <leader>rec  :RExtractConstant<cr>
-vnoremap <leader>relv :RExtractLocalVariable<cr>
-nnoremap <leader>rit  :RInlineTemp<cr>
-vnoremap <leader>rrlv :RRenameLocalVariable<cr>
-vnoremap <leader>rriv :RRenameInstanceVariable<cr>
-vnoremap <leader>rem  :RExtractMethod<cr>
-
+" " Ruby refactory
+" nnoremap <leader>rap  :RAddParameter<cr>
+" nnoremap <leader>rcpc :RConvertPostConditional<cr>
+" nnoremap <leader>rel  :RExtractLet<cr>
+" vnoremap <leader>rec  :RExtractConstant<cr>
+" vnoremap <leader>relv :RExtractLocalVariable<cr>
+" nnoremap <leader>rit  :RInlineTemp<cr>
+" vnoremap <leader>rrlv :RRenameLocalVariable<cr>
+" vnoremap <leader>rriv :RRenameInstanceVariable<cr>
+" vnoremap <leader>rem  :RExtractMethod<cr>
 
 " typescript
 let g:yats_host_keyword = 1
 
-
-
 "*****************************************************************************
 "*****************************************************************************
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 
-"" Include user's local vim config
-if filereadable(expand("~/.config/nvim/local_init.vim"))
-  source ~/.config/nvim/local_init.vim
-endif
+" Required for operations modifying multiple buffers like rename.
+set hidden
 
-" ===================================================================
-" Lightline plug-in configuration
-" ===================================================================
+" echodoc
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 
-let g:lightline = {
-    \ 'colorscheme': 'wombat',
-    \ 'active': {
-    \    'left': [ [ 'mode', 'paste'  ],
-    \              [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-    \ },
-    \ 'component_function': {
-    \    'gitbranch': 'FugitiveHead'
-    \ },
+" Always draw sign column. Prevent buffer moving when adding/deleting sign.
+set signcolumn=yes
+
+" merlin 
+let g:opamshare = substitute(system('opam var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+
+" ale
+let g:ale_linters = {}
+:call extend(g:ale_linters, {
+    \"go": ['golint', 'go vet'], })
+:call extend(g:ale_linters, {
+    \'ocaml': ['merlin'], })
+:call extend(g:ale_linters, {
+    \'python': ['flake8'], })
+
+" lsp client configuration
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
+
+" configure Ionide-vim
+" function! s:configureIonide()
+"   " https://github.com/ionide/Ionide-vim#show-tooltips-on-cursorhold
+"   if has('nvim') && exists('*nvim_open_win')
+"     set updatetime=1000
+"     augroup FSharpShowTooltip
+"       autocmd!
+"       autocmd CursorHold *.fs,*.fsi,*.fsx call fsharp#showTooltip()
+"     augroup END
+"   endif
+
+"   let g:fsharp#exclude_project_directories = ['paket-files']
+" endfunction
+" call s:configureIonide()
+
+function SetLSPShortcuts()
+  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
+  nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
+  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
+  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+endfunction()
+
+augroup LSP
+  autocmd!
+  autocmd FileType cpp,c,fs call SetLSPShortcuts()
+augroup END

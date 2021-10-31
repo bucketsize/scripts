@@ -1,31 +1,55 @@
 #!/bin/sh
 
-comm=$(echo "queue
+present() {
+    comm=$(echo "interactive
+queue
 queue-play
 play
 pause
-continue" | fzy) 
+continue
+quit" | fzy) 
 
-case $comm in
-    pause)
-        mpc pause
-        exit 0
+    case $comm in
+        interactive)
+            while true; do
+                trac=$(mpc listall | fzy)
+                if [ "$trac" = "quit" ]; then
+                    exit 0
+                fi 
+                (mpc clear && mpc add "$trac" && mpc play) > /dev/null
+            done
+            ;;
+        pause)
+            mpc pause
+            ;;
+        continue)
+            mpc play
+            ;;
+        queue)
+            trac=$(mpc listall | fzy) 
+            mpc add "$trac"
+            ;;
+        play)
+            trac=$(mpc listall | fzy) 
+            ((mpc clear; mpc add "$trac") &&  mpc play) > /dev/null
+            ;;
+        queue-play)
+            trac=$(mpc listall | fzy) 
+            mpc add "$trac" &&  mpc play > /dev/null
+            ;;
+        quit)
+            exit 0
+            ;;
+    esac
+}
+
+case $1 in
+    -r)
+        while true; do
+            present
+        done
         ;;
-    continue)
-        mpc play
-        exit 0
-        ;;
-    queue)
-        trac=$(mpc listall | fzy) 
-        mpc add "$trac"
-        ;;
-    play)
-        trac=$(mpc listall | fzy) 
-        (mpc clear; mpc add "$trac") &&  mpc play
-        ;;
-    queue-play)
-        trac=$(mpc listall | fzy) 
-        mpc add "$trac" &&  mpc play
-        ;;
+    *)
+        present
 esac
 
