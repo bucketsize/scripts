@@ -20,10 +20,10 @@ install() {
     . gtk/setup.sh
     . dunst/setup.sh
     . tint2/setup.sh
-    . picom/setup.sh
+    #. picom/setup.sh
     . compton/setup.sh
     . Xresources/setup.sh
-    . nvim/setup.sh
+    . vim/setup.sh
     . mpd/setup.sh
     #. ympd/setup.sh
     . mpv/setup.sh
@@ -34,7 +34,7 @@ install() {
 }
 
 cleanupstale() {
-    for i in openbox bspwm compton dunst mpd ympd mpv nvim picom tint2 sxhkd; do
+    for i in openbox bspwm compton dunst mpd ympd mpv vim picom tint2 sxhkd; do
         rm ~/.config/$i\.*
     done
 }

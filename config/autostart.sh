@@ -15,15 +15,7 @@ $bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
 #screen
 ~/.luarocks/bin/mxctl.control fun setup_video
 
-if [[ $(arch) =~ x86 ]]; then
-    if [ -f /usr/bin/picom   ]; then
-        picom &
-    else
-        compton &
-    fi
-else
-    compton &
-fi
+picom &
 
 # apply wallpaper after screen set
 ~/scripts/xdg/x.wallpaper.sh new &

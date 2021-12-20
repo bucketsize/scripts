@@ -143,6 +143,11 @@ set noshowmode
 set mouse=a
 set guioptions=egmrti
 
+if has("gui_running")
+else
+  let g:CSApprox_loaded = 1
+endif
+
 " IndentLine
 let g:indentLine_enabled = 1
 let g:indentLine_concealcursor = 0
@@ -477,5 +482,3 @@ augroup END
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
-
-

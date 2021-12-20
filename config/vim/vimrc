@@ -27,7 +27,7 @@ endif
 "" Plug install packages
 "*****************************************************************************
 " Required:
-call plug#begin(expand('~/.config/nvim/plugged'))
+call plug#begin(expand('~/.vim/plugged'))
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
@@ -35,7 +35,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
-Plug 'dense-analysis/ale'
 Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 
@@ -43,6 +42,8 @@ Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'frazrepo/vim-rainbow'
+Plug 'godlygeek/csapprox'
+Plug 'joshdick/onedark.vim'
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -55,11 +56,6 @@ if exists('make')
         let g:make = 'make'
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
-Plug 'Shougo/echodoc.vim'
-
-"" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 " align: gaip
 Plug 'junegunn/vim-easy-align'
@@ -72,16 +68,20 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 
-" lsp-configs
-Plug 'mattn/vim-lsp-settings'
-
-" language support
-"
 " julia bundle
 Plug 'JuliaEditorSupport/julia-vim'
 
+" ocaml support + lsp
+Plug 'ocaml/vim-ocaml'
+
 " language pack syntax, indent
 Plug 'sheerun/vim-polyglot'
+
+" Snippets
+" Plug 'SirVer/ultisnips'
+" Plug 'thomasfaingnaert/vim-lsp-snippets'
+" Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+
 
 call plug#end()
 "*****************************************************************************
@@ -92,6 +92,8 @@ filetype plugin indent on
 "*****************************************************************************
 "" Basic Setup
 "*****************************************************************************"
+set nocompatible
+
 "" Performance
 set noswapfile
 set lazyredraw
@@ -114,9 +116,6 @@ set expandtab
 "" Map leader to ,
 let mapleader=','
 
-"" Enable hidden buffers
-set hidden
-
 "" Searching
 set hlsearch
 set incsearch
@@ -135,7 +134,6 @@ endif
 "" Visual Settings
 "*****************************************************************************
 syntax on
-colorscheme delek
 set ruler
 set number
 set nowrap
@@ -143,40 +141,22 @@ set nowrap
 let no_buffers_menu=1
 set noshowmode
 set mouse=a
-set mousemodel=popup
-set t_Co=256
 set guioptions=egmrti
 
 if has("gui_running")
-  if has("gui_mac") || has("gui_macvim")
-    set guifont=Menlo:h12
-    set transparency=7
-  endif
 else
   let g:CSApprox_loaded = 1
-
-  " IndentLine
-  let g:indentLine_enabled = 1
-  let g:indentLine_concealcursor = 0
-  let g:indentLine_char = '┆'
-  let g:indentLine_faster = 1
-
-  
-  if $COLORTERM == 'gnome-terminal'
-    set term=gnome-256color
-  else
-    if $TERM == 'xterm'
-      set term=xterm-256color
-    endif
-  endif
-  
 endif
 
+" IndentLine
+let g:indentLine_enabled = 1
+let g:indentLine_concealcursor = 0
+let g:indentLine_char = '┆'
+let g:indentLine_faster = 1
 
-if &term =~ '256color'
-  set t_ut=
-endif
-
+" set termguicolors
+set background=dark
+colorscheme onedark 
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -205,11 +185,12 @@ if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
 
+" rainbow paranthesis
 let g:rainbow_active = 1
+
 " vim-airline
-let g:airline_theme = 'jellybeans'
+let g:airline_theme = 'onedark'
 let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
@@ -295,7 +276,6 @@ augroup vimrc-make-cmake
   autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
 augroup END
 
-autocmd FileType * setlocal omnifunc=lsp#complete
 
 set autoread
 
@@ -359,7 +339,7 @@ nmap <leader>y :History:<CR>
 " snippets
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsEditSplit="vertical"
 
 " Tagbar
@@ -464,18 +444,78 @@ endif
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
-" echodoc
-set cmdheight=2
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'signature'
-
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
 
-" ale
-let g:ale_linters = {}
-
+" lsp 
 " debug autocomplete
-let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
+
+let g:lsp_diagnostics_echo_cursor  = 1
+let g:lsp_diagnostics_float_cursor = 1
+
+" ocaml
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'ocamllsp',
+            \ 'cmd': {server_info->[
+                \   &shell,
+                \   &shellcmdflag,
+                \   expand('~/Programs/lspd/ocaml-lspd')
+                \ ]},
+                \ 'whitelist': ['reason', 'ocaml'],
+                \ })
+
+" java
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'eclipse.jdt.ls',
+            \ 'cmd': {server_info->[
+                \     'java',
+                \     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+                \     '-Dosgi.bundles.defaultStartLevel=4',
+                \     '-Declipse.product=org.eclipse.jdt.ls.core.product',
+                \     '-Dlog.level=ALL',
+                \     '-noverify',
+                \     '-Dfile.encoding=UTF-8',
+                \     '-Xmx1G',
+                \     '-jar',
+                \     expand('~/Programs/lspd/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.600.v20191014-2022.jar'),
+                \     '-configuration',
+                \     expand('~/Programs/lspd/eclipse.jdt.ls/config_win'),
+                \     '-data',
+                \     getcwd()
+                \ ]},
+                \ 'whitelist': ['java'],
+                \ })
+
+" vim-lsp
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    inoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    inoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+
