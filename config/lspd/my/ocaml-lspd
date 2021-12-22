@@ -1,0 +1,17 @@
+#!/bin/sh
+
+export OPAMSWITCH=$HOME/Programs/ocaml-lsp/
+export OPAMROOT=$HOME/Programs/ocaml-lsp/.opam
+eval $(opam env)
+
+case $1 in
+    init)
+        echo "TODO"
+        ;;
+    env)
+        echo "done"
+        ;;
+    *)
+        ocamllsp
+        ;;
+esac

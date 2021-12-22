@@ -1,0 +1,40 @@
+#!/bin/sh
+
+LS_PATH=~/Programs/eclipse.jdt.ls
+
+if [ "$JAVA_HOME" = "" ] && [ "`which java`" = "" ]; then
+    export JAVA_HOME=$HOME/Programs/jdk
+    export PATH=$PATH:$HOME/Programs/gradle/bin
+    echo "please install java" && exit 22
+fi
+
+case $1 in
+    init)
+        [ -d ~/Programs/eclipse.jdt.ls ] || \
+            mkdir -p ~/Programs/eclipse.jdt.ls
+        cd ~/Programs/eclipse.jdt.ls
+        [ -f ~/Downloads/java-lspd.tgz ] || \
+            wget http://download.eclipse.org/jdtls/milestones/0.47.0/jdt-language-server-0.47.0-201911150945.tar.gz -O ~/Downloads/java-lspd.tgz
+        tar -xvzf ~/Downloads/java-lspd.tgz
+        ;;
+    env)
+        echo "done"
+        ;;
+    *)
+        echo "starting jdt.ls in $(pwd)"
+        java \
+        -Declipse.application=org.eclipse.jdt.ls.core.id1 \
+        -Dosgi.bundles.defaultStartLevel=4 \
+        -Declipse.product=org.eclipse.jdt.ls.core.product \
+        -Dlog.level=ALL \
+        -noverify \
+        -Dfile.encoding=UTF-8 \
+        -Xmx512M \
+        -jar \
+        $LS_PATH/plugins/org.eclipse.equinox.launcher_1.5.600.v20191014-2022.jar \
+        -configuration \
+        $LS_PATH/config_linux \
+        -data \
+        $(pwd) 
+        ;;
+esac
