@@ -37,8 +37,6 @@ URxvt.lineSpace: 0
 URxvt.letterSpace: 0
 !URxvt*iconFile: /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
 URxvt*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
-URxvt*inheritPixmap: true
-URxvt*transparent: true
 !URxvt*shading: 0 to 99 darkens, 101 to 200 lightens
 URxvt*shading: 110
 URxvt.geometry: 96x24

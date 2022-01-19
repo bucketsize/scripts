@@ -1,5 +1,7 @@
 #!/bin/sh
 
+xrdb -merge ~/.Xresources
+
 bgfpid=~/scripts/bgfpid
 
 # dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
