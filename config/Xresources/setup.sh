@@ -1,3 +1,5 @@
+. ../common.sh
+
 checkpkgs "xrdb"
 
 rm ~/.Xresources

@@ -1,6 +1,6 @@
 echo "setup $(pwd) ..."
 
-checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl ximageload"
+checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl feh"
 githubfetch bucketsize/minilib
 githubfetch bucketsize/mxctl
 
