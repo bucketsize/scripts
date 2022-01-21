@@ -20,3 +20,6 @@ xmonad.o
 autoload/
 plugged/
 session/
+
+*.log
+*.obj

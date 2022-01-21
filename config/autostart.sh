@@ -52,3 +52,4 @@ $bgfpid ~/.luarocks/bin/frmad.lemonbar_out '| lemonbar
 	-F "#dddddd"
 	-B "#87000000"'
 
+# flatpak run com.valvesoftware.Steam
