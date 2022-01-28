@@ -1,3 +1,4 @@
+source ../common.sh
 checkpkgs "git libssl make pactl"
 
 githubfetch bucketsize/minilib

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/scripts/common.sh
+source ../common.sh
 
 install() {
     if [ "" = "$(grep '\.local\/bin' ~/.bashrc | tr -d '\n')" ]; then
@@ -13,22 +13,32 @@ install() {
     createdir ~/.wlprs
     createdir ~/.local/bin
 
-    . openbox/setup.sh
-    . bspwm/setup.sh
-    . sxhkd/setup.sh
-    . fontconfig/setup.sh
-    . gtk/setup.sh
-    . dunst/setup.sh
-    . tint2/setup.sh
-    #. picom/setup.sh
-    . compton/setup.sh
-    . Xresources/setup.sh
-    . vim/setup.sh
-    . mpd/setup.sh
-    #. ympd/setup.sh
-    . mpv/setup.sh
-    . frmad/setup.sh
-    . mxctl/setup.sh
+    instlst="
+    openbox
+    bspwm
+    sxhkd
+    fontconfig
+    gtk
+    dunst
+    tint2
+    picom
+    Xresources
+    vim
+    mpd
+    mpv
+    frmad
+    mxctl
+    "
+
+    optlst="
+    ympd
+    compton
+    "
+
+    for i in $instlst; do
+        echo "---> setup %i"
+        sh $i/setup.sh
+    done
 
     updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 }

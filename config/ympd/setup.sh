@@ -1,3 +1,5 @@
+source ../common.sh
+
 githubfetch notandy/ympd
 
 if [ ! -f ~/.local/bin/ympd ]; then

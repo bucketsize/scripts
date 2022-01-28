@@ -1,5 +1,4 @@
-#!/bin/sh
-. ~/scripts/common.sh
+source ../common.sh
 
 bs=$(rndstr)
 

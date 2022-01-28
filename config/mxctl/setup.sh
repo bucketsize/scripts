@@ -1,3 +1,4 @@
+source ../common.sh
 echo "setup $(pwd) ..."
 
 checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl feh"

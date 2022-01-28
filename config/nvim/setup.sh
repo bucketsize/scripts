@@ -1,4 +1,4 @@
-. ../../common.sh
+source ../common.sh
 checkpkgs "nvim"
 
 [ -d my/plugged ] ||\
