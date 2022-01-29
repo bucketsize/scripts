@@ -1,3 +1,3 @@
-source ../common.sh
+. ../common.sh
 checkpkgs "compton"
 updatelink ~/scripts/config/compton/my ~/.config/compton

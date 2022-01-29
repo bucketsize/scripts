@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ../common.sh
+. ../common.sh
 
 install() {
     if [ "" = "$(grep '\.local\/bin' ~/.bashrc | tr -d '\n')" ]; then
@@ -12,6 +12,7 @@ install() {
     createdir ~/.theme
     createdir ~/.wlprs
     createdir ~/.local/bin
+    updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 
     instlst="
     openbox
@@ -22,35 +23,34 @@ install() {
     dunst
     tint2
     picom
+    compton
     Xresources
     vim
     mpd
     mpv
     frmad
     mxctl
-    "
-
-    optlst="
     ympd
-    compton
     "
 
+    echo $(date) > /tmp/instlst.log
     for i in $instlst; do
-        echo "---> setup %i"
-        sh $i/setup.sh
+        echo "> setup $i"
+        sh $i/setup.sh 1>>/tmp/instlst.log 2>>/tmp/instlst.log
+        if [ $? != 0 ]; then
+            less /tmp/instlst.log
+            die "! setup failed $i"
+        fi
     done
 
-    updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 }
 
 cleanupstale() {
-    for i in openbox bspwm compton dunst mpd ympd mpv vim picom tint2 sxhkd; do
-        rm ~/.config/$i\.*
-    done
+    find  ~/.config -type l -name "*.*" -delete
 }
 
 case $1 in
-    cleanupstale)
+    cleanup)
         cleanupstale
         ;;
     *)

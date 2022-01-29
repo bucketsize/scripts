@@ -1,5 +1,5 @@
-source ../common.sh
+. ../common.sh
 checkpkgs "openbox obconf"
-updatelink ~/scripts/config/openbox/my ~/.config/openbox
-[ -d ~/.themes] || mkdir ~/.themes
-ln -s ~/scripts/config/openbox/themes/Tenebris/ ~/.themes/
+updatelink $(pwd)/openbox/my ~/.config/openbox
+createdir ~/.themes
+updatelink $(pwd)/openbox/themes/Tenebris/ ~/.themes/Tenebris

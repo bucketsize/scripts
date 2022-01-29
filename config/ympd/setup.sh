@@ -1,4 +1,4 @@
-source ../common.sh
+. ../common.sh
 
 githubfetch notandy/ympd
 

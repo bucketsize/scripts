@@ -70,7 +70,9 @@ updatelink() {
         echo "mkdir [$(dirname $dst)]"
         mkdir -p $(dirname $dst)
     fi
-    ln -s $src $dst
+    cmd="ln -s $src $dst"
+    echo "> $cmd"
+    $cmd
 }
 githubfetch() {
     b=$(echo "$1" | cut -d"/" -f1)

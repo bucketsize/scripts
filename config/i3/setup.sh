@@ -1,4 +1,4 @@
-source ../common.sh
+. ../common.sh
 
 [ ! -d ~/.cache ] &&  mkdir -p ~/.cache
 [ ! -d ~/.theme ] &&  mkdir -p ~/.theme

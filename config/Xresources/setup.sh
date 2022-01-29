@@ -1,4 +1,4 @@
-source ../common.sh
+. ../common.sh
 checkpkgs "xrdb"
 rm ~/.Xresources
 cp ~/scripts/config/Xresources/my/.Xresources ~/.Xresources
