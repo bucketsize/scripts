@@ -461,7 +461,7 @@ au User lsp_setup call lsp#register_server({
             \ 'cmd': {server_info->[
                 \   &shell,
                 \   &shellcmdflag,
-                \   expand('~/Programs/lspd/ocaml-lspd')
+                \   expand('lspd-ocaml')
                 \ ]},
                 \ 'whitelist': ['reason', 'ocaml'],
                 \ })
@@ -472,7 +472,7 @@ au User lsp_setup call lsp#register_server({
             \ 'cmd': {server_info->[
                 \   &shell,
                 \   &shellcmdflag,
-                \   expand('~/Programs/lspd/java-lspd')
+                \   expand('lspd-java')
                 \ ]},
                 \ 'whitelist': ['java'],
                 \ })

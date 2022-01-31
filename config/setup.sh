@@ -31,6 +31,7 @@ install() {
     frmad
     mxctl
     ympd
+    lspd
     "
 
     echo $(date) > /tmp/instlst.log

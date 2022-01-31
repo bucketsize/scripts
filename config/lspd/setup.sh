@@ -2,5 +2,7 @@
 
 checkpkgs "opam"
 
-[ -d ~/Programs ] || mkdir ~/Programs
-updatelink ~/scripts/config/lspd/my ~/Programs/lspd
+[ -d ~/.local/bin ] || mkdir ~/.local/bin
+
+updatelink $(pwd)/lspd/my/lspd-ocaml ~/.local/bin/lspd-ocaml
+updatelink $(pwd)/lspd/my/lspd-java  ~/.local/bin/lspd-java
