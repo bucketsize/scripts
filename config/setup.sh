@@ -31,7 +31,7 @@ install() {
     frmad
     mxctl
     ympd
-    lsdp
+    lspd
     tz
     "
 
