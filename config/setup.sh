@@ -31,6 +31,8 @@ install() {
     frmad
     mxctl
     ympd
+    lsdp
+    tz
     "
 
     echo $(date) > /tmp/instlst.log
@@ -46,7 +48,10 @@ install() {
 }
 
 cleanupstale() {
-    find  ~/.config -type l -name "*.*" -delete
+    find  ~/.config \
+        -type l -name "*.*" -delete
+    find  ~/.local/bin \
+        -type l -name "*.*" -delete
 }
 
 case $1 in

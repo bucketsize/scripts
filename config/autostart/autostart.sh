@@ -2,8 +2,6 @@
 
 xrdb -merge ~/.Xresources
 
-bgfpid=~/scripts/bgfpid
-
 # dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
 dbus-launch --sh-syntax --exit-with-session
 sleep 1
@@ -17,10 +15,10 @@ $bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
 #screen
 ~/.luarocks/bin/mxctl.control fun setup_video
 
-picom &
+$bgfpid picom
 
 # apply wallpaper after screen set
-~/scripts/xdg/x.wallpaper.sh new &
+~/.luarocks/bin/mxctl.control fun applywallpaper
 
 # locker
 #$bgfpid ~/.luarocks/bin/mxctl.control "cmd autolockd_xautolock"
@@ -29,8 +27,6 @@ picom &
 setxkbmap us
 xsetroot -cursor_name left_ptr
 
-bgfpid=~/scripts/bgfpid
-
 $bgfpid sxhkd "-c ~/.config/sxhkd/sharedrc"
 
 sleep 1
@@ -38,6 +34,7 @@ $bgfpid tint2
 $bgfpid dunst
 $bgfpid clipit
 $bgfpid nm-applet --sm-disable
+$bgfpid lxpolkit
 
 sleep 1
 $bgfpid mpd
