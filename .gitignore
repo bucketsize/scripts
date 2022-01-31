@@ -16,6 +16,7 @@ xmonad.o
 *.gz
 *.tgz
 .uuid
+.opam
 
 autoload/
 plugged/
