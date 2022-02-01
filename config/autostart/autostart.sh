@@ -45,7 +45,7 @@ $bgfpid VBoxClient --clipboard
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-$bgfpid ~/.luarocks/bin/frmad.lemonbar_out '| lemonbar 
+$bgfpid fseer.$(arch) 'lemonbar | lemonbar 
     -f "DejaVu Sans Condensed:size=9"
 	-f "Font Awesome 5 Free:size=9"
 	-F "#dddddd"
