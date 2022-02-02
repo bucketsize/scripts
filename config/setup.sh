@@ -33,6 +33,7 @@ install() {
     ympd
     lspd
     tz
+    fseer
     "
 
     echo $(date) > /tmp/instlst.log
