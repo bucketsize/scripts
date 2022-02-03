@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# maybe / mayb not
+export PATH=$PATH:~/.local/bin
+
+# nice things
 xrdb -merge ~/.Xresources
 
 # dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
