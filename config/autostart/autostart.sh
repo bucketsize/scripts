@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# maybe / mayb not
-export PATH=$PATH:~/.local/bin
+# maybe / maybe not
+export PATH=~/.local/bin:$PATH
 
 # nice things
 xrdb -merge ~/.Xresources
@@ -19,7 +19,11 @@ bgfpid ~/.luarocks/bin/frmad.daemon "2>&1 > /tmp/frmad.daemon.log"
 #screen
 ~/.luarocks/bin/mxctl.control fun setup_video
 
-bgfpid picom
+if [ "$(which picom)" = "" ]; then
+    bgfpid compton
+else
+    bgfpid picom
+fi
 
 # apply wallpaper after screen set
 ~/.luarocks/bin/mxctl.control fun applywallpaper

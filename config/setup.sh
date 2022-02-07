@@ -15,6 +15,8 @@ install() {
     updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 
     instlst="
+    Xresources
+    autostart
     openbox
     bspwm
     sxhkd
@@ -24,11 +26,9 @@ install() {
     tint2
     picom
     compton
-    Xresources
     vim
     mpd
     mpv
-    frmad
     mxctl
     ympd
     lspd
