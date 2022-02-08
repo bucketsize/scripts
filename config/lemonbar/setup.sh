@@ -3,7 +3,13 @@
 . ../common.sh
 
 setup_compile() {
-    if [ -d ~/lemonbar-xft/.git ]; then
+    checkpkgs "xcb
+     xcb-randr
+     xft 
+     x11-xcb
+     xcb-xinerama"
+
+    if [ -d ~/lemonbar-xft ]; then
         cd ~/lemonbar-xft
         git pull
     else
@@ -13,6 +19,7 @@ setup_compile() {
     fi
     make
     tar -czf lemonbar.$(arch).tar.gz lemonbar
+    cp -fv lemonbar ~/.local/bin/
 }
 
 setup_prebuilt() {
@@ -21,3 +28,5 @@ setup_prebuilt() {
     wget https://www.dropbox.com/s/hxuj4yz0x0vvrfj/$pkg 
     tar -xvzf $pkg -C ~/.local/bin
 }
+
+setup_compile
