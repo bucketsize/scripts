@@ -14,6 +14,8 @@ for i in $CF; do
 done
 
 cp $CD/.gtkrc-2.0 ~/
+
+mkdir -p ~/.config/gtk-3.0
 cp $CD/gtk.css ~/.config/gtk-3.0/
 cp $CD/settings.ini ~/.config/gtk-3.0/
 

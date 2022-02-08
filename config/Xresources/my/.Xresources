@@ -35,15 +35,14 @@ URxvt*font: FONTMONO
 URxvt*buffered: true
 URxvt.lineSpace: 0
 URxvt.letterSpace: 0
+URxvt*borderless: 1
+URxvt*underlineColor: orange
 !URxvt*iconFile: /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
 URxvt*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
-!URxvt*shading: 0 to 99 darkens, 101 to 200 lightens
-URxvt*shading: 110
 URxvt.geometry: 96x24
-URxvt.urlLauncher: firefox
-URxvt.underlineURLs: true
-URxvt.urlButton: 1
-
+URxvt*skipBuiltinGlyphs: true
+URxvt.urgentOnBell: true
+URxvt.iso14755: false
 
 
 TVim*iconFile:  /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png

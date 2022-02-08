@@ -39,7 +39,7 @@ install() {
     echo $(date) > /tmp/instlst.log
     for i in $instlst; do
         echo "> setup $i"
-        sh $i/setup.sh 1>>/tmp/instlst.log 2>>/tmp/instlst.log
+        sh $i/setup.sh #1>>/tmp/instlst.log 2>>/tmp/instlst.log
         if [ $? != 0 ]; then
             less /tmp/instlst.log
             die "! setup failed $i"

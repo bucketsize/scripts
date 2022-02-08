@@ -1,25 +1,12 @@
 #!/bin/sh
 
-init_opam() {
-    opam env
-    if [ ! $? = 0 ]; then
-        opam init
-        eval $(opam env)
-    fi
-}
-
-case $1 in
-    init)
-        init_opam
-        ;;
-    env)
-        init_opam
-        ;;
-    *)
-        init_opam
-        if [ "$(which ocamllsp)" = "" ]; then
-            opam install ocamllsp
-        fi
-        ocamllsp
-        ;;
-esac
+opam env
+if [ ! $? = 0 ]; then
+    opam init
+fi
+eval $(opam env)
+if [ "$(which ocamllsp)" = "" ]; then
+    opam install ocaml-lsp-server
+    eval $(opam env)
+fi
+ocamllsp
