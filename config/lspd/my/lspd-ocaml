@@ -1,6 +1,6 @@
 #!/bin/sh
 
-opam env
+opam env > /dev/null
 if [ ! $? = 0 ]; then
     opam init
 fi

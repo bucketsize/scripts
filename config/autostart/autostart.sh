@@ -53,7 +53,7 @@ bgfpid VBoxClient --clipboard
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-bgfpid fseer.$(arch) ' lemonbar | lemonbar 
+bgfpid fseer.$(arch) 'mon lemonbar | lemonbar 
     -f "DejaVu Sans Condensed:size=9"
 	-f "Font Awesome 5 Free:size=9"
 	-F "#dddddd"
