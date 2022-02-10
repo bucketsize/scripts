@@ -14,26 +14,29 @@ install() {
     createdir ~/.local/bin
     updatelink ~/scripts/bgfpid ~/.local/bin/bgfpid
 
+    # alternates
+    # bspwm
+    # compton
+    # ympd
+
     instlst="
     Xresources
     autostart
     openbox
-    bspwm
     sxhkd
     fontconfig
     gtk
     dunst
     tint2
     picom
-    compton
     vim
     mpd
     mpv
     mxctl
-    ympd
     lspd
     tz
     fseer
+    sysctl.d
     "
 
     echo $(date) > /tmp/instlst.log

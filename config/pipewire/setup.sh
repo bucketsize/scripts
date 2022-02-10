@@ -1,4 +1,7 @@
 #!/bin/sh
+. ../common.sh
+
+checkpkgs "pipewire"
 
 sessf=/etc/pipewire/media-session.d/with-pulseaudio
 servd=/etc/systemd/user

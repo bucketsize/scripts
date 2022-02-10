@@ -41,7 +41,7 @@ sleep 1
 bgfpid tint2
 bgfpid dunst
 bgfpid clipit
-bgfpid nm-applet --sm-disable
+bgfpid connman-gtk
 bgfpid lxpolkit
 
 sleep 1
@@ -53,10 +53,12 @@ bgfpid VBoxClient --clipboard
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-bgfpid fseer.$(arch) 'mon lemonbar | lemonbar 
-    -f "DejaVu Sans Condensed:size=9"
-	-f "Font Awesome 5 Free:size=9"
-	-F "#dddddd"
-	-B "#87000000"'
+bgfpid fseer.$(arch) 'mon lemonbar 
+    | lemonbar
+        -f "DejaVu Sans Condensed:size=9"
+	    -f "Font Awesome 5 Free:size=9"
+	    -F "#ddddee"
+	    -B "#87000000" 
+    | sh'
 
 # flatpak run com.valvesoftware.Steam
