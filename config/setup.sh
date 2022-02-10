@@ -2,11 +2,23 @@
 
 . ../common.sh
 
-install() {
+setup_pcbell(){
+    pcnobell=$(grep -Po "^set bell-style none" /etc/inputrc)
+    if [ "$pcnobell" = "" ]; then
+        echo "set bell-style none" | sudo tee /etc/inputrc
+    fi
+}
+
+setup_path(){
     if [ "" = "$(grep '\.local\/bin' ~/.bashrc | tr -d '\n')" ]; then
-        echo "\n# --" >> ~/.bashrc
         echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
     fi
+}
+
+install() {
+
+    setup_pcbell
+    setup_path
 
     createdir ~/.cache
     createdir ~/.theme

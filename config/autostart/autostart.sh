@@ -61,4 +61,6 @@ bgfpid fseer.$(arch) 'mon lemonbar
 	    -B "#87000000" 
     | sh'
 
+bgfpid urxvtd '-q -o -f'
+
 # flatpak run com.valvesoftware.Steam
