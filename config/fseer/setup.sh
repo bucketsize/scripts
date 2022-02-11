@@ -1,9 +1,9 @@
 . ../common.sh
 
 setup_prebuilt() {
-    pkg=fseer.$(arch).tar.gz
+    pkg=fseer.$(_arch).tar.gz
     cd /tmp
-    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.aarch64.tar.gz 
+    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
     tar -xvzf $pkg -C ~/.local/bin
 }
 
@@ -38,8 +38,11 @@ case $1 in
     source)
         setup_sourcebuild
         ;;
-    *)
+    prebuilt)
         setup_prebuilt
+        ;;
+    *)
+        setup_sourcebuild
         ;;
 esac
 

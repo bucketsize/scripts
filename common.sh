@@ -73,3 +73,8 @@ githubfetch() {
 		git pull
 		cd $ipwd
 }
+_arch(){
+    arch=$(grep -o -w 'lm' /proc/cpuinfo | sort -u)
+    if [ "$arch" = "lm" ];then echo "x86_64"
+    fi
+}
