@@ -37,8 +37,7 @@ URxvt.lineSpace: 0
 URxvt.letterSpace: 0
 URxvt*borderless: 1
 URxvt*underlineColor: orange
-!URxvt*iconFile: /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
-URxvt*iconFile: /usr/share/icons/Adwaita/32x32/apps/utilities-terminal.png
+URxvt*iconFile: ~/.icons/terminal.png 
 URxvt.geometry: 96x24
 URxvt*skipBuiltinGlyphs: true
 URxvt.urgentOnBell: false

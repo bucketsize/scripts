@@ -29,34 +29,24 @@ createdir(){
     [ -d $dst ] || mkdir -p $dst
 }
 checkpkgs() {
-    status=0
-    a=$1
-    for i in $a; do
+    for i in $1; do
         pkg-config $i 
-        if [ "$?" != "0" ]; then
+        if [ ! $? = 0 ]; then
             which $i > /dev/null
-            if [ "$?" != "0" ]; then
-                echo "pkg [$i] not installed"
-                status=1
+            if [ ! $? = 0 ]; then
+                echo "pkg [$i] required"
+                exit 10
             fi
         fi
     done
-    if [ "$status" != "0" ]; then
-        die ".. aborting!"
-    fi
 }
 requirefiles(){
-    status=0
-    a=$1
-    for i in $a; do
-        if [ ! -f "$i" ]; then
-            echo "require file [$i]"
-            status=1
+    for i in $1; do
+        if [ ! -f $i ]; then
+            echo "file [$i] required"
+            exit 10
         fi
     done
-    if [ "$status" != "0" ]; then
-        die ".. aborting!"
-    fi
 }
 updatelink() {
     src=$1

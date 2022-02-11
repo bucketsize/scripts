@@ -135,6 +135,7 @@ startup_notifications = 0
 launcher_tooltip = 0
 launcher_item_app = /usr/share/applications/Alacritty.desktop
 launcher_item_app = /usr/share/applications/chromium.desktop
+launcher_item_app = ~/scripts/launch_urxvtc.sh
 
 #-------------------------------------
 # Clock

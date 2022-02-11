@@ -3,7 +3,7 @@
 setup_prebuilt() {
     pkg=fseer.$(arch).tar.gz
     cd /tmp
-    wget https://www.dropbox.com/s/l0f1t59eit2muf4/$pkg
+    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.aarch64.tar.gz 
     tar -xvzf $pkg -C ~/.local/bin
 }
 
@@ -14,7 +14,7 @@ init_opam() {
         eval $(opam env)
     fi
     if [ "$(which dune)" = "" ]; then
-        opam install dune ounit2 ctypes ctypes-foreign stdio
+        opam install dune ounit2 ctypes ctypes-foreign stdio --yes
         eval $(opam env)
     fi
     eval $(opam env)
@@ -33,5 +33,13 @@ setup_sourcebuild() {
     ./build pack fseer
     ./build install fseer
 }
-setup_sourcebuild
+
+case $1 in
+    source)
+        setup_sourcebuild
+        ;;
+    *)
+        setup_prebuilt
+        ;;
+esac
 
