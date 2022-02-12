@@ -1,13 +1,12 @@
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util = require('util')
+--
 
-setup_prebuilt() {
-    pkg=fseer.$(_arch).tar.gz
-    cd /tmp
-    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
-    tar -xvzf $pkg -C ~/.local/bin
-}
 
-init_opam() {
+local init_opam = [[ 
+   init_opam() {
     opam env
     if [ ! $? = 0 ]; then
         opam init
@@ -18,9 +17,11 @@ init_opam() {
         eval $(opam env)
     fi
     eval $(opam env)
-}
+   }
+   ]]
 
-setup_sourcebuild() {
+function setup_sourcebuild()
+    local cmd = init_opam .. [[
     cd ~/
     init_opam
     if [ ! -d ~/fseer ]; then
@@ -32,17 +33,19 @@ setup_sourcebuild() {
     ./build
     ./build pack fseer
     ./build install fseer
-}
+    ]]
+    Util:exec(cmd)
+end
 
-case $1 in
-    source)
-        setup_sourcebuild
-        ;;
-    prebuilt)
-        setup_prebuilt
-        ;;
-    *)
-        setup_sourcebuild
-        ;;
-esac
+function setup_prebuilt()
+    local cmd = [[
+    pkg=fseer.$(_arch).tar.gz
+    cd /tmp
+    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
+    tar -xvzf $pkg -C ~/.local/bin
+    ]]
+    Util:exec(cmd)
+end
+
+setup_sourcebuild()
 

@@ -1,3 +1,11 @@
-. ../common.sh
-checkpkgs "bspwm sxhkd"
-updatelink ~/scripts/config/bspwm/my ~/.config/bspwm
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists("bspwm")
+Util:assert_file_exists("sxhkd")
+
+Shell.ln("$(pwd)/bspwm/my", "~/.config/bspwm")

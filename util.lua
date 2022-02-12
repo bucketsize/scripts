@@ -128,6 +128,12 @@ function Util:file_exists(file)
 	h:close()
 	return true
 end
+function Util:assert_file_exists(file)
+    if not Util:file_exists(file) then
+        print(file .. " -> required") 
+        os.exit(1)
+    end
+end
 function Util:read(filename)
    local h = io.open(filename, "r")
    local r

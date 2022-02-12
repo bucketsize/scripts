@@ -1,3 +1,10 @@
-. ../common.sh
-checkpkgs "dunst"
-updatelink ~/scripts/config/dunst/my ~/.config/dunst
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists("dunst")
+
+Shell.ln("$(pwd)/dunst/my", "~/.config/dunst")
