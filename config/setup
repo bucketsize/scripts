@@ -1,0 +1,42 @@
+#!/usr/bin/env lua
+
+-- BP --
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util=require("util")
+--
+
+local setup_items = {
+    Xresources = {},
+    autostart = {},
+    openbox = {},
+    bspwm = {state="noi"},
+    sxhkd = {},
+    fontconfig = {},
+    gtk = {},
+    dunst = {},
+    tint2 = {},
+    picom = {},
+    compton = {state="noi"},
+    vim = {},
+    mpd = {},
+    ympd = {state="noi"},
+    mpv = {},
+    mxctl = {},
+    lspd = {},
+    tz = {},
+    fseer = {},
+    ["sysctl.d"] = {},
+    alacritty = {state="noi"},
+}
+
+Util:map(function(k, v)
+    if v.state == "noi" then
+        print("> " .. k .. " :noi")
+    else
+        print("> " .. k)
+        Util:exec(
+            string.format("%s/scripts/config/%s/setup",_HOME,k))
+    end
+    return 0
+end, setup_items)
+

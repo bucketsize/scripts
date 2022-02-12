@@ -1,0 +1,9 @@
+#!/usr/bin/env lua
+
+-- BP --
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+--
+
+Shell.ln(
+    "$(pwd)/autostart/autostart", "~/.local/bin/autostart")

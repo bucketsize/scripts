@@ -74,6 +74,10 @@ Plug 'JuliaEditorSupport/julia-vim'
 " ocaml support + lsp
 Plug 'ocaml/vim-ocaml'
 
+" lua
+Plug 'xolox/vim-lua-ftplugin'
+Plug 'xolox/vim-misc'
+
 " language pack syntax, indent
 Plug 'sheerun/vim-polyglot'
 
@@ -508,3 +512,6 @@ augroup lsp_install
 augroup END
 
 let g:NERDTreeWinSize=32
+
+let g:lua_complete_omni=1
+let   lua_complete_omni=1
