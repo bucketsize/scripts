@@ -35,24 +35,7 @@ function F.exec(cmd)
     return err
 end
 function F.assert_exec(cmd, m)
-    Util:log("INFO", _MLOG, "exec> "..cmd)
-    local s,err,sig = os.execute(cmd)
-    if err=="exit" then
-        if sig==0 then
-            -- nothing to do
-        else
-            print(err,sig,m)
-            os.exit(sig)
-        end
-    else
-        if err=="signal" then
-            print(err,sig,m)
-            os.exit(sig)
-        else
-            print(err,sig,m)
-            os.exit(sig)
-        end
-    end
+    Util:assert_exec(cmd, m)
 end
 function F.exec_stream(cmd, fn)
 	local h = assert(io.popen(cmd))

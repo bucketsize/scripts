@@ -40,6 +40,29 @@ function Util:assert_file_exists(file)
         os.exit(1)
     end
 end
+function Util:assert_exec(cmd, m)
+    Util:log("INFO", _MLOG, "exec> "..cmd)
+    local s,err,sig = os.execute(cmd)
+    if err=="exit" then
+        if sig==0 then
+            -- nothing to do
+        else
+            print(err,sig,m)
+            os.exit(sig)
+        end
+    else
+        if err=="signal" then
+            print(err,sig,m)
+            os.exit(sig)
+        else
+            print(err,sig,m)
+            os.exit(sig)
+        end
+    end
+end
+function Util:assert_pkg_exists(pkg)
+    Util:assert_exec("pkg-config "..pkg, "require pkg: "..pkg)
+end
 function Util:tofile(file, ot)
    local h = assert(io.open(file, 'w'))
    for k, v in ot:opairs() do

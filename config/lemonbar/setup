@@ -6,14 +6,12 @@ local Shell = require('shell')
 --
 
 function setup_sourcebuild()
-    local cmd = [[
-        . ../common.sh
-        checkpkgs "xcb
-        xcb-randr
-        xft 
-        x11-xcb
-        xcb-xinerama"
-
+    Util:assert_pkg_exists("xcb")
+    Util:assert_pkg_exists("xcb-randr")
+    Util:assert_pkg_exists("xft")
+    Util:assert_pkg_exists("x11-xcb")
+    Util:assert_pkg_exists("xcb-xinerama")
+    local cmd = string.format([[
         if [ -d ~/lemonbar-xft ]; then
             cd ~/lemonbar-xft
             git pull
@@ -23,9 +21,9 @@ function setup_sourcebuild()
             cd ~/lemonbar-xft
         fi
         make
-        tar -czf lemonbar.$(arch).tar.gz lemonbar
+        tar -czf lemonbar.%s.tar.gz lemonbar
         cp -fv lemonbar ~/.local/bin/
-        ]]
+        ]], Shell.arch())
     Shell.assert_exec(cmd, "failed")
 end
 

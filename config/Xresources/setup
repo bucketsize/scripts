@@ -7,7 +7,8 @@ local Shell = require('shell')
 
 Util:assert_file_exists("xrdb")
 Util:assert_file_exists("sed")
-Shell.cp("~/scripts/config/Xresources/my/.Xresources","~/.Xresources")
+Shell.ln("$(pwd)/Xresources/my","~/.config/xresources.d")
+Shell.cp("$(pwd)/Xresources/my/.Xresources","~/.Xresources")
 Shell.exec([[
         sed -i "s|__home|$HOME|g" ~/.Xresources
 ]])

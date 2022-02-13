@@ -1,7 +1,8 @@
 #!/usr/bin/env lua
 --
 package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util = require('util')
+local Util  = require('util')
+local Shell = require('shell')
 --
 
 
@@ -22,29 +23,29 @@ local init_opam = [[
 
 function setup_sourcebuild()
     local cmd = init_opam .. [[
-    cd ~/
-    init_opam
-    if [ ! -d ~/fseer ]; then
-        git clone https://github.com/bucketsize/fseer.git
-    fi
-    cd ~/fseer
-    git checkout master
-    git pull
-    ./build
-    ./build pack fseer
-    ./build install fseer
+        cd ~/
+        init_opam
+        if [ ! -d ~/fseer ]; then
+            git clone https://github.com/bucketsize/fseer.git
+        fi
+        cd ~/fseer
+        git checkout master
+        git pull
+        ./build
+        ./build pack fseer
+        ./build install fseer
     ]]
-    Util:exec(cmd)
+    Shell.assert_exec(cmd, "fseer sourcebuild")
 end
 
 function setup_prebuilt()
     local cmd = [[
-    pkg=fseer.$(_arch).tar.gz
-    cd /tmp
-    wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
-    tar -xvzf $pkg -C ~/.local/bin
+        pkg=fseer.$(_arch).tar.gz
+        cd /tmp
+        wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
+        tar -xvzf $pkg -C ~/.local/bin
     ]]
-    Shell.assert_exec(cmd)
+    Shell.assert_exec(cmd, "fseer prebuilt")
 end
 
 setup_sourcebuild()
