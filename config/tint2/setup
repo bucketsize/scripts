@@ -1,3 +1,9 @@
-. ../common.sh
-checkpkgs "tint2"
-updatelink ~/scripts/config/tint2/dashy ~/.config/tint2
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists ("tint2")
+Shell.ln ("~/scripts/config/tint2/dashy","~/.config/tint2")

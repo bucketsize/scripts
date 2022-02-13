@@ -1,21 +1,12 @@
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+--
 
-bs=$(rndstr)
+Shell.cp("$(pwd)/gtk/.gtkrc-2.0", "~/.gtkrc-2.0")
 
-CD=~/scripts/config/gtk
-CF="~/.gtkrc-2.0                  
-~/.config/gtk-3.0/gtk.css     
-~/.config/gtk-3.0/settings.in"
-
-for i in $CF; do
-    if [ -f $i ]; then
-        mv $i $i.$bs 
-    fi
-done
-
-cp $CD/.gtkrc-2.0 ~/
-
-mkdir -p ~/.config/gtk-3.0
-cp $CD/gtk.css ~/.config/gtk-3.0/
-cp $CD/settings.ini ~/.config/gtk-3.0/
+Shell.md("~/.config/gtk-3.0")
+Shell.cp("$(pwd)/gtk/gtk.css", "~/.config/gtk-3.0/gtk.css")
+Shell.cp("$(pwd)/gtk/settings.ini", "~/.config/gtk-3.0/settings.ini")
 

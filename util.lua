@@ -170,27 +170,6 @@ function Util:launch(app)
    h:close()
    Util:log("INFO", _MLOG, "out> "..r)
 end
-function Util:exec(cmd)
-	Util:log("INFO", _MLOG, "exec> "..cmd)
-	local h = io.popen(cmd, "r")
-	local r
-	if h == nil then
-		r = ""
-	else
-		r = h:read("*a")
-		h:close()
-	end
-	return r
-end
-function Util:stream_exec(cmd, fn)
-	local h = assert(io.popen(cmd))
-	while true do
-		local l = h:read("*line")
-		if l == nil then break end
-		fn(l)
-	end
-	h:close()
-end
 function Util:stream_file(cmd, fn)
    local h = assert(io.open(cmd, 'r'))
    local r = {}
@@ -256,6 +235,15 @@ function Util:printOTable(t)
 		end
 	end
 end
+math.randomseed(os.time())
+function Util:rndstr()
+    return string.format("%s-%s",os.time(),string.char(
+        math.random(65, 90),
+        math.random(65, 90),
+        math.random(65, 90),
+        math.random(65, 90)
+        ))
+end
 
 Util.PSV_PAT='([%a%s%d-+_{}./]+)|'
 Util.FILENAME_PAT='/([%a%d%s+=-_\\.\\]*)$'
@@ -276,8 +264,8 @@ function test()
     local cmd = string.format("~/scripts/detect.sh")
     local r = Util:exec(cmd)
     print(r)
-
 end
-
---test()
+function test_rndstr()
+    print(Util:rndstr())
+end
 return Util

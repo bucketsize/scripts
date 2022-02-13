@@ -1,5 +1,13 @@
-. ../common.sh
-checkpkgs "openbox obconf"
-updatelink $(pwd)/openbox/my ~/.config/openbox
-createdir ~/.themes
-updatelink $(pwd)/openbox/themes/Tenebris/ ~/.themes/Tenebris
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists ("openbox")
+Util:assert_file_exists ("obconf")
+
+Shell.ln ("$(pwd)/openbox/my", "~/.config/openbox")
+Shell.md ("~/.themes")
+Shell.ln ("$(pwd)/openbox/themes/Tenebris/", "~/.themes/Tenebris")

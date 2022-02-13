@@ -1,3 +1,9 @@
-. ../common.sh
-checkpkgs "picom"
-updatelink ~/scripts/config/picom/my ~/.config/picom
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists("picom")
+Shell.ln ("~/scripts/config/picom/my", "~/.config/picom")

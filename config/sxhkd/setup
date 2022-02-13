@@ -1,3 +1,9 @@
-. ../common.sh
-checkpkgs "sxhkd"
-updatelink ~/scripts/config/sxhkd/my ~/.config/sxhkd
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists ("sxhkd")
+Shell.ln ("~/scripts/config/sxhkd/my","~/.config/sxhkd")

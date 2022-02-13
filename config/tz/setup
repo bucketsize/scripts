@@ -1,4 +1,11 @@
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
 
-checkpkgs "xrdb"
-sudo timedatectl set-timezone Asia/Kolkata
+Util:assert_file_exist("timedatectl")
+Shell.exec([[
+    sudo timedatectl set-timezone Asia/Kolkata
+    ]])

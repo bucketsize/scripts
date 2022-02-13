@@ -1,8 +1,16 @@
-. ../common.sh
-checkpkgs "nvim"
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
 
+Util:assert_file_exists ("nvim")
+
+Shell.exec([[
 [ -d my/plugged ] ||\
 	([ -f my/plug.tgz ] && tar -xzf my/plug.tgz -C my)
+]])
 
-updatelink ~/scripts/config/nvim/my ~/.config/nvim
-updatelink ~/scripts/tvim ~/.local/bin/tvim
+Shell.ln ("~/scripts/config/nvim/my","~/.config/nvim")
+Shell.ln ("~/scripts/tvim","~/.local/bin/tvim")

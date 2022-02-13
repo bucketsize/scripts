@@ -1,6 +1,14 @@
-. ../common.sh
-checkpkgs "mpd mpc"
-createdir ~/.mpd
-updatelink ~/scripts/config/mpd/my ~/.config/mpd
-echo "going to disable automatic root start of mpd:..."
-sudo systemctl disable mpd
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+local Util = require("util")
+--
+
+Util:assert_file_exists ("mpd")
+Util:assert_file_exists ("mpc")
+
+Shell.md ("~/.mpd")
+Shell.ln ("~/scripts/config/mpd/my", "~/.config/mpd")
+print ("going to disable automatic root start of mpd:...")
+Shell.assert_exec("sudo systemctl disable mpd")

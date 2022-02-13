@@ -1,8 +1,10 @@
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+--
 
-checkpkgs "opam"
+Shell.md ("~/.local/bin")
 
-[ -d ~/.local/bin ] || mkdir ~/.local/bin
-
-updatelink $(pwd)/lspd/my/lspd-ocaml ~/.local/bin/lspd-ocaml
-updatelink $(pwd)/lspd/my/lspd-java  ~/.local/bin/lspd-java
+Shell.ln ("$(pwd)/lspd/my/lspd-ocaml", "~/.local/bin/lspd-ocaml")
+Shell.ln ("$(pwd)/lspd/my/lspd-java", "~/.local/bin/lspd-java")

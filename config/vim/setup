@@ -1,4 +1,10 @@
-. ../common.sh
-rm ~/.vimrc
-ln -s ~/scripts/config/vim/vimrc ~/.vimrc
-updatelink ~/scripts/tvim ~/.local/bin/tvim
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exist("vim")
+Shell.ln("~/scripts/config/vim/vimrc", "~/.vimrc")
+Shell.ln("~/scripts/tvim", "~/.local/bin/tvim")

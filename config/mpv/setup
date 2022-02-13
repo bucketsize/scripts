@@ -1,3 +1,9 @@
-. ../common.sh
-checkpkgs "mpv"
-updatelink ~/scripts/config/mpv/my ~/.config/mpv
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+local Util = require('util')
+--
+
+Util:assert_file_exists ("mpv")
+Shell.ln ("~/scripts/config/mpv/my", "~/.config/mpv")

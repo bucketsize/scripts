@@ -1,7 +1,13 @@
-#!/bin/sh
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
 
-sudo cp -v sysctl.d/my/112-fs.conf /etc/sysctl.d/
-sudo cp -v sysctl.d/my/117-net.conf /etc/sysctl.d/
-
-sudo sysctl -p
+Util:assert_file_exists ("sxhkd")
+Shell.exec([[
+    sudo cp -vf sysctl.d/my/112-fs.conf /etc/sysctl.d/
+    sudo cp -vf sysctl.d/my/117-net.conf /etc/sysctl.d/
+    sudo sysctl -p
+]])

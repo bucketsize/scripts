@@ -1,8 +1,13 @@
-#!/bin/sh
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
 
-checkpkgs "pipewire"
+Util:assert_file_exists("pipewire")
 
+local cmd = [[
 sessf=/etc/pipewire/media-session.d/with-pulseaudio
 servd=/etc/systemd/user
 
@@ -20,3 +25,6 @@ systemctl --user daemon-reload
 systemctl --user --now enable pipewire pipewire-pulse
 systemctl --user --now disable pulseaudio.service pulseaudio.socket
 systemctl --user mask pulseaudio
+]]
+
+Shell.assert_exec(cmd)

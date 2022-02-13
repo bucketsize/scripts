@@ -1,20 +1,34 @@
-. ../common.sh
-echo "setup $(pwd) ..."
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+--
 
-checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl feh"
-githubfetch bucketsize/minilib
-githubfetch bucketsize/mxctl
+function setup_sourcebuild()
+    local cmd = [[
+    . ../common.sh
+    echo "setup $(pwd) ..."
 
-ipwd=$(pwd)
-arch=$(lscpu | grep -Po "(?<=Architecture:).+" |  tr -d " ")
-LIBDIR=/usr/lib/$arch-linux-gnu
-cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR
-cd ~/mxctl && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR 
-cd $ipwd
+    checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl feh"
+    githubfetch bucketsize/minilib
+    githubfetch bucketsize/mxctl
 
-if [ -d ~/.config/mxctl ]; then
-    echo "[~/.config/mxctl] already present"
-else
-    createdir ~/.config/mxctl
-    cp ~/scripts/config/mxctl/my/config ~/.config/mxctl/
-fi
+    ipwd=$(pwd)
+    LIBDIR=/usr/lib/$(_arch)-linux-gnu
+    cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR
+    [ $? = 0 ] || exit 22
+    cd ~/mxctl && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR 
+    [ $? = 0 ] || exit 22
+    cd $ipwd
+
+    if [ -d ~/.config/mxctl ]; then
+        echo "[~/.config/mxctl] already present"
+    else
+        createdir ~/.config/mxctl
+        cp ~/scripts/config/mxctl/my/config ~/.config/mxctl/
+    fi
+    ]]
+    Shell.assert_exec(cmd, "failed")
+end
+
+return setup_sourcebuild()

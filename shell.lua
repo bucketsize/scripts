@@ -2,8 +2,8 @@
 
 -- BP --
 package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util=require("util")
-local Process = require('process')
+local Util = require("util")
+local Proc = require('process')
 --
 
 local F = {}
@@ -29,7 +29,40 @@ function F.exec(path)
 	  return l
    end
 end
-
+function F.exec(cmd)
+    Util:log("INFO", _MLOG, "exec> "..cmd)
+    local s,err,sig = os.execute(cmd)
+    return err
+end
+function F.assert_exec(cmd, m)
+    Util:log("INFO", _MLOG, "exec> "..cmd)
+    local s,err,sig = os.execute(cmd)
+    if err=="exit" then
+        if sig==0 then
+            -- nothing to do
+        else
+            print(err,sig,m)
+            os.exit(sig)
+        end
+    else
+        if err=="signal" then
+            print(err,sig,m)
+            os.exit(sig)
+        else
+            print(err,sig,m)
+            os.exit(sig)
+        end
+    end
+end
+function F.exec_stream(cmd, fn)
+	local h = assert(io.popen(cmd))
+	while true do
+		local l = h:read("*line")
+		if l == nil then break end
+		fn(l)
+	end
+	h:close()
+end
 function F.grep(patt)
 	return function(s)
 		local r = {}
@@ -38,7 +71,6 @@ function F.grep(patt)
 		return r
 	end
 end
-
 function listToString(list, level)
 	if level == nil then level = 1 end
 	local b = ''
@@ -61,7 +93,6 @@ function listToString(list, level)
 	end
 	return b
 end
-
 function F.echo()
 	return function(s)
 		if type(s) == 'function' then
@@ -76,7 +107,6 @@ function F.echo()
 		return s
 	end
 end
-
 function F.format(patt)
 	return function(s)
 		return string.format(patt, s)
@@ -96,9 +126,53 @@ function F.flat(delim)
 		return s
 	end
 end
-
 function F.ln(s, t)
-   Util:exec(string.format("ln -svf %s %s", s, t))
+    F.exec(string.format("ln -svf %s %s", s, t))
 end
+function F.cp(s, t)
+    F.exec(string.format("cp -vb %s %s", s, t))
+end
+function F.md(p)
+    F.exec(string.format("mkdir -pv %s", p))
+end
+function F.wget(url)
+    F.exec(string.format("wget %s", url))
+end
+
+-- mutually exclusive CPU arch flags
+_ARCH_FLAG = {
+    lm = "x86_64",
+    BCM2835 = "aarch64" 
+}
+function F.arch()
+    local flags = Proc.pipe()
+	.add(F.cat("/proc/cpuinfo"))
+    .add(Proc.branch()
+        .add(F.grep("BCM2835"))
+        .add(F.grep("lm"))
+        .build()
+    )
+    .add(Proc.cull())
+    .run()
+    for _,i in ipairs(flags) do
+        for _,j in ipairs(i) do
+            print("arch flag: ", j)
+            if _ARCH_FLAG[j] then
+                return _ARCH_FLAG[j]
+            end
+        end
+    end
+    return "UnknownISA"
+end
+
+--
+-- TESTS
+-- 
+
+function test()
+    F.arch()
+end
+
+test()
 
 return F

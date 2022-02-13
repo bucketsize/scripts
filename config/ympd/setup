@@ -1,12 +1,23 @@
-. ../common.sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
 
-githubfetch notandy/ympd
-
-if [ ! -f ~/.local/bin/ympd ]; then
-    ipwd=$(pwd)
-    arch=$(lscpu | grep -Po "(?<=Architecture:).+" |  tr -d " ")
-    LIBDIR=/usr/lib/$arch-linux-gnu
-    cd ~/ympd && make
-    cp ympd ~/.local/bin/
-    cd $ipwd
-fi
+if not Util:path_exists("~/.local/bin/ympd") then
+    local cmd = string.format([[
+        if [ -d ~/ympd ]; then
+            cd ~/ympd
+            git pull
+        else
+            git clone https://github.com/notandy/ympd.git
+            cd ~/ympd
+        fi
+        export LIBDIR=/usr/lib/$%s-linux-gnu
+        make ympd
+        strip ympd
+        cp -vf ympd ~/.local/bin/
+    ]], Shell.arch())
+    Shell.exec(cmd)
+end

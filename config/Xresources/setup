@@ -1,5 +1,12 @@
-. ../common.sh
-checkpkgs "xrdb"
-rm ~/.Xresources
-cp ~/scripts/config/Xresources/my/.Xresources ~/.Xresources
-sed -i "s|__home|$HOME|g" ~/.Xresources
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exist("xrdb")
+Shell.cp("~/scripts/config/Xresources/my/.Xresources","~/.Xresources")
+Shell.exec([[
+        sed -i "s|__home|$HOME|g" ~/.Xresources
+]])

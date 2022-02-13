@@ -1,32 +1,42 @@
-#!/bin/sh
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util = require('util')
+local Shell = require('shell')
+--
 
-. ../common.sh
+function setup_sourcebuild()
+    local cmd = [[
+        . ../common.sh
+        checkpkgs "xcb
+        xcb-randr
+        xft 
+        x11-xcb
+        xcb-xinerama"
 
-setup_compile() {
-    checkpkgs "xcb
-     xcb-randr
-     xft 
-     x11-xcb
-     xcb-xinerama"
+        if [ -d ~/lemonbar-xft ]; then
+            cd ~/lemonbar-xft
+            git pull
+        else
+            cd ~/
+            git clone https://gitlab.com/protesilaos/lemonbar-xft.git
+            cd ~/lemonbar-xft
+        fi
+        make
+        tar -czf lemonbar.$(arch).tar.gz lemonbar
+        cp -fv lemonbar ~/.local/bin/
+        ]]
+    Shell.assert_exec(cmd, "failed")
+end
 
-    if [ -d ~/lemonbar-xft ]; then
-        cd ~/lemonbar-xft
-        git pull
-    else
-        cd ~/
-        git clone https://gitlab.com/protesilaos/lemonbar-xft.git
-        cd ~/lemonbar-xft
-    fi
-    make
-    tar -czf lemonbar.$(arch).tar.gz lemonbar
-    cp -fv lemonbar ~/.local/bin/
-}
+function setup_prebuilt()
+    local cmd = [[
+        pkg=lemonbar.$(arch).tar.gz
+        cd /tmp
+        wget https://www.dropbox.com/s/hxuj4yz0x0vvrfj/$pkg 
+        tar -xvzf $pkg -C ~/.local/bin
+        ]]
+    Shell.assert_exec(cmd, "failed")
+end
 
-setup_prebuilt() {
-    pkg=lemonbar.$(arch).tar.gz
-    cd /tmp
-    wget https://www.dropbox.com/s/hxuj4yz0x0vvrfj/$pkg 
-    tar -xvzf $pkg -C ~/.local/bin
-}
-
-setup_compile
+setup_sourcebuild()
