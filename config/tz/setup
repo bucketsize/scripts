@@ -5,7 +5,7 @@ local Util  = require('util')
 local Shell = require('shell')
 --
 
-Util:assert_file_exist("timedatectl")
+Util:assert_file_exists("timedatectl")
 Shell.exec([[
     sudo timedatectl set-timezone Asia/Kolkata
-    ]])
+]])

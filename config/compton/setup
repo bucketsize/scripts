@@ -1,3 +1,7 @@
-. ../common.sh
-checkpkgs "compton"
-updatelink ~/scripts/config/compton/my ~/.config/compton
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Shell = require('shell')
+--
+
+Shell.ln ("~/scripts/config/compton/my", "~/.config/compton")

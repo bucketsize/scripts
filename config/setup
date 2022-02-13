@@ -2,10 +2,24 @@
 
 -- BP --
 package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util=require("util")
+local Util = require("util")
+local Shell = require("shell")
 --
 
-local setup_items = {
+local dirs = {
+    ["~/.cache"] = {},
+    ["~/.theme"] = {},
+    ["~/.wlprs"] = {},
+    ["~/.local/bin"] = {},
+}
+
+local bins = {
+    ["bgfpid"] = {},
+    ["ctrl_backlight.sh"] = {},
+    ["ctrl_monitor.sh"] = {},
+}
+
+local configs = {
     Xresources = {},
     autostart = {},
     openbox = {},
@@ -29,14 +43,51 @@ local setup_items = {
     alacritty = {state="noi"},
 }
 
-Util:map(function(k, v)
-    if v.state == "noi" then
-        print("> " .. k .. " :noi")
-    else
-        print("> " .. k)
-        Util:exec(
-            string.format("%s/scripts/config/%s/setup",_HOME,k))
-    end
-    return 0
-end, setup_items)
+function setup_pcbell()
+    Shell.assert_exec([[
+        pcnobell=$(grep -Po "^set bell-style none" /etc/inputrc)
+        if [ "$pcnobell" = "" ]; then
+            echo "set bell-style none" | sudo tee /etc/inputrc
+        fi
+    ]])
+end
 
+function setup_path()
+    Shell.assert_exec([[
+        if [ "" = "$(grep '\.local\/bin' ~/.bashrc | tr -d '\n')" ]; then
+            echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
+        fi
+    ]])
+end
+
+function setup_dirs()
+    Util:map(function(k, v)
+        Shell.md (k)
+    end, dirs)
+end
+
+function setup_bins()
+    Util:map(function(k, v)
+        Shell.ln (
+            string.format("~/scripts/%s", k),
+            string.format("~/.local/bin/%s", k))
+    end, bins)
+end
+
+function setup_configs()
+    Util:map(function(k, v)
+        if v.state == "noi" then
+            print("> " .. k .. " :noi")
+        else
+            print("> " .. k)
+            Shell.exec(
+                string.format("%s/scripts/config/%s/setup",_HOME,k))
+        end
+        return 0
+    end, configs)
+end
+
+setup_dirs()
+setup_bins()
+setup_path()
+setup_configs()

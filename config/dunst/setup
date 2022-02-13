@@ -6,5 +6,4 @@ local Shell = require('shell')
 --
 
 Util:assert_file_exists("dunst")
-
 Shell.ln("$(pwd)/dunst/my", "~/.config/dunst")

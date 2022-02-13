@@ -44,7 +44,7 @@ function setup_prebuilt()
     wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
     tar -xvzf $pkg -C ~/.local/bin
     ]]
-    Util:exec(cmd)
+    Shell.assert_exec(cmd)
 end
 
 setup_sourcebuild()

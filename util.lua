@@ -34,6 +34,12 @@ function Util:file_exists(file)
     end
     return nil
 end
+function Util:assert_file_exists(file)
+    if not Util:file_exists(file) then
+        print(file .. " -> required") 
+        os.exit(1)
+    end
+end
 function Util:tofile(file, ot)
    local h = assert(io.open(file, 'w'))
    for k, v in ot:opairs() do
@@ -119,20 +125,6 @@ function Util:if_else(p, o1, o2)
    else
       return o2
    end
-end
-function Util:file_exists(file)
-	local h = io.open(file, "r")
-	if h == nil then
-		return false
-	end
-	h:close()
-	return true
-end
-function Util:assert_file_exists(file)
-    if not Util:file_exists(file) then
-        print(file .. " -> required") 
-        os.exit(1)
-    end
 end
 function Util:read(filename)
    local h = io.open(filename, "r")
