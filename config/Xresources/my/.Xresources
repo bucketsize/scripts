@@ -28,7 +28,6 @@ dunst.font: FONT
 xterm*faceName: FONTMONO
 
 !urxvt
-URxvt*termName: screen-256color
 URxvt.depth: 24
 URxvt*transparent: false
 URxvt.background: #000000
@@ -41,14 +40,9 @@ URxvt.letterSpace: 0
 URxvt*borderless: 1
 URxvt*underlineColor: pink
 URxvt*colorUL: pink
-URxvt*iconFile: ~/.icons/terminal.png 
+URxvt*iconFile: __home/.icons/terminal.png 
 URxvt.geometry: 96x24
 URxvt*skipBuiltinGlyphs: true
 URxvt.urgentOnBell: false
 URxvt.visualBell: false
 URxvt.iso14755: false
-Rxvt.underlineURLs: true
-URxvt*urlLauncher: firefox
-
-
-TVim*iconFile:  /usr/share/icons/HighContrast/32x32/apps/utilities-terminal.png
