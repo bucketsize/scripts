@@ -31,6 +31,7 @@ local configs = {
     tint2 = {},
     picom = {},
     compton = {state="noi"},
+    chromium = {},
     vim = {},
     mpd = {},
     ympd = {state="noi"},

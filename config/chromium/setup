@@ -4,4 +4,4 @@ package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
 local Shell = require('shell')
 --
 
-Shell.ln ("~/scripts/config/chromium/my/chromium-flags.conf", "~/.config/chromium-flags.conf")
+Shell.ln ("$(pwd)/chromium/my/chromium-flags.conf", "~/.config/chromium-flags.conf")

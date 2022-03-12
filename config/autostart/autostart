@@ -8,8 +8,7 @@ xrdb -merge ~/.Xresources
 
 # dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
 dbus-launch --sh-syntax --exit-with-session
-sleep 1
-dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
+dbus-update-activation-environment --systemd --all 
 
 # monitoring
 bgfpid ~/.luarocks/bin/frmad.cached "- - 2>&1 > /tmp/frmad.cached.log"

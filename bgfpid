@@ -1,23 +1,71 @@
 #!/bin/sh
 
-[ -d /tmp/run ] || mkdir /tmp/run
+bgf_base=/tmp/bgfpid/run
+[ -d $bgf_base ] || mkdir -p $bgf_base
 
-exe=$1
-opt=$2
+ps_ls(){
+    ls $bgf_base/*.pid | while read -r p; do
+        pid=$(cat $p)
+        status="exite"
+        if [ -f /proc/$pid/status ]; then
+            status="alive"
+        fi
+        c=$(echo $p | sed "s/\.pid/\.run/")
+        cmd=$(cat $c)
+        echo "$pid | $status | $cmd"
+    done
+}
+ps_chk(){
+    exe=$1
+    exe_name=$(basename $exe)
+    pid_file=$bgf_base/$exe_name.pid
+    if [ -f $pid_file ]; then
+        pgrep -F $pid_file
+        if [ ! $? -eq 1 ]; then
+            echo "process [$exe_name] already running"
+            exit
+        fi
+    fi
+}
+ps_kill(){
+    exe=$1
+    exe_name=$(basename $exe)
+    pid_file=$bgf_base/$exe_name.pid
+    if [ -f $pid_file ]; then
+        pgrep -F $pid_file
+        if [ ! $? -eq 1 ]; then
+            echo "process [$exe_name] killing ..."
+            pkill -F $pid_file
+            exit
+        fi
+    fi
+}
+ps_run(){
+    exe=$1
+    opt=$2
+    exe_name=$(basename $exe)
+    pid_file=$bgf_base/$exe_name.pid
+    run_file=$bgf_base/$exe_name.run
+    ps_chk $exe
 
-exe_name=$(basename $exe)
-pid_file=/tmp/run/$exe_name.pid
+    cmd="$exe $opt &"
+    echo "> $cmd"
 
-if [ -f $pid_file ]; then
-	pgrep -F $pid_file
-	if [ ! $? -eq 1 ]; then
-		echo "process [$exe_name] already running"
-		exit
-	fi
-fi
+    eval $cmd
+    echo $! > $pid_file
+    echo $cmd > $run_file
+}
 
-cmd="$exe $opt &"
-echo "> $cmd"
-
-eval $cmd
-echo $! > $pid_file
+case $1 in
+    :ls)
+        ps_ls
+        ;;
+    :kill)
+        ps_kill $2
+        ;;
+    :restart)
+        ps_kill $2
+        ;;
+    *)
+        ps_run $1 "$2"
+esac

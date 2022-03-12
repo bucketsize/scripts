@@ -5,7 +5,7 @@ local Shell = require('shell')
 --
 
 function setup_sourcebuild()
-    local cmd = [[
+    local cmd = string.format([[
     . ../common.sh
     echo "setup $(pwd) ..."
 
@@ -14,7 +14,7 @@ function setup_sourcebuild()
     githubfetch bucketsize/mxctl
 
     ipwd=$(pwd)
-    LIBDIR=/usr/lib/$(_arch)-linux-gnu
+    LIBDIR=/usr/lib/%s-linux-gnu
     cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR
     [ $? = 0 ] || exit 22
     cd ~/mxctl && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR 
@@ -27,7 +27,7 @@ function setup_sourcebuild()
         createdir ~/.config/mxctl
         cp ~/scripts/config/mxctl/my/config ~/.config/mxctl/
     fi
-    ]]
+    ]], Shell.arch())
     Shell.assert_exec(cmd, "failed")
 end
 
