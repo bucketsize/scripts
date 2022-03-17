@@ -1,0 +1,9 @@
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists("foot")
+Shell.ln("$(pwd)/foot/my", "~/.config/foot")

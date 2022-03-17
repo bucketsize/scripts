@@ -1,0 +1,12 @@
+#!/usr/bin/env lua
+--
+package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
+local Util  = require('util')
+local Shell = require('shell')
+--
+
+Util:assert_file_exists("weston")
+Util:assert_file_exists("foot")
+Util:assert_file_exists("wofi")
+
+Shell.ln("$(pwd)/weston/my/weston.ini", "~/.config/weston.ini")

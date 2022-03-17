@@ -34,11 +34,11 @@ local config_group = {
     },
     common = {
         sxhkd = {},
+        chromium = {},
         fontconfig = {},
         gtk = {},
         dunst = {},
         firefox = {},
-        chromium = {},
         vim = {},
         mpd = {},
         ympd = {state="noi"},
@@ -105,6 +105,6 @@ setup_dirs()
 setup_bins()
 setup_path()
 
--- weston
+# weston
 setup_configs("weston")
 setup_configs("common")
