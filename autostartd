@@ -1,0 +1,11 @@
+#!/usr/bin/env lua
+
+require "luarocks.loader"
+
+local Pr = require("minilib.process")
+local Sh = require("minilib.shell")
+local Ut = require("minilib.util")
+
+Pr.new_listener()("pi", "weston", function()
+    Ut:exec("weston-flower")
+end)

@@ -9,4 +9,17 @@ Util:assert_file_exists("weston")
 Util:assert_file_exists("foot")
 Util:assert_file_exists("wofi")
 
-Shell.ln("$(pwd)/weston/my/weston.ini", "~/.config/weston.ini")
+Shell.ln("$(pwd)/weston/my/weston.ini"
+    , "~/.config/weston.ini")
+
+Shell.assert_exec([[
+    [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
+
+    sudo ln -s $(pwd)/../autostartd /opt/sbin/autostartd
+    sudo ln -s $(pwd)/weston/my/weston-autostart.service \
+        /etc/systemd/user/weston-autostart.service
+    
+    systemctl --user daemon-reload
+    systemctl --user enable weston-autostart.service 
+    ]])
+
