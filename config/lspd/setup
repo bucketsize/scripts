@@ -1,10 +1,10 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Shell = require('shell')
---
+require "luarocks.loader"
 
-Shell.md ("~/.local/bin")
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
+
+Shell.mkdir ("~/.local/bin")
 
 Shell.ln ("$(pwd)/lspd/my/lspd-ocaml", "~/.local/bin/lspd-ocaml")
 Shell.ln ("$(pwd)/lspd/my/lspd-java", "~/.local/bin/lspd-java")

@@ -7,5 +7,26 @@ local Sh = require("minilib.shell")
 local Ut = require("minilib.util")
 
 Pr.new_listener()("pi", "weston", function()
-    Ut:exec("weston-flower")
+
+    -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+    Ut:exec("dbus-launch --sh-syntax --exit-with-session")
+    Ut:exec("dbus-update-activation-environment --systemd --all")
+
+    -- key
+    Ut:exec("thd --triggers triggerhappy/my/th.conf --deviceglob /dev/input/event* &")
+
+    Ut:exec("lxpolkit &")
+
+    Ut:exec("dunst &")
+    Ut:exec("clipit &")
+    Ut:exec("connman-gtk &")
+    
+    Ut:exec("conky -c ~/scripts/config/conky/simple/conky.conf 2>/dev/null 1>/dev/null &")
+
+
+    Ut:exec("mpd &")
+    Ut:exec("VBoxClient --clipboard &")
+
+    Ut:exec("weston-flower &")
+
 end)

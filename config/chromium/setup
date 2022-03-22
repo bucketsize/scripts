@@ -1,8 +1,8 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
 
 -- note; only works on arch linux
 Shell.ln ("$(pwd)/chromium/my/chromium-flags.conf", "~/.config/chromium-flags.conf")

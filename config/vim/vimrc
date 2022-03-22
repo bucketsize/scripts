@@ -160,7 +160,7 @@ let g:indentLine_faster = 1
 
 " set termguicolors
 set background=dark
-colorscheme onedark 
+colorscheme onedark
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -239,7 +239,8 @@ nnoremap <silent> <leader>sh :terminal<CR>
 "" Commands
 "*****************************************************************************
 " remove trailing whitespaces
-command! FixWhitespace :%s/\s\+$//e
+command! HmFixWhitespace :%s/\s\+$//e
+command! HmShowInNerdtree :NERDTree %
 
 "*****************************************************************************
 "" Functions
@@ -451,7 +452,7 @@ set hidden
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
 
-" lsp 
+" lsp
 " debug autocomplete
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
@@ -507,7 +508,7 @@ function! s:on_lsp_buffer_enabled() abort
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-    
+
     " refer to doc to add more commands
 endfunction
 
@@ -517,7 +518,13 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-let g:NERDTreeWinSize=32
+let g:NERDTreeWinSize   = 32
 
-let g:lua_complete_omni=1
-let   lua_complete_omni=1
+let g:lua_complete_omni = 1
+let   lua_complete_omni = 1
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)

@@ -1,8 +1,8 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
 
 -- note; only works on arch linux
 Shell.ln ("$(pwd)/firefox/my/user.js", "~/.mozilla/firefox/hlnn94f7.default-esr/user.js")

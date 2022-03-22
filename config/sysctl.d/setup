@@ -1,12 +1,11 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util  = require('util')
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
 
 Util:assert_file_exists ("sxhkd")
-Shell.exec([[
+Shell.assert_exec([[
     sudo cp -vf sysctl.d/my/112-fs.conf /etc/sysctl.d/
     sudo cp -vf sysctl.d/my/117-net.conf /etc/sysctl.d/
     sudo sysctl -p

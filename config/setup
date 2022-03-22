@@ -1,10 +1,10 @@
 #!/usr/bin/env lua
+require "luarocks.loader"
+package.path = '/?.lua;' .. package.path
 
--- BP --
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util = require("util")
-local Shell = require("shell")
---
+local Sh = require('minilib.shell')
+local Pr = require('minilib.process')
+local Ut = require('minilib.util')
 
 local dirs = {
     ["~/.cache"] = {},
@@ -19,21 +19,23 @@ local bins = {
     ["ctrl_monitor.sh"] = {},
 }
 
+local cfg = "/var/tmp/cfg"
 local config_group = {
     bspwm = {
         Xresources = {},
         autostart = {},
-        bspwm = {state="noi"},
+        bspwm = {},
+        sxhkd = {},
         alacritty = {state="noi"}
     },
     openbox = {
         Xresources = {},
         autostart = {},
         openbox = {},
+        sxhkd = {},
         alacritty = {state="noi"}
     },
     common = {
-        sxhkd = {},
         fontconfig = {},
         gtk = {},
         dunst = {},
@@ -50,15 +52,15 @@ local config_group = {
         ["sysctl.d"] = {},
         pipewire = {}
     },
-    weston = {
+    wayland_weston = {
         weston = {},
         foot = {},
-        wofi = {}
+        triggerhappy = {}
     }
 }
 
 function setup_pcbell()
-    Shell.assert_exec([[
+    Ut:exec([[
         pcnobell=$(grep -Po "^set bell-style none" /etc/inputrc)
         if [ "$pcnobell" = "" ]; then
             echo "set bell-style none" | sudo tee /etc/inputrc
@@ -67,7 +69,7 @@ function setup_pcbell()
 end
 
 function setup_path()
-    Shell.assert_exec([[
+    Ut:exec([[
         if [ "" = "$(grep '\.local\/bin' ~/.bashrc | tr -d '\n')" ]; then
             echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
         fi
@@ -75,36 +77,51 @@ function setup_path()
 end
 
 function setup_dirs()
-    Util:map(function(k, v)
-        Shell.md (k)
+    Ut:map(function(k, v)
+        Sh.mkdir (k)
     end, dirs)
 end
 
 function setup_bins()
-    Util:map(function(k, v)
-        Shell.ln (
+    Ut:map(function(k, v)
+        Sh.ln (
             string.format("~/scripts/%s", k),
             string.format("~/.local/bin/%s", k))
     end, bins)
 end
 
+function prepare_configs()
+    local subcfg = require("config-global")
+    Pr.pipe()
+        .add(Sh.find("./"))
+        .add(Sh.read())
+        .add(Sh.sed(subcfg))
+        .add(Sh.write(cfg))
+        .run()
+    Sh.assert_exec(string.format("cd %s && chmod +x */setup", cfg))
+end
+
 function setup_configs(name)
-    Util:map(function(k, v)
+    print("deploying config_group", name)
+    for k, v in pairs(config_group[name]) do
         if v.state == "noi" then
             print("> " .. k .. " :noi")
         else
             print("> " .. k)
-            Shell.exec(
-                string.format("%s/scripts/config/%s/setup",_HOME,k))
+            Ut:exec(string.format([[
+                cd %s && %s/setup
+                ]], cfg, k))
         end
-        return 0
-    end, config_group[name])
+    end
+    return 0
 end
 
+-- common
 setup_dirs()
 setup_bins()
 setup_path()
+prepare_configs()
 
 -- weston
-setup_configs("weston")
+setup_configs("wayland_weston")
 setup_configs("common")

@@ -1,13 +1,12 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Util  = require('util')
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
+
 
 Util:assert_file_exists("weston")
 Util:assert_file_exists("foot")
-Util:assert_file_exists("wofi")
 
 Shell.ln("$(pwd)/weston/my/weston.ini"
     , "~/.config/weston.ini")
@@ -15,8 +14,8 @@ Shell.ln("$(pwd)/weston/my/weston.ini"
 Shell.assert_exec([[
     [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
 
-    sudo ln -s $(pwd)/../autostartd /opt/sbin/autostartd
-    sudo ln -s $(pwd)/weston/my/weston-autostart.service \
+    sudo ln -sfv $(pwd)/../autostartd /opt/sbin/autostartd
+    sudo ln -sfv $(pwd)/weston/my/weston-autostart.service \
         /etc/systemd/user/weston-autostart.service
     
     systemctl --user daemon-reload

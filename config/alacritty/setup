@@ -1,8 +1,7 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
 
 function build_pack()
     Shell.assert_exec([[

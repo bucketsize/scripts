@@ -1,8 +1,8 @@
 #!/usr/bin/env lua
---
-package.path = os.getenv("HOME")..'/scripts/?.lua;' .. package.path
-local Shell = require('shell')
---
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
 
 Shell.ln("$(pwd)/fontconfig/my", "~/.config/fontconfig")
 Shell.ln("$(pwd)/../fonts", "~/.fonts")
