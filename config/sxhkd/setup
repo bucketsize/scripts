@@ -4,5 +4,5 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("sxhkd")
+Shell.file_exists ("sxhkd")
 Shell.ln ("~/scripts/config/sxhkd/my","~/.config/sxhkd")

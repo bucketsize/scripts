@@ -4,5 +4,5 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("tint2")
+Shell.file_exists ("tint2")
 Shell.ln ("~/scripts/config/tint2/dashy","~/.config/tint2")

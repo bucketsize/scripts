@@ -6,21 +6,19 @@ local Sh = require('minilib.shell')
 local Pr = require('minilib.process')
 local Ut = require('minilib.util')
 
-local dirs = {
-    ["~/.cache"] = {},
-    ["~/.theme"] = {},
-    ["~/.wlprs"] = {},
-    ["~/.local/bin"] = {},
-}
-
-local bins = {
-    ["bgfpid"] = {},
-    ["ctrl_backlight.sh"] = {},
-    ["ctrl_monitor.sh"] = {},
-}
-
 local cfg = "/var/tmp/cfg"
 local config_group = {
+    dirs = {
+        ["~/.cache"] = {},
+        ["~/.theme"] = {},
+        ["~/.wlprs"] = {},
+        ["~/.local/bin"] = {},
+    },
+    bins = {
+        ["bgfpid"] = {},
+        ["ctrl_backlight.sh"] = {},
+        ["ctrl_monitor.sh"] = {},
+    },
     bspwm = {
         Xresources = {},
         autostart = {},
@@ -77,17 +75,17 @@ function setup_path()
 end
 
 function setup_dirs()
-    Ut:map(function(k, v)
+    for k, v in pairs(config_group.dirs) do
         Sh.mkdir (k)
-    end, dirs)
+    end
 end
 
 function setup_bins()
-    Ut:map(function(k, v)
+    for k, v in pairs(config_group.bins) do
         Sh.ln (
             string.format("~/scripts/%s", k),
             string.format("~/.local/bin/%s", k))
-    end, bins)
+    end
 end
 
 function prepare_configs()
@@ -98,7 +96,7 @@ function prepare_configs()
         .add(Sh.sed(subcfg))
         .add(Sh.write(cfg))
         .run()
-    Sh.assert_exec(string.format("cd %s && chmod +x */setup", cfg))
+    Sh.sh(string.format("cd %s && chmod +x */setup", cfg))
 end
 
 function setup_configs(name)
@@ -120,6 +118,7 @@ end
 setup_dirs()
 setup_bins()
 setup_path()
+setup_pcbell()
 prepare_configs()
 
 -- weston

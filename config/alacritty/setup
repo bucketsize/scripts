@@ -4,7 +4,7 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 
 function build_pack()
-    Shell.assert_exec([[
+    Shell.sh([[
         if [ -d ~/alacritty ]; then
             cd ~/alacritty
             git pull
@@ -25,7 +25,7 @@ function build_pack()
 end
 
 function setup_prebuilt()
-    Shell.assert_exec([[
+    Shell.sh([[
         if [ -f ~/.local/bin/alacritty ]; then
             exit 0
         fi

@@ -4,31 +4,24 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-function setup_sourcebuild()
-    local cmd = string.format([[
-    . ../common.sh
-    echo "setup $(pwd) ..."
-
-    checkpkgs "git libssl make urxvt xrandr fzy wmctrl pactl feh"
-    githubfetch bucketsize/minilib
-    githubfetch bucketsize/mxctl
-
-    ipwd=$(pwd)
+local deps = {
+    "git", "make", "urxvt", "xrandr", "fzy", "wmctrl", "pactl", "feh"
+}
+for _,v in ipairs(deps) do
+    assert(Shell.file_exists(v))
+end
+assert(Shell.lib_exists("libssl"))
+Shell.github_fetch("bucketsize", "minilib")
+Shell.github_fetch("bucketsize", "mxctl")
+Shell.sh(string.format([[
     LIBDIR=/usr/lib/%s-linux-gnu
     cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR
-    [ $? = 0 ] || exit 22
     cd ~/mxctl && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR 
-    [ $? = 0 ] || exit 22
-    cd $ipwd
-
     if [ -d ~/.config/mxctl ]; then
         echo "[~/.config/mxctl] already present"
     else
         createdir ~/.config/mxctl
         cp ~/scripts/config/mxctl/my/config ~/.config/mxctl/
     fi
-    ]], Shell.arch())
-    Shell.assert_exec(cmd, "failed")
-end
+]], Shell.arch()))
 
-return setup_sourcebuild()

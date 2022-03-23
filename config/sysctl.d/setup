@@ -4,8 +4,8 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("sxhkd")
-Shell.assert_exec([[
+Shell.file_exists ("sxhkd")
+Shell.sh([[
     sudo cp -vf sysctl.d/my/112-fs.conf /etc/sysctl.d/
     sudo cp -vf sysctl.d/my/117-net.conf /etc/sysctl.d/
     sudo sysctl -p

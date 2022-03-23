@@ -5,7 +5,7 @@ local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
 
-if not Util:path_exists("~/.local/bin/ympd") then
+if not Shell.file_exists("~/.local/bin/ympd") then
     local cmd = string.format([[
         if [ -d ~/ympd ]; then
             cd ~/ympd

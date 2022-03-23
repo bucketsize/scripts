@@ -33,7 +33,7 @@ function setup_sourcebuild()
         ./build pack fseer
         ./build install fseer
     ]]
-    Shell.assert_exec(cmd, "fseer sourcebuild")
+    Shell.sh(cmd, "fseer sourcebuild")
 end
 
 function setup_prebuilt()
@@ -43,7 +43,7 @@ function setup_prebuilt()
         wget https://github.com/bucketsize/fseer/releases/download/20220210/fseer.$(_arch).tar.gz 
         tar -xvzf $pkg -C ~/.local/bin
     ]]
-    Shell.assert_exec(cmd, "fseer prebuilt")
+    Shell.sh(cmd, "fseer prebuilt")
 end
 
 setup_sourcebuild()

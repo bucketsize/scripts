@@ -5,13 +5,13 @@ local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
 
-Util:assert_file_exists("weston")
-Util:assert_file_exists("foot")
+Shell.file_exists("weston")
+Shell.file_exists("foot")
 
 Shell.ln("$(pwd)/weston/my/weston.ini"
     , "~/.config/weston.ini")
 
-Shell.assert_exec([[
+Shell.sh([[
     [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
 
     sudo ln -sfv $(pwd)/../autostartd /opt/sbin/autostartd

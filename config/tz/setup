@@ -4,7 +4,7 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists("timedatectl")
+Shell.file_exists("timedatectl")
 Shell.exec([[
     sudo timedatectl set-timezone Asia/Kolkata
 ]])

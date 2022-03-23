@@ -4,8 +4,8 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("openbox")
-Util:assert_file_exists ("obconf")
+Shell.file_exists ("openbox")
+Shell.file_exists ("obconf")
 
 Shell.ln ("$(pwd)/openbox/my", "~/.config/openbox")
 Shell.mkdir ("~/.themes")

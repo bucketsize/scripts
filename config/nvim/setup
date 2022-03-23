@@ -4,7 +4,7 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("nvim")
+Shell.file_exists ("nvim")
 
 Shell.exec([[
 [ -d my/plugged ] ||\

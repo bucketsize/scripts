@@ -5,8 +5,8 @@ local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
 
-Util:assert_file_exists("xrdb")
-Util:assert_file_exists("sed")
+Shell.file_exists("xrdb")
+Shell.file_exists("sed")
 Shell.ln("$(pwd)/Xresources/my","~/.config/xresources.d")
 Shell.cp("$(pwd)/Xresources/my/.Xresources","~/.Xresources")
 Shell.exec([[

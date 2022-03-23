@@ -4,7 +4,7 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists("pipewire")
+Shell.file_exists("pipewire")
 
 local cmd = [[
 sessf=/etc/pipewire/media-session.d/with-pulseaudio
@@ -26,4 +26,4 @@ systemctl --user --now disable pulseaudio.service pulseaudio.socket
 systemctl --user mask pulseaudio
 ]]
 
-Shell.assert_exec(cmd)
+Shell.sh(cmd)

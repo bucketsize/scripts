@@ -4,6 +4,6 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists("vim")
+Shell.file_exists("vim")
 Shell.ln("~/scripts/config/vim/vimrc", "~/.vimrc")
 Shell.ln("~/scripts/tvim", "~/.local/bin/tvim")

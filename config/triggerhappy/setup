@@ -4,5 +4,5 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists("triggerhappy")
+Shell.file_exists("triggerhappy")
 Shell.ln("$(pwd)/triggerhappy/my", "~/.config/triggerhappy")

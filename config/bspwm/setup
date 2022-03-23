@@ -5,7 +5,7 @@ local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 --
 
-Util:assert_file_exists("bspwm")
-Util:assert_file_exists("sxhkd")
+Shell.file_exists("bspwm")
+Shell.file_exists("sxhkd")
 
 Shell.ln("$(pwd)/bspwm/my", "~/.config/bspwm")

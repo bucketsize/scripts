@@ -4,5 +4,5 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists("foot")
-Shell.ln("$(pwd)/foot/my", "~/.config/foot")
+Shell.file_exists("foot")
+Shell.ln ("$(pwd)/foot/my", "~/.config/foot")

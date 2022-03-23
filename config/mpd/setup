@@ -4,10 +4,10 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Util:assert_file_exists ("mpd")
-Util:assert_file_exists ("mpc")
+Shell.file_exists ("mpd")
+Shell.file_exists ("mpc")
 
 Shell.mkdir ("~/.mpd")
 Shell.ln ("~/scripts/config/mpd/my", "~/.config/mpd")
 print ("going to disable automatic root start of mpd:...")
-Shell.assert_exec("sudo systemctl disable mpd")
+Shell.sh("sudo systemctl disable mpd")

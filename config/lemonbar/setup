@@ -23,7 +23,7 @@ function setup_sourcebuild()
         tar -czf lemonbar.%s.tar.gz lemonbar
         cp -fv lemonbar ~/.local/bin/
         ]], Shell.arch())
-    Shell.assert_exec(cmd, "failed")
+    Shell.sh(cmd, "failed")
 end
 
 function setup_prebuilt()
@@ -33,7 +33,7 @@ function setup_prebuilt()
         wget https://www.dropbox.com/s/hxuj4yz0x0vvrfj/$pkg 
         tar -xvzf $pkg -C ~/.local/bin
         ]]
-    Shell.assert_exec(cmd, "failed")
+    Shell.sh(cmd, "failed")
 end
 
 setup_sourcebuild()
