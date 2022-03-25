@@ -1,0 +1,27 @@
+#!/usr/bin/env lua
+
+require "luarocks.loader"
+
+local Pr = require("minilib.process")
+local Sh = require("minilib.shell")
+
+Pr.new_listener()("pi", "weston", function()
+
+    -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+    Sh.fork("dbus-launch --sh-syntax --exit-with-session")
+    Sh.fork("dbus-update-activation-environment --systemd --all")
+
+    -- sys key binder
+    Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+
+    Sh.fork("lxpolkit")
+
+    Sh.fork("dunst")
+    Sh.fork("clipit")
+    Sh.fork("connman-gtk")
+    
+    Sh.fork("conky -c ~/scripts/config/conky/simple/conky.conf 2>/dev/null 1>/dev/null")
+
+    Sh.fork("mpd")
+    Sh.fork("VBoxClient --clipboard")
+end)

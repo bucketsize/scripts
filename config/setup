@@ -47,6 +47,7 @@ local config_group = {
         lspd = {},
         tz = {},
         fseer = {},
+        conky = {},
         ["sysctl.d"] = {},
         pipewire = {}
     },

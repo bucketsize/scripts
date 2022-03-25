@@ -14,7 +14,7 @@ Shell.ln("$(pwd)/weston/my/weston.ini"
 Shell.sh([[
     [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
 
-    sudo ln -sfv $(pwd)/../autostartd /opt/sbin/autostartd
+    sudo ln -sfv $(pwd)/weston/my/autostartd /opt/sbin/autostartd
     sudo ln -sfv $(pwd)/weston/my/weston-autostart.service \
         /etc/systemd/user/weston-autostart.service
     
