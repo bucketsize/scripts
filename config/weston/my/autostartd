@@ -14,13 +14,13 @@ Pr.new_listener()("pi", "weston", function()
     -- sys key binder
     Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 
-    Sh.fork("lxpolkit")
+    Sh.nohup("lxpolkit")
 
     Sh.fork("dunst")
     Sh.fork("clipit")
     Sh.fork("connman-gtk")
     
-    Sh.fork("conky -c ~/scripts/config/conky/simple/conky.conf 2>/dev/null 1>/dev/null")
+    Sh.fork("DISPLAY=:0 conky -c ~/scripts/config/conky/simple/conky.conf 2>/dev/null 1>/dev/null")
 
     Sh.fork("mpd")
     Sh.fork("VBoxClient --clipboard")

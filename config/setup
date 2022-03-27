@@ -46,8 +46,8 @@ local config_group = {
         mxctl = {},
         lspd = {},
         tz = {},
-        fseer = {},
-        conky = {},
+        fseer = {state="noi"},
+        --conky = {},
         ["sysctl.d"] = {},
         pipewire = {}
     },
@@ -98,6 +98,7 @@ function prepare_configs()
         .add(Sh.write(cfg))
         .run()
     Sh.sh(string.format("cd %s && chmod +x */setup", cfg))
+    Sh.sh(string.format("cd %s && chmod +x weston/my/autostartd", cfg))
 end
 
 function setup_configs(name)

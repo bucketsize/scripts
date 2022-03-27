@@ -76,7 +76,6 @@ Plug 'ocaml/vim-ocaml'
 
 " lua
 Plug 'xolox/vim-lua-ftplugin'
-Plug 'xolox/vim-misc'
 
 " language pack syntax, indent
 Plug 'sheerun/vim-polyglot'
@@ -101,12 +100,16 @@ set nocompatible
 "" Performance
 set noswapfile
 set lazyredraw
+set norelativenumber
+set regexpengine=1
+set ttyfast
+set synmaxcol=128
+syntax sync minlines=64
 
 "" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
-set ttyfast
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -115,7 +118,7 @@ set backspace=indent,eol,start
 set tabstop=4
 set softtabstop=0
 set shiftwidth=4
-set expandtab
+set noexpandtab
 
 "" Map leader to ,
 let mapleader=','
