@@ -6,7 +6,10 @@ local Sh = require('minilib.shell')
 local Pr = require('minilib.process')
 local Ut = require('minilib.util')
 
-local cfg = "/var/tmp/cfg"
+local _HOME = os.getenv("HOME")
+
+local _CFG_DIR = _HOME .. "/cfg"
+
 local config_group = {
     dirs = {
         ["~/.cache"] = {},
@@ -89,7 +92,7 @@ function setup_bins()
     end
 end
 
-function prepare_configs()
+function prepare_configs(cfg)
     local subcfg = require("config-global")
     Pr.pipe()
         .add(Sh.find("./"))
@@ -101,7 +104,7 @@ function prepare_configs()
     Sh.sh(string.format("cd %s && chmod +x weston/my/autostartd", cfg))
 end
 
-function setup_configs(name)
+function setup_configs(cfg, name)
     print("deploying config_group", name)
     for k, v in pairs(config_group[name]) do
         if v.state == "noi" then
@@ -116,13 +119,19 @@ function setup_configs(name)
     return 0
 end
 
+local _cfg_dir = _CFG_DIR
+if arg[1] then
+	_cfg_dir = arg[1]
+end
+print("> setup in", _cfg_dir)
+
 -- common
 setup_dirs()
 setup_bins()
 setup_path()
 setup_pcbell()
-prepare_configs()
+prepare_configs(_cfg_dir)
 
 -- weston
-setup_configs("wayland_weston")
-setup_configs("common")
+setup_configs(_cfg_dir, "wayland_weston")
+setup_configs(_cfg_dir, "common")
