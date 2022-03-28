@@ -2,11 +2,10 @@
 
 require "luarocks.loader"
 
-local Pr = require("minilib.process")
+local Lr = require("minilib.process_listener")
 local Sh = require("minilib.shell")
 
-Pr.new_listener()("pi", "weston", function()
-
+function autostart_weston()
     -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
     Sh.fork("dbus-update-activation-environment --systemd --all")
@@ -24,4 +23,11 @@ Pr.new_listener()("pi", "weston", function()
 
     Sh.fork("mpd")
     Sh.fork("VBoxClient --clipboard")
-end)
+end
+
+Lr.new_listener()
+	.listen("pi", "weston", "start", function()
+		print("pi, weston, start")
+	end)
+	.start()
+

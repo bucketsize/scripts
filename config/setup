@@ -133,5 +133,5 @@ setup_pcbell()
 prepare_configs(_cfg_dir)
 
 -- weston
-setup_configs(_cfg_dir, "wayland_weston")
+setup_configs(_cfg_dir, "openbox")
 setup_configs(_cfg_dir, "common")
