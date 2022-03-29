@@ -3,4 +3,15 @@ require "luarocks.loader"
 
 local Shell = require('minilib.shell')
 
-Shell.ln("$(pwd)/autostart/autostart", "~/.local/bin/autostart")
+Shell.sh([[
+    [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
+    sudo ln -sfv $(pwd)/autostart/my/autostartd /opt/sbin/autostartd
+    ]])
+    
+Shell.mkdir("~/.config/systemd/user")
+Shell.sh([[
+	ln -sfv $(pwd)/autostart/my/autostart.service ~/.config/systemd/user/autostart.service
+    systemctl --user daemon-reload
+    systemctl --user enable autostart.service 
+    ]])
+

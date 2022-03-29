@@ -6,6 +6,8 @@ local Lr = require("minilib.process_listener")
 local Sh = require("minilib.shell")
 
 function autostart_weston()
+	local env = "DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 "	
+
     -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
     Sh.fork("dbus-update-activation-environment --systemd --all")
@@ -13,21 +15,46 @@ function autostart_weston()
     -- sys key binder
     Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 
-    Sh.nohup("lxpolkit")
+    Sh.fork(env .. "lxpolkit")
+    Sh.fork(env .. "dunst")
+    Sh.fork(env .. "connman-gtk")
+    Sh.fork(env .. "conky") 
+    Sh.fork(env .. "mpd")
+    Sh.fork(env .. "VBoxClient --clipboard")
+    Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
 
-    Sh.fork("dunst")
-    Sh.fork("clipit")
-    Sh.fork("connman-gtk")
+end
+
+function autostart_openbox()
+	local env = "DISPLAY=:0 "	
     
-    Sh.fork("DISPLAY=:0 conky -c ~/scripts/config/conky/simple/conky.conf 2>/dev/null 1>/dev/null")
+	-- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+    Sh.fork("dbus-launch --sh-syntax --exit-with-session")
+    Sh.fork("dbus-update-activation-environment --systemd --all")
 
-    Sh.fork("mpd")
-    Sh.fork("VBoxClient --clipboard")
+
+    -- sys key binder
+    Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	
+	Sh.fork("urxvtd '-q -o -f'")
+
+	Sh.fork(env .. "~/.luarocks/bin/mxctl.control fun setup_video")
+	Sh.fork(env .. "~/.luarocks/bin/mxctl.control fun applywallpaper")
+	Sh.fork(env .. "compton")
+	Sh.fork(env .. "setxkbmap us")
+	Sh.fork(env .. "xsetroot -cursor_name left_ptr")
+	Sh.fork(env .. "lxpolkit")
+    Sh.fork(env .. "dunst")
+    Sh.fork(env .. "tint2")
+    Sh.fork(env .. "connman-gtk")
+    Sh.fork(env .. "conky") 
+    Sh.fork(env .. "mpd")
+    Sh.fork(env .. "VBoxClient --clipboard")
+    Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
 end
 
 Lr.new_listener()
-	.listen("pi", "weston", "start", function()
-		print("pi, weston, start")
-	end)
+	.listen("pi", "weston", "start", autostart_weston)
+	.listen("pi", "openbox", "start", autostart_openbox)
 	.start()
 

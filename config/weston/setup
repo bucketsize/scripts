@@ -11,14 +11,3 @@ Shell.file_exists("foot")
 Shell.ln("$(pwd)/weston/my/weston.ini"
     , "~/.config/weston.ini")
 
-Shell.sh([[
-    [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
-
-    sudo ln -sfv $(pwd)/weston/my/autostartd /opt/sbin/autostartd
-    sudo ln -sfv $(pwd)/weston/my/weston-autostart.service \
-        /etc/systemd/user/weston-autostart.service
-    
-    systemctl --user daemon-reload
-    systemctl --user enable weston-autostart.service 
-    ]])
-

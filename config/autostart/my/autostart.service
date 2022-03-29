@@ -1,5 +1,5 @@
 [Unit]
-Description=Start a wayland application
+Description=Auto start wm complementary services
 
 [Service]
 Type=simple
