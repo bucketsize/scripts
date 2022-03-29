@@ -1,8 +1,17 @@
 #!/usr/bin/env lua
 require "luarocks.loader"
 
-local Shell = require('minilib.shell')
-local Util = require('minilib.util')
+local Sh = require('minilib.shell')
+local Ut = require('minilib.util')
+local Pr = require('minilib.process')
 
--- note; only works on arch linux
-Shell.ln ("$(pwd)/firefox/my/user.js", "~/.mozilla/firefox/hlnn94f7.default-esr/user.js")
+Pr.pipe()
+	.add(Sh.exec("find -L ~/.mozilla/  -name \"xulstore.json\" | grep -v backup"))
+	.add(Sh.echo())
+	.add(function (x)
+		if x then
+			local f, p = Sh.split_path(x)
+			Sh.cp ("$(pwd)/firefox/my/user.js", p)
+		end
+	end)
+	.run()
