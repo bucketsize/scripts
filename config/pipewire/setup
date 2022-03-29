@@ -4,15 +4,16 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Shell.file_exists("pipewire")
+Shell.assert_file_exists("pipewire")
 
 local cmd = [[
-sessf=/etc/pipewire/media-session.d/with-pulseaudio
+#sessf=/etc/pipewire/media-session.d/with-pulseaudio
+sessf=$HOME/.config/pipewire-media-session/with-pulseaudio
 servd=$HOME/.config/systemd/user
 
 if [ ! -f $sessf ] ; then
     echo "installing pulse session [with-pulseaudio] ..."
-    sudo touch $sessf
+    touch $sessf
 fi
 
 if [ "$(ls $servd/pipewire-pulse.*)" = "" ]; then
