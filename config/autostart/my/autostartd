@@ -4,13 +4,17 @@ require "luarocks.loader"
 
 local Lr = require("minilib.process_listener")
 local Sh = require("minilib.shell")
+local Ut = require("minilib.util")
 
 function autostart_weston()
 	local env = "DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 "	
 
     -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
-    Sh.fork("dbus-update-activation-environment --systemd --all")
+    Ut.sleep(1)
+	Sh.fork("dbus-update-activation-environment --systemd --all")
+    Ut.sleep(1)
+
 
     -- sys key binder
     Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")

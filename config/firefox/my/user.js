@@ -174,21 +174,21 @@ user_pref("dom.archivereader.enabled",				false);
 // PREF: Disable webGL
 // https://en.wikipedia.org/wiki/WebGL
 // https://www.contextis.com/resources/blog/webgl-new-dimension-browser-exploitation/
-user_pref("webgl.disabled",					true);
+// user_pref("webgl.disabled",					true);
 // PREF: When webGL is enabled, use the minimum capability mode
-user_pref("webgl.min_capability_mode",				true);
+//user_pref("webgl.min_capability_mode",				true);
 // PREF: When webGL is enabled, disable webGL extensions
 // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API#WebGL_debugging_and_testing
-user_pref("webgl.disable-extensions",				true);
+//user_pref("webgl.disable-extensions",				true);
 // PREF: When webGL is enabled, force enabling it even when layer acceleration is not supported
 // https://trac.torproject.org/projects/tor/ticket/18603
-user_pref("webgl.disable-fail-if-major-performance-caveat",	true);
+//user_pref("webgl.disable-fail-if-major-performance-caveat",	true);
 // PREF: When webGL is enabled, do not expose information about the graphics driver
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1171228
 // https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_debug_renderer_info
 user_pref("webgl.enable-debug-renderer-info",			false);
 // somewhat related...
-//user_pref("pdfjs.enableWebGL",					false);
+user_pref("pdfjs.enableWebGL",					false);
 
 // PREF: Spoof dual-core CPU
 // https://trac.torproject.org/projects/tor/ticket/21675
@@ -200,7 +200,7 @@ user_pref("dom.maxHardwareConcurrency",				2);
 // https://en.wikipedia.org/wiki/WebAssembly
 // https://trac.torproject.org/projects/tor/ticket/21549
 // NOTICE: WebAssembly is required for Unity web player/games
-user_pref("javascript.options.wasm",				false);
+//user_pref("javascript.options.wasm",				false);
 
 /******************************************************************************
  * SECTION: Misc                                                              *
@@ -801,13 +801,13 @@ user_pref("browser.cache.offline.enable",			false);
 // NOTICE: Installing user.js **will remove your saved passwords** (https://github.com/pyllyukko/user.js/issues/27)
 // NOTICE: Clearing open windows on Firefox exit causes 2 windows to open when Firefox starts https://bugzilla.mozilla.org/show_bug.cgi?id=1334945
 user_pref("privacy.sanitize.sanitizeOnShutdown",		true);
-user_pref("privacy.clearOnShutdown.cache",			true);
-user_pref("privacy.clearOnShutdown.cookies",			true);
-user_pref("privacy.clearOnShutdown.downloads",			true);
+//user_pref("privacy.clearOnShutdown.cache",			true);
+//user_pref("privacy.clearOnShutdown.cookies",			true);
+//user_pref("privacy.clearOnShutdown.downloads",			true);
 user_pref("privacy.clearOnShutdown.formdata",			true);
 user_pref("privacy.clearOnShutdown.history",			true);
-user_pref("privacy.clearOnShutdown.offlineApps",		true);
-user_pref("privacy.clearOnShutdown.sessions",			true);
+//user_pref("privacy.clearOnShutdown.offlineApps",		true);
+//user_pref("privacy.clearOnShutdown.sessions",			true);
 user_pref("privacy.clearOnShutdown.openWindows",		true);
 
 // PREF: Set time range to "Everything" as default in "Clear Recent History"
@@ -827,7 +827,7 @@ user_pref("places.history.enabled",				false);
 
 // PREF: Disable disk cache
 // http://kb.mozillazine.org/Browser.cache.disk.enable
-user_pref("browser.cache.disk.enable",				false);
+//user_pref("browser.cache.disk.enable",				false);
 
 // PREF: Disable memory cache (disabled)
 // http://kb.mozillazine.org/Browser.cache.memory.enable
@@ -836,7 +836,7 @@ user_pref("browser.cache.disk.enable",				false);
 // PREF: Disable Caching of SSL Pages
 // CIS Version 1.2.0 October 21st, 2011 2.5.8
 // http://kb.mozillazine.org/Browser.cache.disk_cache_ssl
-user_pref("browser.cache.disk_cache_ssl",			false);
+//user_pref("browser.cache.disk_cache_ssl",			false);
 
 // PREF: Disable download history
 // CIS Version 1.2.0 October 21st, 2011 2.5.5
@@ -1248,11 +1248,6 @@ user_pref("geo.wifi.xhr.timeout","1");
 user_pref("dom.push.enabled","false");
 user_pref("network.dns.disablePrefetch","true");
 user_pref("network.prefetch-next","false");
-user_pref("browser.cache.offline.capacity","0");
-user_pref("browser.cache.offline.enable","false");
-user_pref("browser.cache.disk_cache_ssl","false");
-user_pref("browser.cache.memory.enable","true");
-user_pref("browser.cache.disk.smart_size.enabled","false");
 user_pref("network.trr.mode","2");
 user_pref("network.trr.uri","https://mozilla.cloudflare-dns.com/dns-query");
 user_pref("network.dns.echconfig.enabled","true");
@@ -1270,4 +1265,3 @@ user_pref("print.print_footerleft", "");
 user_pref("print.print_footerright", "");
 user_pref("print.print_headerleft", "");
 user_pref("print.print_headerright", ""); 
-
