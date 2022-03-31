@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+#one of (arm64 x86_64 aarch64 armf)
+ARCH=aarch64 
+
+if [ -d ~/minilib ]; then
+	cd ~/minilib && git pull
+else
+	git clone https://github.com/bucketsize/minilib.git ~/minilib
+fi
+
+LIBDIR=/usr/lib/$ARCH-linux-gnu
+cd ~/minilib && luarocks make --local CRYPTO_LIBDIR=$LIBDIR OPENSSL_LIBDIR=$LIBDIR

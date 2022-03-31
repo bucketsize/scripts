@@ -3,4 +3,8 @@ Description=Auto start wm complementary services
 
 [Service]
 Type=simple
-ExecStart=/opt/sbin/autostartd
+TimeoutStartSec=0
+ExecStart=%h/.local/bin/autostartd
+
+[Install]
+WantedBy=default.target

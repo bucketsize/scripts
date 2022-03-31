@@ -3,10 +3,7 @@ require "luarocks.loader"
 
 local Shell = require('minilib.shell')
 
-Shell.sh([[
-    [ -d /opt/sbin ] || sudo mkdir -p /opt/sbin
-    sudo ln -sfv $(pwd)/autostart/my/autostartd /opt/sbin/autostartd
-    ]])
+Shell.ln("$(pwd)/autostart/my/autostartd", "~/.local/bin/autostartd")
     
 Shell.mkdir("~/.config/systemd/user")
 Shell.sh([[

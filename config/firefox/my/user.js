@@ -64,7 +64,7 @@ user_pref("dom.mozTCPSocket.enabled",				false);
 // http://kb.mozillazine.org/Dom.storage.enabled
 // https://html.spec.whatwg.org/multipage/webstorage.html
 // NOTICE-DISABLED: Disabling DOM storage is known to cause`TypeError: localStorage is null` errors
-//user_pref("dom.storage.enabled",		false);
+// user_pref("dom.storage.enabled",		false);
 
 // PREF: Disable leaking network/browser connection information via Javascript
 // Network Information API provides general information about the system's connection type (WiFi, cellular, etc.)
@@ -232,7 +232,7 @@ user_pref("browser.search.geoSpecificDefaults",			false);
 
 // PREF: Do not automatically send selection to clipboard on some Linux platforms
 // http://kb.mozillazine.org/Clipboard.autocopy
-user_pref("clipboard.autocopy",					false);
+// user_pref("clipboard.autocopy",					false);
 
 // PREF: Prevent leaking application locale/date format using JavaScript
 // https://bugzilla.mozilla.org/show_bug.cgi?id=867501
@@ -805,7 +805,7 @@ user_pref("privacy.sanitize.sanitizeOnShutdown",		true);
 //user_pref("privacy.clearOnShutdown.cookies",			true);
 //user_pref("privacy.clearOnShutdown.downloads",			true);
 user_pref("privacy.clearOnShutdown.formdata",			true);
-user_pref("privacy.clearOnShutdown.history",			true);
+//user_pref("privacy.clearOnShutdown.history",			true);
 //user_pref("privacy.clearOnShutdown.offlineApps",		true);
 //user_pref("privacy.clearOnShutdown.sessions",			true);
 user_pref("privacy.clearOnShutdown.openWindows",		true);

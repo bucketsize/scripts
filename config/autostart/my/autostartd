@@ -11,10 +11,7 @@ function autostart_weston()
 
     -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
-    Ut.sleep(1)
 	Sh.fork("dbus-update-activation-environment --systemd --all")
-    Ut.sleep(1)
-
 
     -- sys key binder
     Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
@@ -22,10 +19,11 @@ function autostart_weston()
     Sh.fork(env .. "lxpolkit")
     Sh.fork(env .. "dunst")
     Sh.fork(env .. "connman-gtk")
-    Sh.fork(env .. "conky") 
     Sh.fork(env .. "mpd")
     Sh.fork(env .. "VBoxClient --clipboard")
     Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
+    
+	Sh.fork(env .. "conky") 
 
 end
 
@@ -42,19 +40,22 @@ function autostart_openbox()
 	
 	Sh.fork("urxvtd '-q -o -f'")
 
-	Sh.fork(env .. "~/.luarocks/bin/mxctl.control fun setup_video")
-	Sh.fork(env .. "~/.luarocks/bin/mxctl.control fun applywallpaper")
+	Sh.sh(env .. "~/.luarocks/bin/mxctl.control fun setup_video")
+	Sh.sh(env .. "~/.luarocks/bin/mxctl.control fun applywallpaper")
+	Sh.sh(env .. "setxkbmap us")
+	Sh.sh(env .. "xsetroot -cursor_name left_ptr")
+
 	Sh.fork(env .. "compton")
-	Sh.fork(env .. "setxkbmap us")
-	Sh.fork(env .. "xsetroot -cursor_name left_ptr")
 	Sh.fork(env .. "lxpolkit")
     Sh.fork(env .. "dunst")
     Sh.fork(env .. "tint2")
     Sh.fork(env .. "connman-gtk")
-    Sh.fork(env .. "conky") 
     Sh.fork(env .. "mpd")
     Sh.fork(env .. "VBoxClient --clipboard")
     Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
+	
+	Sh.fork(env .. "conky") 
+
 end
 
 Lr.new_listener()
