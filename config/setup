@@ -97,10 +97,14 @@ end
 
 function prepare_configs(cfg)
     local subcfg = require("config-global")
+	local subhbs = {}
+	for i,v in pairs(subcfg) do
+		subhbs["{"..i.."}"] = v
+	end
     Pr.pipe()
         .add(Sh.find("./"))
         .add(Sh.read())
-        .add(Sh.sed(subcfg))
+        .add(Sh.sed(subhbs))
         .add(Sh.write(cfg))
         .run()
     Sh.sh(string.format("cd %s && chmod +x */setup", cfg))

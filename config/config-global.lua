@@ -1,7 +1,9 @@
 return {
-    __font_global           = "Cantarell:size=10",
-    __font_global_monospace = "Monoid:size=10",
-    __font_family_monospace = "Monoid",
-    __font_family_serif     = "Cantarell",
-    __font_family_sans      = "Cantarell"
+    font                  = "Cantarell",
+	font_size             = "10",
+    font_monospace        = "Monoid",
+    font_monospace_size   = "10",
+    font_family_monospace = "Monoid",
+    font_family_serif     = "Cantarell",
+    font_family_sans      = "Cantarell"
 }
