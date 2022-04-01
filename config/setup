@@ -53,7 +53,7 @@ local config_group = {
         lspd = {},
         tz = {},
         fseer = {state="noi"},
-        --conky = {},
+        conky = {},
         ["sysctl.d"] = {},
         pipewire = {}
     },

@@ -1,6 +1,6 @@
 return {
     font                  = "Cantarell",
-	font_size             = "10",
+	font_size             = "12",
     font_monospace        = "Monoid",
     font_monospace_size   = "10",
     font_family_monospace = "Monoid",
