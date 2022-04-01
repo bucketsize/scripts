@@ -104,7 +104,7 @@ function prepare_configs(cfg)
         .add(Sh.write(cfg))
         .run()
     Sh.sh(string.format("cd %s && chmod +x */setup", cfg))
-    Sh.sh(string.format("cd %s && chmod +x weston/my/autostartd", cfg))
+    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostartd", cfg))
 end
 
 function setup_configs(cfg, name)
