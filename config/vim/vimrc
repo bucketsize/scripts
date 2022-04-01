@@ -151,6 +151,7 @@ set mouse=a
 set guioptions=egmrti
 
 if has("gui_running")
+	set guifont=__font_family_monospace
 else
   let g:CSApprox_loaded = 1
 endif

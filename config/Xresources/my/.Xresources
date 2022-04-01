@@ -1,7 +1,7 @@
 #include "__home/.config/xresources.d/colors-terminal.sexy-4"
 
-#define FONT 	 xft:dejavu sans book:size=9
-#define FONTMONO xft:dejavu sans mono:size=9:style=Book
+#define FONT 	 xft:__font_global
+#define FONTMONO xft:__font_global_monospace
 
 !global Font
 *font:         FONT
