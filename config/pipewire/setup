@@ -13,6 +13,9 @@ servd=$HOME/.config/systemd/user
 
 if [ ! -f $sessf ] ; then
     echo "installing pulse session [with-pulseaudio] ..."
+	if [ ! -d "$HOME/.config/pipewire-media-session" ]; then
+		mkdir -p $HOME/.config/pipewire-media-session
+	fi
     touch $sessf
 fi
 

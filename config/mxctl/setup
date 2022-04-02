@@ -17,7 +17,7 @@ Shell.sh(string.format([[
     if [ -d ~/.config/mxctl ]; then
         echo "[~/.config/mxctl] already present"
     else
-        createdir ~/.config/mxctl
+        mkdir -p ~/.config/mxctl
         cp ~/scripts/config/mxctl/my/config ~/.config/mxctl/
     fi
 ]], Shell.arch()))
