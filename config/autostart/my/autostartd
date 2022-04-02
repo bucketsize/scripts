@@ -14,15 +14,26 @@ function autostart_weston()
 	Sh.fork("dbus-update-activation-environment --systemd --all")
 
     -- sys key binder
-    Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.killall("thd")
+	Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+    
+	Sh.fork(env .. "mpd")
 
+	Sh.killall("lxpolkit")	
     Sh.fork(env .. "lxpolkit")
+
+	Sh.killall("dunst")	
     Sh.fork(env .. "dunst")
+
+	Sh.killall("connman-gtk")	
     Sh.fork(env .. "connman-gtk")
-    Sh.fork(env .. "mpd")
+
     Sh.fork(env .. "VBoxClient --clipboard")
+
+	Sh.killall("Steam")	
     Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
     
+	Sh.killall("conky")	
 	Sh.fork(env .. "conky") 
 
 end
@@ -34,32 +45,49 @@ function autostart_openbox()
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
     Sh.fork("dbus-update-activation-environment --systemd --all")
 
-
     -- sys key binder
-    Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
-	
+	Sh.killall("thd")
+	Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+
+	-- faster vterminal
+	Sh.killall("urxvtd")
 	Sh.fork("urxvtd '-q -o -f'")
+
+    Sh.fork("mpd")
 
 	Sh.sh(env .. "~/.luarocks/bin/mxctl.control fun setup_video")
 	Sh.sh(env .. "~/.luarocks/bin/mxctl.control fun applywallpaper")
 	Sh.sh(env .. "setxkbmap us")
 	Sh.sh(env .. "xsetroot -cursor_name left_ptr")
 
+	Sh.killall("compton")
 	Sh.fork(env .. "compton")
+	
+	Sh.killall("lxpolkit")
 	Sh.fork(env .. "lxpolkit")
+
+	Sh.killall("dunst")
     Sh.fork(env .. "dunst")
+
+	Sh.killall("tint2")
     Sh.fork(env .. "tint2")
+
+	Sh.killall("connman-gtk")
     Sh.fork(env .. "connman-gtk")
-    Sh.fork(env .. "mpd")
+
     Sh.fork(env .. "VBoxClient --clipboard")
+
+	Sh.killall("Steam")
     Sh.fork(env .. "flatpak run com.valvesoftware.Steam")
 	
+	Sh.killall("conky")
 	Sh.fork(env .. "conky") 
 
 end
 
+local USER = os.getenv("USER")
 Lr.new_listener()
-	.listen("pi", "weston", "start", autostart_weston)
-	.listen("pi", "openbox", "start", autostart_openbox)
+	.listen(USER, "weston",  "start", autostart_weston)
+	.listen(USER, "openbox", "start", autostart_openbox)
 	.start()
 

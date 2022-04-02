@@ -118,7 +118,7 @@ function setup_configs(cfg, name)
             print("> " .. k .. " :noi")
         else
             print("> " .. k)
-            Ut:exec(string.format([[
+            Sh.sh(string.format([[
                 cd %s && %s/setup
                 ]], cfg, k))
         end
