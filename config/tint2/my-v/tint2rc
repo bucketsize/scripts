@@ -133,9 +133,8 @@ launcher_icon_asb = 100 -2 -2
 launcher_icon_theme_override = 0
 startup_notifications = 0
 launcher_tooltip = 0
-launcher_item_app = /usr/share/applications/Alacritty.desktop
-launcher_item_app = /usr/share/applications/chromium.desktop
 launcher_item_app = ~/scripts/launch_urxvtc.sh
+launcher_item_app = /usr/share/applications/chromium.desktop
 
 #-------------------------------------
 # Clock

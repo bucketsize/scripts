@@ -6,13 +6,13 @@
 !global Font
 *font:         FONT
 
-!xft
+!xft -- matchup with fontconfig
 Xft.dpi:       96
 Xft.antialias: true
 Xft.hinting:   true
 Xft.autohint:  false
 Xft.hintstyle: hintslight
-Xft.rgba:      none
+Xft.rgba:      rgb
 Xft.lcdfilter: lcddefault
 
 !emacs

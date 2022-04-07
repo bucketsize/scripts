@@ -1,0 +1,40 @@
+#!/usr/bin/env lua
+
+require "luarocks.loader"
+
+local Lr = require("minilib.process_listener")
+local Sh = require("minilib.shell")
+local Ut = require("minilib.util")
+
+function autostart()
+
+    -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+    Sh.fork("dbus-launch --sh-syntax --exit-with-session")
+	Sh.fork("dbus-update-activation-environment --systemd --all")
+
+    -- sys key binder
+	Sh.killall("thd")
+	Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+    
+	Sh.fork("mpd")
+
+	Sh.killall("lxpolkit")	
+    Sh.fork("lxpolkit")
+
+	Sh.killall("dunst")	
+    Sh.fork("dunst")
+
+	Sh.killall("connman-gtk")	
+    Sh.fork("connman-gtk")
+
+    Sh.fork("VBoxClient --clipboard")
+
+	Sh.killall("Steam")	
+    Sh.fork("flatpak run com.valvesoftware.Steam")
+    
+	Sh.killall("conky")	
+	Sh.fork("conky") 
+
+end
+
+return autostart

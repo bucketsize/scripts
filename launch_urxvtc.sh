@@ -2,6 +2,6 @@
 
 pgrep -laf urxvtd
 if [ ! $? = 0 ]; then
-    urxvtd -q -o -f
+    nohup urxvtd -q -o -f > /dev/null &
 fi
-urxvtc
+nohup urxvtc > /dev/null &

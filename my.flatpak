@@ -1,2 +1,37 @@
+# allow fs, dev access
 flatpak --user override --allow=bluetooth --filesystem=/mnt/3dff com.valvesoftware.Steam
+flatpak --user override --filesystem=host net.jb.vt.Alacritty 
+
+# repair
+sudo flatpak repair
+flatpak repair --user
+flatpak uninstall --unused
+flatpak update --appstream
+flatpak update
+
+# user distro flatpak and flatpak-builder 
+# don't user org.flatpak.Builder
+# as it doesn't detect sdks
+
+# sdk
+flatpak install flathub org.freedesktop.Platform//21.08
+flatpak install org.freedesktop.Sdk//21.08
+
+# build
+flatpak-builder build-dir org.flatpak.Hello.yml
+
+# install
+flatpak-builder --user --install --force-clean build-dir org.flatpak.Hello.yml
+
+# run
+flatpak run org.flatpak.Hello
+
+# publish to repo (local dir repo)
+flatpak-builder --repo=repo --force-clean build-dir org.flatpak.Hello.yml
+
+#?
+flatpak --user remote-add --no-gpg-verify tutorial-repo repo
+
+# install from repo repo?
+flatpak --user install tutorial-repo org.flatpak.Hello
 
