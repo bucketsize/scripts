@@ -26,7 +26,7 @@ flatpak-builder --user --install --force-clean build-dir org.flatpak.Hello.yml
 # run
 flatpak run org.flatpak.Hello
 
-# publish to repo (local dir repo)
+# publish to repo (local dir repo); repo can be hosted on a http server
 flatpak-builder --repo=repo --force-clean build-dir org.flatpak.Hello.yml
 
 #?
@@ -35,3 +35,5 @@ flatpak --user remote-add --no-gpg-verify tutorial-repo repo
 # install from repo repo?
 flatpak --user install tutorial-repo org.flatpak.Hello
 
+# export an app as a bundle .flatpak
+flatpak build-bundle ~/repositories/apps dictionary.flatpak org.gnome.Dictionary

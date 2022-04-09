@@ -68,19 +68,23 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 
-" lsp-configs
-Plug 'mattn/vim-lsp-settings'
-
 " julia bundle
 Plug 'JuliaEditorSupport/julia-vim'
+
+" ocaml support + lsp
+Plug 'ocaml/vim-ocaml'
+
+" lua
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-lua-ftplugin'
 
 " language pack syntax, indent
 Plug 'sheerun/vim-polyglot'
 
 " Snippets
-Plug 'SirVer/ultisnips'
-Plug 'thomasfaingnaert/vim-lsp-snippets'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+" Plug 'SirVer/ultisnips'
+" Plug 'thomasfaingnaert/vim-lsp-snippets'
+" Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
 
 call plug#end()
@@ -97,6 +101,11 @@ set nocompatible
 "" Performance
 set noswapfile
 set lazyredraw
+set norelativenumber
+set regexpengine=1
+set ttyfast
+set synmaxcol=128
+syntax sync minlines=64
 
 "" Encoding
 set encoding=utf-8
@@ -111,7 +120,7 @@ set backspace=indent,eol,start
 set tabstop=4
 set softtabstop=0
 set shiftwidth=4
-set expandtab
+set noexpandtab
 
 "" Map leader to ,
 let mapleader=','
@@ -144,6 +153,7 @@ set mouse=a
 set guioptions=egmrti
 
 if has("gui_running")
+	set guifont={font_monospace}\ {font_monospace_size}
 else
   let g:CSApprox_loaded = 1
 endif
@@ -154,9 +164,9 @@ let g:indentLine_concealcursor = 0
 let g:indentLine_char = '┆'
 let g:indentLine_faster = 1
 
+" set termguicolors
 set background=dark
-colorscheme onedark 
-set termguicolors
+colorscheme onedark
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -235,7 +245,8 @@ nnoremap <silent> <leader>sh :terminal<CR>
 "" Commands
 "*****************************************************************************
 " remove trailing whitespaces
-command! FixWhitespace :%s/\s\+$//e
+command! HmFixWhitespace :%s/\s\+$//e
+command! HmShowInNerdtree :NERDTree %
 
 "*****************************************************************************
 "" Functions
@@ -276,7 +287,6 @@ augroup vimrc-make-cmake
   autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
 augroup END
 
-autocmd FileType * setlocal omnifunc=lsp#complete
 
 set autoread
 
@@ -446,7 +456,43 @@ endif
 set hidden
 
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
-set signcolumn=yes:2
+set signcolumn=yes
+
+" lsp
+" debug autocomplete
+let g:lsp_log_file = expand('/tmp/vim-lsp.log')
+let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
+
+let g:lsp_diagnostics_echo_cursor  = 1
+let g:lsp_diagnostics_float_cursor = 1
+
+" ocaml
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'ocamllsp',
+            \ 'cmd': {server_info->[
+                \   &shell,
+                \   &shellcmdflag,
+                \   expand('lspd-ocaml')
+                \ ]},
+                \ 'whitelist': ['reason', 'ocaml'],
+                \ })
+
+" java
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'eclipse.jdt.ls',
+            \ 'cmd': {server_info->[
+                \   &shell,
+                \   &shellcmdflag,
+                \   expand('lspd-java')
+                \ ]},
+                \ 'whitelist': ['java'],
+                \ })
+
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'jedi-language-server',
+            \ 'cmd': {server_info->['jedi-language-server']},
+            \ 'allowlist': ['python'],
+            \ })
 
 " vim-lsp
 function! s:on_lsp_buffer_enabled() abort
@@ -468,7 +514,7 @@ function! s:on_lsp_buffer_enabled() abort
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-    
+
     " refer to doc to add more commands
 endfunction
 
@@ -477,6 +523,17 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+let g:NERDTreeWinSize   = 32
+
+let g:lua_complete_omni = 1
+let   lua_complete_omni = 1
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " debug autocomplete
 let g:lsp_log_verbose = 1

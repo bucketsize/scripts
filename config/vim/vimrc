@@ -110,6 +110,7 @@ syntax sync minlines=64
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
+set ttyfast
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -532,3 +533,8 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+" debug autocomplete
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('/tmp/vim-lsp.log')
+let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')

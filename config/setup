@@ -46,6 +46,7 @@ local config_group = {
         firefox = {},
         chromium = {},
         vim = {},
+        nvim = {},
         mpd = {},
         ympd = {state="noi"},
         mpv = {},
@@ -108,7 +109,8 @@ function prepare_configs(cfg)
         .add(Sh.write(cfg))
         .run()
     Sh.sh(string.format("cd %s && chmod +x */setup", cfg))
-    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostartd", cfg))
+    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostartd.lua", cfg))
+    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostart.lua", cfg))
 end
 
 function setup_configs(cfg, name)

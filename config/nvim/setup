@@ -6,10 +6,5 @@ local Util = require('minilib.util')
 
 Shell.file_exists ("nvim")
 
-Shell.exec([[
-[ -d my/plugged ] ||\
-	([ -f my/plug.tgz ] && tar -xzf my/plug.tgz -C my)
-]])
-
-Shell.ln ("~/scripts/config/nvim/my","~/.config/nvim")
+Shell.ln ("$(pwd)/nvim/my","~/.config/nvim")
 Shell.ln ("~/scripts/tvim","~/.local/bin/tvim")
