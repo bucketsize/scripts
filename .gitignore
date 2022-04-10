@@ -24,3 +24,5 @@ session/
 
 *.log
 *.obj
+
+__pycache__/

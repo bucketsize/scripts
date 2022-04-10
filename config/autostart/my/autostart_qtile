@@ -24,6 +24,8 @@ function autostart()
 	Sh.killall("dunst")	
     Sh.fork("dunst")
 
+	Sh.sh("~/.luarocks/bin/mxctl.control fun setup_video")
+	
 	Sh.killall("connman-gtk")	
     Sh.fork("connman-gtk")
 
@@ -32,9 +34,6 @@ function autostart()
 	Sh.killall("Steam")	
     Sh.fork("flatpak run com.valvesoftware.Steam")
     
-	Sh.killall("conky")	
-	Sh.fork("conky") 
-
 end
 
 return autostart

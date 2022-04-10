@@ -14,7 +14,7 @@ function autostart()
 
     -- sys key binder
 	Sh.killall("thd")
-	Sh.fork("thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.fork("/usr/sbin/thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 
 	-- faster vterminal
 	Sh.killall("urxvtd")

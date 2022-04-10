@@ -16,5 +16,7 @@ Shell.ln("$(pwd)/autostart/my/autostart_openbox"
 	, "~/.local/bin/autostart_openbox")
 Shell.ln("$(pwd)/autostart/my/autostart_weston"
 	, "~/.local/bin/autostart_weston")
+Shell.ln("$(pwd)/autostart/my/autostart_qtile"
+	, "~/.local/bin/autostart_qtile")
 Shell.ln("$(pwd)/autostart/my/autostart.lua"
 	, "~/.local/bin/autostart")

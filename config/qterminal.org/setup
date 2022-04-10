@@ -1,0 +1,8 @@
+#!/usr/bin/env lua
+require "luarocks.loader"
+
+local Shell = require('minilib.shell')
+local Util = require('minilib.util')
+
+Shell.file_exists ("qterminal")
+Shell.ln ("$(pwd)/qterminal.org/my","~/.config/qterminal.org")
