@@ -48,14 +48,14 @@ def get_theme_from_file():
     f.close()
     if 'cursorColor' not in theme:
         theme.update({ 'cursorColor': theme['color4']})
-    print(theme)
     return theme
 
 # Colours
 color_theme = get_theme_from_file()
 colors = ["black","red","green","yellow","blue","magenta","cyan","white"]
-colorv = [(color_theme[f'color{n}'], color_theme[f'color{n+8}']) for n in range(8)]
+colorv = [("#"+color_theme[f'color{n}'], "#"+color_theme[f'color{n+8}']) for n in range(8)]
 colorm = dict(list(zip(colors, colorv)))
+print(colorm)
 color_alert = colorm["red"][1]
 color_frame = colorm["black"][0]
 
@@ -84,13 +84,11 @@ def dmenu_windowlist():
     lazy.run_extension(extension.WindowList(
         dmenu_prompt=">",
         all_groups = True,
-        background="#15181a",
-        foreground="#00ff00",
-        selected_background="#079822",
-        selected_foreground="#fff",
         dmenu_height=24,  # Only supported by some dmenu forks
     ))
 
+# only window manangement hotkeys
+# others via triggerhappy
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -190,14 +188,20 @@ for i in groups:
         ]
     )
 
+border = dict(
+    border_focus     = colorm['yellow'][0],
+    border_normal    = colorm['white'][0],
+    border_width     = 4,
+)
+
 layouts = [
+    layout.Floating(**border),
+    layout.Tile(**border),
     layout.Max(),
-    layout.Tile(border_focus=color_alert, border_normal=color_frame, ),
-    layout.Floating(border_focus=color_alert, border_normal=color_frame, ),
 ]
 
 widget_defaults = dict(
-    font="terminus",
+    font="Terminus",
     fontsize=12,
     padding=3,
 )
@@ -206,7 +210,7 @@ extension_defaults = widget_defaults.copy()
 
 top_bar = [
     widget.Clock(
-        format='%a %d %b %Y %H:%M:%S',
+        format='%a %d %b %Y %H:%M:%S', **widget_defaults
     ),
     # widget.CurrentLayoutIcon(),
     # widget.LaunchBar(
@@ -274,7 +278,7 @@ bottom_bar = [
     widget.TaskList(
         border=color_frame,
         highlight_method='block',
-        max_title_width=800,
+        max_title_width=256,
         urgent_border=color_alert,
     ),
 ]
@@ -302,19 +306,20 @@ dgroups_app_rules = []  # type: list
 follow_mouse_focus = False
 bring_front_click = False
 cursor_warp = False
+
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
-        Match(wm_class="confirmreset"),  # gitk
-        Match(wm_class="makebranch"),  # gitk
-        Match(wm_class="maketag"),  # gitk
-        Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(title='Open File'),
         Match(title='Unlock Database - KeePassXC'),  # Wayland
         Match(title='File Operation Progress', wm_class='thunar'),  # Wayland
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(wm_class='Arandr'),
         Match(wm_class='org.kde.ark'),
         Match(wm_class='confirm'),
@@ -341,7 +346,8 @@ floating_layout = layout.Floating(
         Match(role='gimp-file-export'),
         # Match(func=lambda c: c.has_fixed_size()),
         # Match(func=lambda c: bool(c.is_transient_for())),
-    ]
+    ],
+    **border
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
