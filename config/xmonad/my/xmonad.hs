@@ -1,3 +1,12 @@
+-- TODO
+-- 1. read some config from external json/yaml things like 
+--      resolution,
+--      wallpaper,
+--      colors,
+--      so you dont have to keep recompiling for silly things
+--
+-- 2. build for multiarch, x86_64, aarch64, armhf
+--
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE DisambiguateRecordFields #-}
@@ -131,7 +140,7 @@ main = do
   catch start handleShutdown
 
 start = do
-  -- xmobar <- spawnPipe "xmobar"
+  xmobar <- spawnPipe "xmobar"
   xmonad $ ewmh $ desktopConfig
     { terminal          = "qterminal"
       , focusFollowsMouse = False
@@ -146,8 +155,7 @@ start = do
       , manageHook        = oManageHook
       -- handleEventHook = myEventHook
       , startupHook       = handleStartup
-      -- , logHook           = oLogHook xmobar  >>  historyHook
-      , logHook           = historyHook
+      , logHook           = oLogHook xmobar  >>  historyHook
     }
 
 oKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $

@@ -1,0 +1,53 @@
+#!/bin/sh
+
+build_dir=$(pwd)/xmonad/xmonad-stack
+
+_setup() {
+	rm ~/.xmonad
+	ln -s $(pwd)/xmonad/xmonad-stack/ ~/.xmonad
+
+	rm ~/.config/xmobar
+	ln -s $(pwd)/xmobar/my ~/.config/xmobar
+}
+
+_download() {
+	[ -d $build_dir ] || mkdir -p $build_dir
+
+	cd $build_dir
+	if [ ! -f xmonad.zip ]; then
+		wget -O xmonad.zip https://github.com/xmonad/xmonad/archive/master.zip
+		unzip xmonad.zip
+	fi
+	if [ ! -f xmonad-contrib.zip ]; then
+		wget
+		-O xmonad-contrib.zip https://github.com/xmonad/xmonad-contrib/archive/master.zip
+		unzip xmonad-contrib.zip
+	fi
+	if [ ! -f xmobar.zip ]; then
+		wget -O xmobar.zip https://github.com/jaor/xmobar/archive/master.zip
+		unzip xmobar.zip
+	fi
+}
+
+_clean() {
+	rm -v {xmonad-master,xmonad-contrib-master,xmobar-master} -rf
+	rm -v {xmonad-x86_64-linux,xmonad.o,xmonad.hi,xmonad.errors}
+}
+
+_install() {
+	stack install
+	xmonad --recompile	
+	cp xmonad-x86_64-linux ~/.local/bin
+}
+
+case $1 in 
+	clean)
+		_clean
+		;;
+	*)
+		_setup
+		_download
+		_install
+		;;
+esac
+

@@ -79,7 +79,8 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
 
 " haskell
-Plug 'neovimhaskell/haskell-vim'
+" Plug 'neovimhaskell/haskell-vim'
+Plug 'haskell/haskell-mode'
 
 " language pack syctax, indent
 Plug 'sheerun/vim-polyglot'
@@ -501,6 +502,12 @@ au User lsp_setup call lsp#register_server({
             \ 'allowlist': ['python'],
             \ })
 
+au User lsp_setup call lsp#register_server({
+            \ 'name': 'haskell-language-server',
+            \ 'cmd': {server_info->['haskell-language-server', '--lsp']},
+            \ 'allowlist': ['haskell'],
+            \ })
+
 " vim-lsp
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -535,13 +542,13 @@ let g:NERDTreeWinSize   = 32
 
 " haskell-vim confic
 au FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
-let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
+" let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+" let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+" let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+" let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+" let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+" let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+" let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
 " lua foncif
 let g:lua_complete_omni = 1

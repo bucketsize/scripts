@@ -30,21 +30,25 @@ local config_group = {
         autostart = {},
         bspwm = {},
         sxhkd = {},
-        alacritty = {state="noi"}
     },
     openbox = {
         Xresources = {},
         autostart = {},
         openbox = {},
-        sxhkd = {},
-        alacritty = {state="noi"}
+    },
+    xmonad = {
+        Xresources = {},
+        xmonad = {},
+        xmobar = {},
     },
     common = {
         fontconfig = {},
         gtk = {},
+		qt5ct = {},
         dunst = {},
         firefox = {},
         chromium = {},
+		qutebrowser = {},
         vim = {},
         nvim = {},
         mpd = {},
@@ -56,7 +60,9 @@ local config_group = {
         fseer = {state="noi"},
         conky = {},
         ["sysctl.d"] = {},
-        pipewire = {}
+        pipewire = {},
+		["qterminal.org"] = {},
+        alacritty = {state="noi"},
     },
     wayland_weston = {
         weston = {},
@@ -143,4 +149,5 @@ prepare_configs(_cfg_dir)
 
 -- weston
 setup_configs(_cfg_dir, "openbox")
+setup_configs(_cfg_dir, "xmonad")
 setup_configs(_cfg_dir, "common")
