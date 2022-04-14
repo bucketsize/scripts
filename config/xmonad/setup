@@ -5,11 +5,9 @@ build_dir=$(pwd)/xmonad/xmonad-stack
 _setup() {
 	rm ~/.xmonad
 	ln -s $(pwd)/xmonad/xmonad-stack/ ~/.xmonad
-
-	rm ~/.config/xmobar
-	ln -s $(pwd)/xmobar/my ~/.config/xmobar
 }
 
+# migrate to lua
 _download() {
 	[ -d $build_dir ] || mkdir -p $build_dir
 
@@ -37,7 +35,7 @@ _clean() {
 _install() {
 	stack install
 	xmonad --recompile	
-	cp xmonad-x86_64-linux ~/.local/bin
+	cp -fav xmonad-x86_64-linux ~/.local/bin
 }
 
 case $1 in 

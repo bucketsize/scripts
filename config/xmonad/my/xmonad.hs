@@ -4,9 +4,8 @@
 --      wallpaper,
 --      colors,
 --      so you dont have to keep recompiling for silly things
---
 -- 2. build for multiarch, x86_64, aarch64, armhf
---
+-- 3. forget
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE DisambiguateRecordFields #-}
@@ -99,6 +98,49 @@ import Text.Printf
 --   notification <- notify client hello
 --   return 0
 
+readFileLnsC :: Handle -> [String] -> IO [String]
+readFileLnsC h acc = do
+  eof <- hIsEOF h
+  if eof
+    then return acc
+    else do
+      l <- hGetLine h
+      readFileLnsC h (acc ++ [l])
+
+readFileLns :: FilePath -> IO [String]
+readFileLns path = do
+  h <- openFile path ReadMode
+  readFileLnsC h []
+
+splitOn :: Char -> String -> [String]
+splitOn c cs =
+  let (h, r) = break (== c) cs
+   in h :
+      case r of
+        "" -> []
+        _  -> splitOn c (tail r)
+
+getLogger :: FilePath -> IO (String -> IO ())
+getLogger path = 
+  openFile path WriteMode
+  >>= (\h -> return (\s -> hPutStrLn h s))
+
+logger :: IO (String -> IO ())
+logger = getLogger "/tmp/xmonad.log"
+
+oconfig1 :: IO [(String, String)]
+oconfig1 = readFileLns "~/.xmonad/xmonad.properties"
+  >>= (\ls -> do
+    log <- logger
+    let cs =
+          map (\l -> do
+            let la = (splitOn '=' l)
+            (la !! 0, la !! 1)) ls
+    return cs) 
+
+oconfig :: IO (M.Map String String)
+oconfig = oconfig1 >>= (\ls -> return (M.fromList ls))
+
 data Monitor = Monitor
   { output :: String
   , mode :: String
@@ -110,23 +152,45 @@ data Sound = Sound
   , level :: Int
   }
 
+oTerminal = "urxvt"
+
 monitorUp   m = printf "xrandr --output %s --mode %s --pos %s --rotate normal" (output m) (mode m) (position (m::Monitor))
 monitorDown m = printf "xrandr --output %s --off" (output m)
-vBoxDisplay = Monitor { output="DisplayPort-0", mode="1280x720", position="0x0"}
-lenovo_eDP1 = Monitor { output="eDP-1", mode="1280x720", position="0x0"}
-pi4Hdmi0 = Monitor { output="HDMI-A-0", mode="1280x720", position="0x0"}
-pi4Hdmi1 = Monitor { output="HDMI-A-1", mode="1280x720", position="0x0"}
 
-monitor00=monitorUp lenovo_eDP1 ++ " --primary"
+getMonitor :: String -> IO Monitor
+getMonitor label = do
+  c <- oconfig
+  let d = case (M.lookup label c) of
+            Just s  -> s
+            Nothing -> "default"
+  let m = case (M.lookup (label++"_mode") c) of
+            Just s  -> s
+            Nothing -> "1280x720"
+  let p = case (M.lookup (label++"_position") c) of
+            Just s  -> s
+            Nothing -> "0x0"
+  return Monitor {output = d, mode = m, position = p}
+
+monitor00 = getMonitor "display"
+  >>= \m -> return (monitorUp m ++ " --primary")
+
+wallpaper = oconfig
+  >>= \c -> return $ "feh --bgscale" ++
+    case (M.lookup "wallpaper" c) of 
+      Just w -> w
+      Nothing-> "~/.wlprs/wallpaper"
+
+configuredAutostarts = 
+  [ 
+   ("wallpaper", wallpaper)
+   , ("display", monitor00)
+  ]
 
 autostarts = 
   [("xrdb prefs","xrdb ~/.Xresources")
   ,("dbus session","dbus-launch --sh-syntax --exit-with-session")
   ,("dbus activation","dbus-update-activation-environment --systemd --all")
-  ,("video", monitor00)
-  ,("wallpaper get", "~/.luarocks/bin/mxctl.control fun getwallpaper")
-  ,("wallpaper apply", "~/.luarocks/bin/mxctl.control fun applywallpaper")
-  ,("compositer", "picom -cb")
+  ,("compositer", "picom")
   ,("triggerhappy","/usr/sbin/thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
   ,("music player daemon","mpd")
   ,("policykit ui","lxpolkit")
@@ -136,28 +200,6 @@ autostarts =
   ,("steam client","flatpak run com.valvesoftware.Steam")
  ]
 
-main = do
-  catch start handleShutdown
-
-start = do
-  xmobar <- spawnPipe "xmobar"
-  xmonad $ ewmh $ desktopConfig
-    { terminal          = "qterminal"
-      , focusFollowsMouse = False
-      , borderWidth       = 4
-      , modMask           = mod1Mask
-      , workspaces        = ["1", "2", "3", "4"]
-      -- normalBorderColor = myNormalBorderColor
-      -- focusedBorderColor = myFocusedBorderColor
-      ,keys = oKeys
-      -- , mouseBindings = oMouseBindings
-      , layoutHook        = oLayoutHook
-      , manageHook        = oManageHook
-      -- handleEventHook = myEventHook
-      , startupHook       = handleStartup
-      , logHook           = oLogHook xmobar  >>  historyHook
-    }
-
 oKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   [ 
     -- Restart after compile
@@ -166,6 +208,7 @@ oKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Quit xmonad
     , ((modm .|. controlMask, xK_q), io (exitWith ExitSuccess))
 
+    , ((modm, xK_Return),        spawn oTerminal)
     , ((modm, xK_l),        spawn "slock")
     , ((mod4Mask, xK_r),       spawn "dmenu_run -l 10")
     , ((mod4Mask, xK_w),       gotoMenuArgs ["-l", "10"])
@@ -203,9 +246,19 @@ oKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Toggle the status bar gap
     , ((modm ,xK_g), sendMessage ToggleStruts)
 
-    , ((modm .|. controlMask, xK_l),withFocused (keysResizeWindow (-10,-10) (1,1)))
-    , ((modm .|. controlMask, xK_h),withFocused (keysResizeWindow (10,10) (1,1)))
-    , ((modm .|. shiftMask, xK_l),withFocused (keysMoveWindowTo (512,384) (1%2,1%2)))
+    , ((modm .|. controlMask, xK_l),withFocused (keysResizeWindow (-20,-20) (1%2,1%2)))
+    , ((modm .|. controlMask, xK_h),withFocused (keysResizeWindow ( 20, 20) (1%2,1%2)))
+    , ((modm .|. controlMask, xK_Right),withFocused (keysResizeWindow (-20,-20) (1%2,1%2)))
+    , ((modm .|. controlMask, xK_Left),withFocused (keysResizeWindow ( 20, 20) (1%2,1%2)))
+    
+      , ((modm .|. shiftMask, xK_l),withFocused (keysMoveWindow ( 20,0))) -- right
+    , ((modm .|. shiftMask, xK_h),withFocused (keysMoveWindow (-20,0))) -- left
+    , ((modm .|. shiftMask, xK_j),withFocused (keysMoveWindow (0,-20))) -- up
+    , ((modm .|. shiftMask, xK_k),withFocused (keysMoveWindow (0, 20))) -- down
+    , ((modm .|. shiftMask, xK_Right),withFocused (keysMoveWindow ( 20,0))) -- right
+    , ((modm .|. shiftMask, xK_Left),withFocused (keysMoveWindow (-20,0))) -- left
+    , ((modm .|. shiftMask, xK_Up),withFocused (keysMoveWindow (0,-20))) -- up
+    , ((modm .|. shiftMask, xK_Down),withFocused (keysMoveWindow (0, 20))) -- down
   ]
 
 oManageHook = composeAll . concat $
@@ -217,29 +270,49 @@ oManageHook = composeAll . concat $
                   , "Rename", "Create" ]
 
 oLayoutHook = avoidStruts
-          $ configurableNavigation (navigateColor "#00aa00")
           $ smartBorders
           $ spacing 4 
           $ simpleFloat 
           ||| Tall 1 (3/100) (1/2) 
-          ||| spiral (125 % 146)
           ||| Full
           ||| layoutHook desktopConfig
 
-oLogHook statProc =
-      dynamicLogWithPP xmobarPP
+oLogHook statProc = dynamicLogWithPP xmobarPP
         { ppOutput = hPutStrLn statProc
         , ppTitle  = xmobarColor "pink" "" . shorten 50
         }
 
-handleShutdown :: AsyncException -> IO ()
-handleShutdown e = do
-  throw e
 
-handleStartup :: X ()
-handleStartup = do
-  forM_ autostarts $ \(name, cmd) ->
-    (spawn cmd) >> liftIO (print ("started" ++ name))
-  -- liftIO (notifySend "XMonad" "started")
-  -- setWMName "LG3D" -- java compat
+oStartupHook :: X ()
+oStartupHook = do
+  log <- (liftIO logger)
+  liftIO (forM_ autostarts $ \(name, cmd) -> do
+    log ("Xmonad::autostart " ++ name ++ " -> " ++ cmd)
+    spawn cmd)
+  liftIO (forM_ configuredAutostarts $ \(name, mcmd) -> do
+    cmd <- mcmd
+    log ("Xmonad::autostart " ++ name ++ " -> " ++ cmd) 
+    spawn cmd) 
+
+
+start = do
+  xmobar <- spawnPipe "xmobar"
+  xmonad $ ewmh $ desktopConfig
+    { terminal              = oTerminal 
+      , focusFollowsMouse   = False
+      , borderWidth         = 4
+      , modMask             = mod1Mask
+      , workspaces          = ["1", "2", "3", "4"]
+      -- normalBorderColor  = myNormalBorderColor
+      -- focusedBorderColor = myFocusedBorderColor
+      ,keys                 = oKeys
+      -- , mouseBindings    = oMouseBindings
+      , layoutHook          = oLayoutHook
+      , manageHook          = oManageHook
+      -- handleEventHook    = myEventHook
+      , startupHook         = oStartupHook
+      , logHook             = oLogHook xmobar  >>  historyHook
+    }
+
+main = start
 

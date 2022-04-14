@@ -1,4 +1,4 @@
-Config { font = "{font_monospace}:size={font_monospace_size}:antialias=false"
+Config { font = "xft:{font_monospace}:size={font_monospace_size}:antialias=false"
        , additionalFonts = []
        , alpha = 127
        , border = TopB
