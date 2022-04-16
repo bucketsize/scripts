@@ -7,7 +7,9 @@ local Sh = require("minilib.shell")
 local Ut = require("minilib.util")
 
 function autostart()
-    
+
+	Sh.sh("xrdb ~/.Xresources")
+
 	-- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
     Sh.fork("dbus-launch --sh-syntax --exit-with-session")
     Sh.fork("dbus-update-activation-environment --systemd --all")
@@ -35,6 +37,9 @@ function autostart()
 
 	Sh.killall("dunst")
     Sh.fork("dunst")
+	
+	Sh.killall("xmobar")
+    Sh.fork("xmobar")
 
 	Sh.killall("tint2")
     Sh.fork("tint2")

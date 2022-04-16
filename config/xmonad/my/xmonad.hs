@@ -55,14 +55,15 @@ oMxctl fu = "~/.luarocks/bin/mxctl.control fun " ++ fu
 
 autostarts :: [(String, String)]
 autostarts =
-  [("xrdb prefs","xrdb ~/.Xresources")
-    , ("video", oMxctl "setup_video")
-    , ("compositer", "picom")
-    , ("wallpaper",  oMxctl "applywallpaper")
-    , ("dbus session","dbus-launch --sh-syntax --exit-with-session")
+  [
+      ("dbus session","dbus-launch --sh-syntax --exit-with-session")
     , ("dbus activation","dbus-update-activation-environment --systemd --all")
     , ("triggerhappy","/usr/sbin/thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
     , ("music player daemon","mpd")
+    , ("video", "sleep 5 && " ++ oMxctl "setup_video")
+    , ("xrdb prefs","xrdb ~/.Xresources")
+    , ("compositer", "picom")
+    , ("wallpaper",  oMxctl "applywallpaper")
     , ("policykit ui","lxpolkit")
     , ("notification daemon","dunst")
     , ("network applet","connman-gtk --tray")
@@ -129,14 +130,24 @@ oKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_Down),withFocused (keysMoveWindow (0, 20))) -- down
   ]
 
-oManageHook = composeAll . concat $
-    [ [ className =? c               --> doFloat | c <- cFloats ]
-    , [ title     =? t               --> doFloat | t <- tFloats ]]
-  where cFloats = [ "Gimp", "Pidgin", "ROX-Filer", "Dunst", "Conky"
-                  , "Pavucontrol", "Steam", "Mpv", "arandr", "Gvim"
-                  , "Popeye"]
-        tFloats = [ "Firefox Preferences", "Downloads", "Add-ons"
-                  , "Rename", "Create", "mxctl.control" ]
+oManageHook = composeAll
+    [   className =? "Dunst"          --> doFloat
+      , className =? "Tint2"          --> doFloat
+      , className =? "Conky"          --> doFloat
+      , className =? "Mpv"          --> doFloat
+      , className =? "Arandr"          --> doFloat
+      , className =? "Pavucontrol"          --> doFloat
+      , className =? "Pavucontrol-qt"          --> doFloat
+      , className =? "Steam"          --> doFloat
+      , className =? "Popeye"          --> doFloat
+      
+      , title =? "Firefox Preferences"          --> doFloat
+      , title =? "Downloads"          --> doFloat
+      , title =? "Add-ons"          --> doFloat
+      , title =? "Rename"          --> doFloat
+      , title =? "Create"          --> doFloat
+      , title =? "mxctl.control"          --> doFloat
+    ]
 
 oLayoutHook = avoidStruts
           $ smartBorders
@@ -173,7 +184,7 @@ start = do
   xmonad $ ewmh $ desktopConfig
     { terminal              = oTerminal
       , focusFollowsMouse   = False
-      , borderWidth         = 4
+      , borderWidth         = 2
       , modMask             = mod1Mask
       , workspaces          = ["1", "2", "3", "4"]
       , normalBorderColor   = "grey" 
@@ -181,7 +192,9 @@ start = do
       ,keys                 = oKeys
       -- , mouseBindings    = oMouseBindings
       , layoutHook          = oLayoutHook
-      , manageHook          = oManageHook
+      , manageHook          = manageDocks 
+                              <+> oManageHook
+                              <+> manageHook def
       -- handleEventHook    = myEventHook
       , startupHook         = oStartupHook
       , logHook             = oLogHook xmobar  >>  historyHook
