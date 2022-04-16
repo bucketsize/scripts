@@ -5,16 +5,22 @@
 -- TODO
 -- 1. build for multiarch, x86_64, aarch64, armhf
 
+
 import Control.Exception
 import Control.Monad (liftM, forM_)
+import Data.List
 import Data.Monoid
 import Data.Ratio -- this makes the '%' operator available (optional)
+import Graphics.X11.Xlib
 import System.Exit
 import System.IO
 import Text.Printf
 import XMonad
+import XMonad.Actions.Commands
+import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DwmPromote
+import XMonad.Actions.FindEmptyWorkspace
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.GridSelect
 import XMonad.Actions.GroupNavigation
@@ -25,12 +31,17 @@ import XMonad.Config.Desktop
 import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.FadeInactive(setOpacity)
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Grid
+import XMonad.Layout.LayoutHints
 import XMonad.Layout.Magnifier
+import XMonad.Layout.Named
 import XMonad.Layout.NoBorders
+import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Spacing
@@ -43,6 +54,7 @@ import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
 import XMonad.Prompt.Shell
 import XMonad.Util.EZConfig
+import XMonad.Util.NamedScratchpad
 import XMonad.Util.Paste
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.SpawnOnce
@@ -140,6 +152,7 @@ oManageHook = composeAll
       , className =? "Pavucontrol-qt"          --> doFloat
       , className =? "Steam"          --> doFloat
       , className =? "Popeye"          --> doFloat
+      , className =? "Connman-gtk"          --> doFloat
       
       , title =? "Firefox Preferences"          --> doFloat
       , title =? "Downloads"          --> doFloat
@@ -157,9 +170,20 @@ oLayoutHook = avoidStruts
           ||| Full
           ||| layoutHook desktopConfig
 
-oLogHook statProc = dynamicLogWithPP xmobarPP
-        { ppOutput = hPutStrLn statProc
-        , ppTitle  = xmobarColor "pink" "" . shorten 32
+oLogHook statProc = 
+      dynamicLogWithPP xmobarPP
+        { ppOutput  = hPutStrLn statProc
+        , ppTitle   = xmobarColor "pink" "" . shorten 32
+        
+        -- Takes up less space this way
+        , ppLayout  = (\x -> case x of
+                                "Tall" -> "|"
+                                "Wide" -> "-"
+                                "Full" -> "^"
+                                _      -> "?")
+        , ppUrgent  = xmobarColor "" "red" . xmobarStrip
+        , ppVisible = xmobarColor "#3579a8" ""
+        , ppCurrent = xmobarColor "#000000" "#111111"
         }
 
 getLogger :: FilePath -> IO (String -> IO ())
@@ -189,7 +213,7 @@ start = do
       , workspaces          = ["1", "2", "3", "4"]
       , normalBorderColor   = "grey" 
       , focusedBorderColor  = "orange"
-      ,keys                 = oKeys
+      , keys                = oKeys
       -- , mouseBindings    = oMouseBindings
       , layoutHook          = oLayoutHook
       , manageHook          = manageDocks 
