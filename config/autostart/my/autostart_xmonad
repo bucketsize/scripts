@@ -1,0 +1,37 @@
+#!/usr/bin/env lua
+
+require "luarocks.loader"
+
+local Lr = require("minilib.process_listener")
+local Sh = require("minilib.shell")
+local Ut = require("minilib.util")
+
+function autostart()
+	Sh.sh([[
+		xrdb ~/.Xresources
+		xsetroot -cursor_name left_ptr
+		setxkbmap us
+	]])
+	
+    -- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+    Sh.sh([[
+		dbus-launch --sh-syntax --exit-with-session
+		dbus-update-activation-environment --systemd --all
+	]])
+
+    -- sys key binder
+	Sh.forkonce("/usr/sbin/thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.forkonce("mpd")
+    Sh.forkonce("lxpolkit")
+    Sh.forkonce("dunst")
+    Sh.forkonce("VBoxClient", "--clipboard")
+    Sh.forkonce("flatpak run com.valvesoftware.Steam")
+	Sh.forkonce("urxvtd", "-q -o -f")
+	Sh.forkonce("picom")
+	Ut.sleep(1)
+	Sh.sh("~/.luarocks/bin/mxctl.control fun setup_video")
+	Sh.sh("~/.luarocks/bin/mxctl.control fun applywallpaper")
+
+end
+
+return autostart

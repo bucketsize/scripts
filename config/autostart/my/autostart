@@ -1,9 +1,6 @@
 #!/usr/bin/env lua
 
 local _HOME = os.getenv("HOME")
-local fn = loadfile(_HOME.."/.local/bin/autostart_qtile")
+local fn = loadfile(_HOME.."/.config/autostart/autostart_xmonad")
 fn()
 autostart()
-
-
-

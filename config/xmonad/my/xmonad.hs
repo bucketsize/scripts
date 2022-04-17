@@ -62,8 +62,9 @@ import XMonad.Util.WorkspaceCompare
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
 
-oTerminal = "urxvt"
-oMxctl fu = "~/.luarocks/bin/mxctl.control fun " ++ fu
+oTerminal      = "urxvt"
+oMxctl fu      = "~/.luarocks/bin/mxctl.control fun " ++ fu
+orgAutostartTg = "~/.config/autostart/autostart"
 
 autostarts :: [(String, String)]
 autostarts =
@@ -194,14 +195,18 @@ getLogger path =
 logger :: IO (String -> IO ())
 logger = getLogger "/tmp/xmonad.log"
 
-__oStartupHook :: IO ()
-__oStartupHook = do
+oStartupHook :: X ()
+oStartupHook = liftIO $ do
   log <- logger
   forM_ autostarts $ \(name, cmd) -> do
     log ("Xmonad::autostart " ++ name ++ " -> " ++ cmd)
     spawn cmd
 
-oStartupHook = liftIO __oStartupHook
+orgStartupHook :: X ()
+orgStartupHook = do
+  log <- liftIO logger
+  liftIO (log ("Xmonad::org autostart "++orgAutostartTg))
+  spawnOnce orgAutostartTg
 
 start = do
   xmobar <- spawnPipe "xmobar"
@@ -220,7 +225,7 @@ start = do
                               <+> oManageHook
                               <+> manageHook def
       -- handleEventHook    = myEventHook
-      , startupHook         = oStartupHook
+      , startupHook         = orgStartupHook
       , logHook             = oLogHook xmobar  >>  historyHook
     }
 
