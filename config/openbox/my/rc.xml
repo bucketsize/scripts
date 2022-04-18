@@ -42,7 +42,7 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>nord-openbox-theme</name>
+    <name>Arc-Dark</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -110,6 +110,8 @@
       <slant>normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
+    <cornerRadius>8</cornerRadius>
+    <cornerRadius menu="yes">8</cornerRadius>
   </theme>
   <desktops>
     <!-- this stuff is only used at startup, pagers allow you to change them
