@@ -17,11 +17,11 @@
 // NOTICE: Disabling ServiceWorkers breaks Firefox Sync
 // Unknown security implications
 // CVE-2016-5259, CVE-2016-2812, CVE-2016-1949, CVE-2016-5287 (fixed)
-//user_pref("dom.serviceWorkers.enabled",				false);
+user_pref("dom.serviceWorkers.enabled",				true);
 
 // PREF: Disable web notifications
 // https://support.mozilla.org/en-US/questions/1140439
-//user_pref("dom.webnotifications.enabled",			false);
+user_pref("dom.webnotifications.enabled",			true);
 
 // PREF: Disable DOM timing API
 // https://wiki.mozilla.org/Security/Reviews/Firefox/NavigationTimingAPI
@@ -41,7 +41,7 @@
 // PREF: Disable Web Audio API
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1288359
 // NOTICE: Web Audio API is required for Unity web player/games
-//user_pref("dom.webaudio.enabled",				false);
+user_pref("dom.webaudio.enabled",				true);
 
 // PREF: Disable Location-Aware Browsing (geolocation)
 // https://www.mozilla.org/en-US/firefox/geolocation/
@@ -113,12 +113,12 @@ user_pref("beacon.enabled",					false);
 // PREF: Disable clipboard event detection (onCut/onCopy/onPaste) via Javascript
 // NOTICE: Disabling clipboard events breaks Ctrl+C/X/V copy/cut/paste functionaility in JS-based web applications (Google Docs...)
 // https://developer.mozilla.org/en-US/docs/Mozilla/Preferences/Preference_reference/dom.event.clipboardevents.enabled
-user_pref("dom.event.clipboardevents.enabled",			false);
+user_pref("dom.event.clipboardevents.enabled",			true);
 
 // PREF: Disable "copy to clipboard" functionality via Javascript (Firefox >= 41)
 // NOTICE: Disabling clipboard operations will break legitimate JS-based "copy to clipboard" functionality
 // https://hg.mozilla.org/mozilla-central/rev/2f9f8ea4b9c3
-user_pref("dom.allow_cut_copy", false);
+user_pref("dom.allow_cut_copy", true);
 
 // PREF: Disable speech recognition
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html
@@ -559,7 +559,7 @@ user_pref("browser.startup.blankWindow", false);
 // https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2015-2743
 // https://blog.mozilla.org/security/2015/08/06/firefox-exploit-found-in-the-wild/
 // https://www.mozilla.org/en-US/security/advisories/mfsa2015-69/
-user_pref("pdfjs.disabled",					true);
+user_pref("pdfjs.disabled",					false);
 
 // PREF: Disable collection/sending of the health report (healthreport.sqlite*)
 // https://support.mozilla.org/en-US/kb/firefox-health-report-understand-your-browser-perf

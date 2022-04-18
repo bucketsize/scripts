@@ -8,6 +8,14 @@ Shell.file_exists ("openbox")
 Shell.file_exists ("obconf")
 
 Shell.ln ("$(pwd)/openbox/my", "~/.config/openbox")
+Shell.ln ("~/.config/autostart/autostart", "$(pwd)/openbox/my/autostart")
+
+-- theme
 Shell.mkdir ("~/.themes")
-Shell.ln ("$(pwd)/openbox/themes/Tenebris/", "~/.themes/Tenebris")
-Shell.ln ("~/.local/bin/autostart", "$(pwd)/openbox/my/autostart")
+Shell.sh([[
+	cd ~/.themes
+	if [ ! -d nord-openbox-theme ]; then 
+		git clone https://gitlab.com/the-zero885/nord-openbox-theme.git
+	fi
+	]])
+

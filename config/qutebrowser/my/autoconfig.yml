@@ -7,4 +7,6 @@
 config_version: 2
 settings:
   content.notifications:
-    https://www.reddit.com: false
+    https://www.facebook.com: false
+  content.register_protocol_handler:
+    https://outlook.live.com?mailtouri=%25s: false
