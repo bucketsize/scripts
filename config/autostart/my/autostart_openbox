@@ -7,53 +7,33 @@ local Sh = require("minilib.shell")
 local Ut = require("minilib.util")
 
 function autostart()
-
-	Sh.sh("xrdb ~/.Xresources")
-
-	-- dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
-    Sh.fork("dbus-launch --sh-syntax --exit-with-session")
-    Sh.fork("dbus-update-activation-environment --systemd --all")
-
+	Sh.sh([[
+		xrdb -merge ~/.Xresources
+		xhost +
+		xsetroot -cursor_name left_ptr
+		setxkbmap us
+    
+		# dbus for dbus aware apps integration . ie pulseaudio, nautilus, firefox, dunst
+		dbus-launch --sh-syntax --exit-with-session
+		dbus-update-activation-environment --systemd --all
+	]])
+	
     -- sys key binder
-	Sh.killall("thd")
-	Sh.fork("/usr/sbin/thd --triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
-
-	-- faster vterminal
-	Sh.killall("urxvtd")
-	Sh.fork("urxvtd '-q -o -f'")
-
-    Sh.fork("mpd")
-
+	Sh.forkonce("/usr/sbin/thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.forkonce("mpd")
+    Sh.forkonce("lxpolkit")
+    Sh.forkonce("dunst")
+    Sh.forkonce("VBoxClient", "--clipboard")
+	Sh.forkonce("urxvtd", "-q -o -f")
+	Sh.forkonce("picom")
+	Ut.sleep(1)
 	Sh.sh("~/.luarocks/bin/mxctl.control fun setup_video")
+	Ut.sleep(1)
 	Sh.sh("~/.luarocks/bin/mxctl.control fun applywallpaper")
-	Sh.sh("setxkbmap us")
-	Sh.sh("xsetroot -cursor_name left_ptr")
+    Sh.forkonce("tint2")
+	Sh.forkonce("xmobar") --or conky 
+    Sh.forkonce("flatpak run com.valvesoftware.Steam")
 
-	Sh.killall("compton")
-	Sh.fork("compton")
-	
-	Sh.killall("lxpolkit")
-	Sh.fork("lxpolkit")
-
-	Sh.killall("dunst")
-    Sh.fork("dunst")
-	
-	Sh.killall("xmobar")
-    Sh.fork("xmobar")
-
-	Sh.killall("tint2")
-    Sh.fork("tint2")
-
-	Sh.killall("connman-gtk")
-    Sh.fork("connman-gtk")
-
-    Sh.fork("VBoxClient --clipboard")
-
-	Sh.killall("Steam")
-    Sh.fork("flatpak run com.valvesoftware.Steam")
-	
-	Sh.killall("conky")
-	Sh.fork("conky") 
 
 end
 

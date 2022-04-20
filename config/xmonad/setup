@@ -1,51 +1,50 @@
-#!/bin/sh
+#!/usr/bin/env lua
 
-build_dir=$(pwd)/xmonad/xmonad-stack
+require "luarocks.loader"
 
-_setup() {
-	rm ~/.xmonad
-	ln -s $(pwd)/xmonad/xmonad-stack/ ~/.xmonad
+local Sh = require('minilib.shell')
+local Ut = require('minilib.util')
+
+local build_dir = os.getenv("HOME").."/xmonad-1"
+local packs = {
+	{
+		name = "xmonad",
+		ver  = "0.17.0",
+		url  = "https://github.com/xmonad/xmonad/archive/refs/tags/v0.17.0.tar.gz",
+	},
+	{
+		name = "xmonad-contrib",
+		ver  = "0.17.0",
+		url  = "https://github.com/xmonad/xmonad-contrib/archive/refs/tags/v0.17.0.tar.gz ",
+	},
+	{
+		name = "xmobar",
+		ver  = "0.42",
+		url  = "https://github.com/jaor/xmobar/archive/refs/tags/0.42.tar.gz",
+	},
 }
 
-# migrate to lua
-_download() {
-	[ -d $build_dir ] || mkdir -p $build_dir
+function setup_xmonad()
+	Sh.mkdir(build_dir)
+	Sh.cp("$(pwd)/xmonad/xmonad-stack/*", build_dir)
+	for _, p in ipairs(packs) do
+		if not Sh.path_exists(build_dir.."/"..p.name) then
+			local tar = "/tmp/"..p.name..".tar.gz"
+			print("getting", p.name, p.ver, tar)
+			Sh.wget(p.url, tar)
+			Sh.sh(string.format("tar -xvzf %s -C %s", tar, build_dir))
+			Sh.mv(
+				string.format("%s/%s-%s", build_dir, p.name, p.ver),
+				string.format("%s/%s", build_dir, p.name))
+		end
+	end
+	Sh.sh(string.format("cd %s && stack install", build_dir))
+end
 
-	cd $build_dir
-	if [ ! -f xmonad.zip ]; then
-		wget -O xmonad.zip https://github.com/xmonad/xmonad/archive/master.zip
-		unzip xmonad.zip
-	fi
-	if [ ! -f xmonad-contrib.zip ]; then
-		wget
-		-O xmonad-contrib.zip https://github.com/xmonad/xmonad-contrib/archive/master.zip
-		unzip xmonad-contrib.zip
-	fi
-	if [ ! -f xmobar.zip ]; then
-		wget -O xmobar.zip https://github.com/jaor/xmobar/archive/master.zip
-		unzip xmobar.zip
-	fi
-}
+function setup_xmonad_config()
+	Sh.ln(build_dir, "~/.xmonad")
+	Sh.ln("$(pwd)/xmonad/my/xmonad.hs", "~/.xmonad/xmonad.hs")
+	Sh.sh("xmonad --recompile")
+end
 
-_clean() {
-	rm -v {xmonad-master,xmonad-contrib-master,xmobar-master} -rf
-	rm -v {xmonad-x86_64-linux,xmonad.o,xmonad.hi,xmonad.errors}
-}
-
-_install() {
-	stack install
-	xmonad --recompile	
-	cp -fav xmonad-x86_64-linux ~/.local/bin
-}
-
-case $1 in 
-	clean)
-		_clean
-		;;
-	*)
-		_setup
-		_download
-		_install
-		;;
-esac
-
+setup_xmonad_config()

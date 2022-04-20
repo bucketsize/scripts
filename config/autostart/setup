@@ -4,7 +4,6 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 
 -- Shell.ln("$(pwd)/autostart/my/autostartd", "~/.local/bin/autostartd")
-    
 -- Shell.mkdir("~/.config/systemd/user")
 -- Shell.sh([[
 -- 	ln -sfv $(pwd)/autostart/my/autostart.service ~/.config/systemd/user/autostart.service
@@ -13,3 +12,4 @@ local Shell = require('minilib.shell')
 --     ]])
 
 Shell.ln("$(pwd)/autostart/my", "~/.config/autostart")
+Shell.sh("chmod -v +x $(pwd)/autostart/my/autostart")

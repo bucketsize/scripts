@@ -8,13 +8,11 @@ Shell.file_exists ("openbox")
 Shell.file_exists ("obconf")
 
 Shell.ln ("$(pwd)/openbox/my", "~/.config/openbox")
-Shell.ln ("$(pwd)/autostart/autostart", "$(pwd)/openbox/my/autostart")
-Shell.sh ([[
-	chmod +x $(pwd)/autostart/autostart 
-	]])
 
 -- theme
 Shell.mkdir ("~/.themes")
+
+-- TODO : use release tar.gz
 Shell.sh([[
 	cd ~/.themes
 	if [ ! -d nord-openbox-theme ]; then 

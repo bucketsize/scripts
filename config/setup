@@ -38,7 +38,7 @@ local config_group = {
     },
     xmonad = {
         Xresources = {},
-        xmonad = {},
+        xmonad = {state="noi"},
         xmobar = {},
     },
     common = {
