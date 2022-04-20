@@ -1,4 +1,4 @@
-#include "__home/.config/xresources.d/colors-terminal.sexy-4"
+#include "{home}/.config/xresources.d/colors-terminal.sexy-4"
 
 #define FONT 	 xft:{font}:size={font_size}
 #define FONTMONO xft:{font_monospace}:size={font_monospace_size}

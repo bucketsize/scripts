@@ -1,5 +1,6 @@
 return {
-    font                  = "Cantarell",
+    home				  = os.getenv("HOME"),
+	font                  = "Cantarell",
 	font_size             = "12",
     font_monospace        = "Terminus",
     font_monospace_size   = "12",
