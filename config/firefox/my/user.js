@@ -26,7 +26,7 @@ user_pref("dom.webnotifications.enabled",			true);
 // PREF: Disable DOM timing API
 // https://wiki.mozilla.org/Security/Reviews/Firefox/NavigationTimingAPI
 // https://www.w3.org/TR/navigation-timing/#privacy
-//user_pref("dom.enable_performance",				false);
+user_pref("dom.enable_performance",				true);
 
 // PREF: Disable resource timing API
 // https://www.w3.org/TR/resource-timing/#privacy-security
@@ -64,7 +64,7 @@ user_pref("dom.mozTCPSocket.enabled",				false);
 // http://kb.mozillazine.org/Dom.storage.enabled
 // https://html.spec.whatwg.org/multipage/webstorage.html
 // NOTICE-DISABLED: Disabling DOM storage is known to cause`TypeError: localStorage is null` errors
-// user_pref("dom.storage.enabled",		false);
+user_pref("dom.storage.enabled",		true);
 
 // PREF: Disable leaking network/browser connection information via Javascript
 // Network Information API provides general information about the system's connection type (WiFi, cellular, etc.)
@@ -174,21 +174,21 @@ user_pref("dom.archivereader.enabled",				false);
 // PREF: Disable webGL
 // https://en.wikipedia.org/wiki/WebGL
 // https://www.contextis.com/resources/blog/webgl-new-dimension-browser-exploitation/
-// user_pref("webgl.disabled",					true);
+user_pref("webgl.disabled",					false);
 // PREF: When webGL is enabled, use the minimum capability mode
-//user_pref("webgl.min_capability_mode",				true);
+user_pref("webgl.min_capability_mode",				false);
 // PREF: When webGL is enabled, disable webGL extensions
 // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API#WebGL_debugging_and_testing
-//user_pref("webgl.disable-extensions",				true);
+user_pref("webgl.disable-extensions",				false);
 // PREF: When webGL is enabled, force enabling it even when layer acceleration is not supported
 // https://trac.torproject.org/projects/tor/ticket/18603
-//user_pref("webgl.disable-fail-if-major-performance-caveat",	true);
+user_pref("webgl.disable-fail-if-major-performance-caveat",	true);
 // PREF: When webGL is enabled, do not expose information about the graphics driver
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1171228
 // https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_debug_renderer_info
 user_pref("webgl.enable-debug-renderer-info",			false);
 // somewhat related...
-user_pref("pdfjs.enableWebGL",					false);
+user_pref("pdfjs.enableWebGL",					true);
 
 // PREF: Spoof dual-core CPU
 // https://trac.torproject.org/projects/tor/ticket/21675
@@ -200,7 +200,7 @@ user_pref("dom.maxHardwareConcurrency",				2);
 // https://en.wikipedia.org/wiki/WebAssembly
 // https://trac.torproject.org/projects/tor/ticket/21549
 // NOTICE: WebAssembly is required for Unity web player/games
-//user_pref("javascript.options.wasm",				false);
+user_pref("javascript.options.wasm",				true);
 
 /******************************************************************************
  * SECTION: Misc                                                              *
@@ -297,7 +297,7 @@ user_pref("browser.urlbar.filter.javascript",			true);
 // https://www.mozilla.org/en-US/security/advisories/mfsa2015-29/
 // https://www.mozilla.org/en-US/security/advisories/mfsa2015-50/
 // https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-2712
-user_pref("javascript.options.asmjs",				false);
+user_pref("javascript.options.asmjs",				true);
 
 // PREF: Disable SVG in OpenType fonts
 // https://wiki.mozilla.org/SVGOpenTypeFonts
@@ -453,6 +453,7 @@ user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr",	false);
 // PREF: Trusted Recursive Resolver (DNS-over-HTTPS) (disabled)
 // https://wiki.mozilla.org/Trusted_Recursive_Resolver
 //user_pref("network.trr.mode",					0);
+//user_pref("network.trr.uri","https://mozilla.cloudflare-dns.com/dns-query");
 
 // PREF: Disable WebIDE
 // https://trac.torproject.org/projects/tor/ticket/16222
@@ -597,7 +598,7 @@ user_pref("loop.logDomains",					false);
 // PREF: Enable Auto Update (disabled)
 // NOTICE: Fully automatic updates are disabled and left to package management systems on Linux. Windows users may want to change this setting.
 // CIS 2.1.1
-//user_pref("app.update.auto",					true);
+user_pref("app.update.auto",					false);
 
 // PREF: Enforce checking for Firefox updates
 // http://kb.mozillazine.org/App.update.enabled
@@ -753,6 +754,14 @@ user_pref("network.http.referer.XOriginPolicy",		2);
 // PREF: Accept Only 1st Party Cookies
 // http://kb.mozillazine.org/Network.cookie.cookieBehavior#1
 // NOTICE: Blocking 3rd-party cookies breaks a number of payment gateways
+// 0
+// All cookies are allowed. (Default)
+// 1
+// Only cookies from the originating server are allowed.
+// 2
+// No cookies are allowed.
+// 3
+// Third-party cookies are allowed only if that site has stored cookies already from a previous visit (Firefox 22.0 and SeaMonkey 2.19 and later) (obsolete) Cookies are allowed based on the cookie P3P policy
 // CIS 2.5.1
 user_pref("network.cookie.cookieBehavior",			1);
 
@@ -789,7 +798,8 @@ user_pref("network.cookie.thirdparty.sessionOnly",		true);
 // NOTICE: Private browsing breaks Kerberos authentication
 // NOTICE: Disables "Containers" functionality (see below)
 // NOTICE: "Always use private browsing mode" (browser.privatebrowsing.autostart) disables the possibility to use password manager: https://support.mozilla.org/en-US/kb/usernames-and-passwords-are-not-saved#w_private-browsing
-user_pref("browser.privatebrowsing.autostart",			true);
+
+user_pref("browser.privatebrowsing.autostart",			false);
 
 // PREF: Do not download URLs for the offline cache
 // http://kb.mozillazine.org/Browser.cache.offline.enable
@@ -827,11 +837,11 @@ user_pref("places.history.enabled",				false);
 
 // PREF: Disable disk cache
 // http://kb.mozillazine.org/Browser.cache.disk.enable
-//user_pref("browser.cache.disk.enable",				false);
+user_pref("browser.cache.disk.enable",				true);
 
 // PREF: Disable memory cache (disabled)
 // http://kb.mozillazine.org/Browser.cache.memory.enable
-//user_pref("browser.cache.memory.enable",		false);
+user_pref("browser.cache.memory.enable",		true);
 
 // PREF: Disable Caching of SSL Pages
 // CIS Version 1.2.0 October 21st, 2011 2.5.8
@@ -1231,14 +1241,10 @@ user_pref("extensions.formautofill.creditCards.enabled","false");
 user_pref("extensions.formautofill.firstTimeUse","false");
 user_pref("extensions.formautofill.heuristics.enabled","false");
 user_pref("extensions.formautofill.section.enabled","false");
-user_pref("extensions.pocket.api","");
-user_pref("extensions.pocket.enabled","false");
-user_pref("extensions.pocket.site","");
+
 user_pref("extensions.screenshots.disabled","true");
 user_pref("extensions.webcompat-reporter.enabled","false");
 user_pref("media.navigator.enabled","false");
-user_pref("media.peerconnection.enabled","false");
-user_pref("gfx.webrender.all","true");
 user_pref("extensions.getAddons.discovery.api_url","");
 user_pref("extensions.htmlaboutaddons.recommendations.enabled","false");
 user_pref("browser.urlbar.maxHistoricalSearchSuggestions","0");
@@ -1246,22 +1252,15 @@ user_pref("browser.urlbar.maxRichResults","0");
 user_pref("toolkit.telemetry.reportingpolicy.firstRun","false");
 user_pref("geo.wifi.xhr.timeout","1");
 user_pref("dom.push.enabled","false");
-user_pref("network.dns.disablePrefetch","true");
 user_pref("network.prefetch-next","false");
-user_pref("network.trr.mode","2");
-user_pref("network.trr.uri","https://mozilla.cloudflare-dns.com/dns-query");
 user_pref("network.dns.echconfig.enabled","true");
 user_pref("network.dns.use_https_rr_as_altsvc","true");
 user_pref("network.ftp.enabled","false");
-user_pref("widget.non-native-theme.scrollbar.size","12 (default, scrollbar width) =&gt;");
-user_pref("widget.non-native-theme.scrollbar.size.override","0");
-user_pref("widget.non-native-theme.gtk.scrollbar.thumb-size","0.75");
-user_pref("widget.non-native-theme.gtk.scrollbar.round-thumb","true");
-user_pref("widget.non-native-theme.gtk.scrollbar.thumb-cross-size","40");
 user_pref("dom.image-lazy-loading.enabled","true");
+user_pref("gfx.webrender.all","true");
 
 // Printer Settings Default off
-user_pref("print.print_footerleft", "");
-user_pref("print.print_footerright", "");
-user_pref("print.print_headerleft", "");
-user_pref("print.print_headerright", ""); 
+user_pref("print.print_footerleft", "|>");
+user_pref("print.print_footerright", "|");
+user_pref("print.print_headerleft", "|>");
+user_pref("print.print_headerright", "|"); 

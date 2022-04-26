@@ -17,11 +17,14 @@ Sh.wget(
 	Home.."/.fonts/cozette.otb"
 	)
 Sh.wget(
-	"https://github.com/slavfox/Cozette/releases/download/v.1.13.0/cozette.otf",
-	Home.."/.fonts/cozette.otf"
+	"https://github.com/slavfox/Cozette/releases/download/v.1.13.0/CozetteVector.otf",
+	Home.."/.fonts/cozette_vector.otf"
 	)
 Sh.sh([[
-	xset +fp ~/.fonts
+	cd ~/.fonts
+	mkfontdir
+	mkfontscale
+	xset +fp "$HOME/.fonts"
 	xset fp rehash
 	fc-cache -fv
 	]])
