@@ -1,10 +1,10 @@
 return {
     home				  = os.getenv("HOME"),
-	font                  = "Cantarell",
-	font_size             = "12",
-    font_monospace        = "Terminus",
-    font_monospace_size   = "16",
-    font_family_monospace = "Terminus",
-    font_family_serif     = "Cantarell",
-    font_family_sans      = "Cantarell"
+	font                  = "Cantarell Light",
+	font_size             = "10",
+    font_monospace        = "Spleen",
+    font_monospace_size   = "12",
+    font_family_monospace = "Spleen",
+    font_family_serif     = "Cantarell Light",
+    font_family_sans      = "Cantarell Light"
 }

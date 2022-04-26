@@ -35,11 +35,13 @@ local config_group = {
         Xresources = {},
         autostart = {},
         openbox = {},
+        triggerhappy = {}
     },
     xmonad = {
         Xresources = {},
         xmonad = {state="noi"},
         xmobar = {},
+        triggerhappy = {}
     },
     common = {
         fontconfig = {},
@@ -147,7 +149,6 @@ setup_path()
 setup_pcbell()
 prepare_configs(_cfg_dir)
 
--- weston
 setup_configs(_cfg_dir, "openbox")
 setup_configs(_cfg_dir, "xmonad")
 setup_configs(_cfg_dir, "common")

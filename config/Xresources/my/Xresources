@@ -1,7 +1,9 @@
 #include "{home}/.config/xresources.d/colors-terminal.sexy-4"
 
+!#define FONTMONO -*-{font_monospace}-*-*-*-*-{font_monospace_size}-*-*-*-*-*-iso8859-*
+
 #define FONT 	 xft:{font}:size={font_size}
-#define FONTMONO -*-{font_monospace}-*-*-*-*-{font_monospace_size}-*-*-*-*-*-iso8859-*
+#define FONTMONO xft:{font_monospace}:size={font_monospace_size}
 
 !global Font
 *font:         FONT

@@ -14,10 +14,14 @@ end
 
 Sh.wget(
 	"https://github.com/slavfox/Cozette/releases/download/v.1.13.0/cozette.otb",
-	"~/.fonts/cozette.otb"
+	Home.."/.fonts/cozette.otb"
 	)
 Sh.wget(
-	"https://github.com/slavfox/Cozette/releases/download/v.1.13.0/cozette.otb",
-	"~/.fonts/cozette.otf"
+	"https://github.com/slavfox/Cozette/releases/download/v.1.13.0/cozette.otf",
+	Home.."/.fonts/cozette.otf"
 	)
-Sh.sh("fc-cache -fv")
+Sh.sh([[
+	xset +fp ~/.fonts
+	xset fp rehash
+	fc-cache -fv
+	]])

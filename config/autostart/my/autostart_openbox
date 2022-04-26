@@ -21,9 +21,7 @@ function autostart()
     -- sys key binder
 	Sh.forkonce("/usr/sbin/thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 	Sh.forkonce("mpd")
-    Sh.forkonce("lxpolkit")
     Sh.forkonce("dunst")
-    Sh.forkonce("VBoxClient", "--clipboard")
 	Sh.forkonce("urxvtd", "-q -o -f")
 	Sh.forkonce("picom")
 	Ut.sleep(1)
@@ -32,9 +30,10 @@ function autostart()
 	Sh.sh("~/.luarocks/bin/mxctl.control fun applywallpaper")
     Sh.forkonce("tint2")
 	Sh.forkonce("xmobar") --or conky 
+    Sh.forkonce("lxqt-policykit-agent")
+    Sh.forkonce("lxqt-powermanagement")
     Sh.forkonce("flatpak run com.valvesoftware.Steam")
-
-
+    Sh.forkonce("VBoxClient", "--clipboard")
 end
 
 return autostart
