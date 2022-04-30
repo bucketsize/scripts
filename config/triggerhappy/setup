@@ -1,8 +1,24 @@
 #!/usr/bin/env lua
 require "luarocks.loader"
 
-local Shell = require('minilib.shell')
-local Util = require('minilib.util')
+local Sh = require('minilib.shell')
+local Ut = require('minilib.util')
 
-Shell.file_exists("triggerhappy")
-Shell.ln("$(pwd)/triggerhappy/my", "~/.config/triggerhappy")
+Sh.assert_file_exists("thd")
+
+Sh.ln("$(pwd)/triggerhappy/my", "~/.config/triggerhappy")
+
+if Sh.path_exists("/usr/sbin/thd")  -- debian non std path for exe
+	and (not Sh.path_exists("/usr/bin/thd"))
+	and (not Sh.path_exists(Sh.HOME .. "/.local/bin/thd"))
+	then
+		Sh.ln("/usr/sbin/thd", Sh.HOME .. "/.local/bin/thd")
+end
+
+if not Ut:haz(Sh.groups(), "input") then
+	print ("add user to input group ...")
+	Sh.sh([[
+		sudo usermod $USER -a -G input
+	]])
+	print ("relogin for it to work!")
+end

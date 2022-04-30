@@ -17,9 +17,11 @@ function autostart()
 		dbus-launch --sh-syntax --exit-with-session
 		dbus-update-activation-environment --systemd --all
 	]])
-	
+
+	Sh.forkonce("urxvt")  -- TODO sync
+
     -- sys key binder
-	Sh.forkonce("/usr/sbin/thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.forkonce("thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 	Sh.forkonce("mpd")
     Sh.forkonce("dunst")
 	Sh.forkonce("urxvtd", "-q -o -f")
@@ -29,7 +31,7 @@ function autostart()
 	Ut.sleep(1)
 	Sh.sh("~/.luarocks/bin/mxctl.control fun applywallpaper")
     Sh.forkonce("tint2")
-	Sh.forkonce("xmobar") --or conky 
+	Sh.forkonce("conky") -- xmobar or conky or lemonbar
     Sh.forkonce("lxqt-policykit-agent")
     Sh.forkonce("lxqt-powermanagement")
     Sh.forkonce("flatpak run com.valvesoftware.Steam")

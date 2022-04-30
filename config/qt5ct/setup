@@ -4,5 +4,5 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-Shell.file_exists ("qt5ct")
+Shell.assert_file_exists ("qt5ct")
 Shell.ln ("$(pwd)/qt5ct/my","~/.config/qt5ct")
