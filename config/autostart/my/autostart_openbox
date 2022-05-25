@@ -18,7 +18,7 @@ function autostart()
 		dbus-update-activation-environment --systemd --all
 	]])
 
-	Sh.forkonce("urxvt")  -- TODO sync
+	Sh.forkonce("urxvt")  -- to be safe
 
     -- sys key binder
 	Sh.forkonce("thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
@@ -35,7 +35,7 @@ function autostart()
     Sh.forkonce("lxqt-policykit-agent")
     Sh.forkonce("lxqt-powermanagement")
     Sh.forkonce("flatpak run com.valvesoftware.Steam")
-    Sh.forkonce("VBoxClient", "--clipboard")
+    Sh.forkonce("VBoxClient", "--all")
 end
 
 return autostart

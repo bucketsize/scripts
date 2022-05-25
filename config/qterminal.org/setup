@@ -6,3 +6,4 @@ local Util = require('minilib.util')
 
 Shell.file_exists ("qterminal")
 Shell.ln ("$(pwd)/qterminal.org/my","~/.config/qterminal.org")
+Shell.ln ("$(pwd)/qterminal.org/my/Popeye.conf","~/.config/Popeye.conf")

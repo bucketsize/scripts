@@ -4,7 +4,7 @@ require "luarocks.loader"
 local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 
-function setup_sourcebuild()
+function setup_xft_sourcebuild()
     Util:assert_pkg_exists("xcb")
     Util:assert_pkg_exists("xcb-randr")
     Util:assert_pkg_exists("xft")
@@ -26,7 +26,7 @@ function setup_sourcebuild()
     Shell.sh(cmd, "failed")
 end
 
-function setup_prebuilt()
+function setup_xft_prebuilt()
     local cmd = [[
         pkg=lemonbar.$(arch).tar.gz
         cd /tmp
@@ -36,4 +36,8 @@ function setup_prebuilt()
     Shell.sh(cmd, "failed")
 end
 
-setup_sourcebuild()
+function setup()
+    Shell.assert_file_exists("lemonbar")
+end
+
+setup()

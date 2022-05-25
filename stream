@@ -1,0 +1,43 @@
+#!/usr/bin/env lua
+
+local vlc = [[
+cvlc \
+v4l2:///dev/video0 :v4l2-standard= :input-slave=alsa://hw:0,0 \
+:sout=#transcode{vcodec=theo,vb=800,acodec=vorb,ab=128,channels=2,samplerate=44100,scodec=none} \
+:http{mux=ogg,dst=:15371/fuhrer} \
+:no-sout-all :sout-keep :live-caching=700
+]] 
+
+local ffmpeg = [[
+ffmpeg \
+-loglevel warning \
+-thread_queue_size 8 \
+-f v4l2 -i %s \
+-f alsa -ac 2 -i %s \
+-profile:v high -pix_fmt yuv420p -level:v 4.1 -preset ultrafast -tune zerolatency \
+-vcodec libx264 -r 10 -b:v 512k -s 640x360 \
+-acodec aac -ac 2 -ab 32k -ar 44100 \
+-f mpegts -flush_packets 0 %s://0.0.0.0:%s?pkt_size=1316
+]]
+
+local cfg = {
+	video_dev = "/dev/video0",
+	audio_dev = "hw:0,0",
+	proto = "udp",
+	port = 15371,
+}
+
+local cmd = string.format(ffmpeg
+	, cfg.video_dev
+	, cfg.audio_dev
+	, cfg.proto
+	, cfg.port)
+print(cmd)
+
+local h = io.popen(cmd)
+local l = h:read("*l")
+while l do
+	print(">",l)
+	l = h:read("*l")
+end
+h:close()
