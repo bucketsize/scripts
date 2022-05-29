@@ -1,4 +1,4 @@
-#include "{home}/.config/xresources.d/colors-terminal.breeze"
+#include "{home}/.config/xresources.d/colors-terminal.sexy-4"
 
 !#define FONTMONO -*-{font_monospace}-*-*-*-*-{font_monospace_size}-*-*-*-*-*-iso8859-*
 

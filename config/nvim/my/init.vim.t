@@ -43,14 +43,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'frazrepo/vim-rainbow'
 Plug 'godlygeek/csapprox'
-Plug 'joshdick/onedark.vim'
 
-if isdirectory('/usr/local/opt/fzf')
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-else
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-endif
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
+Plug 'kyazdani42/nvim-web-devicons'
+
 let g:make = 'gmake'
 if exists('make')
         let g:make = 'make'
@@ -61,12 +58,24 @@ Plug 'Shougo/vimproc.vim', {'do': g:make}
 Plug 'junegunn/vim-easy-align'
 
 " autocomplete
-Plug 'prabirshrestha/asyncomplete.vim'
+" \_ vim"
+" Plug 'prabirshrestha/asyncomplete.vim'
+
+" \_ nvim
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
 
 " lsp
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
+" \_ vim
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete-file.vim'
+
+" \_ nvim
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
 
 " julia bundle
 Plug 'JuliaEditorSupport/julia-vim'
@@ -166,7 +175,7 @@ let g:indentLine_faster = 1
 
 " set termguicolors
 set background=dark
-colorscheme onedark
+colorscheme delek 
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -199,7 +208,7 @@ endif
 let g:rainbow_active = 1
 
 " vim-airline
-let g:airline_theme = 'onedark'
+let g:airline_theme = 'base16'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
@@ -342,8 +351,17 @@ if executable('rg')
 endif
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
+
+" \_ vim
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>e :FZF -m<CR>
+
+" \_ nvim
+nnoremap <c-P> <cmd>lua require('fzf-lua').files()<CR>
+" nnoremap <silent> <leader>b <cmd>lua require('fzf-lua').buffers()<CR>
+" nnoremap <silent> <leader>e <cmd>lua require('fzf-lua').files()<CR>
+
+
 "Recovery commands from history through FZF
 nmap <leader>y :History:<CR>
 
@@ -458,76 +476,9 @@ set hidden
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
 
-" lsp
-" debug autocomplete
-let g:lsp_log_file = expand('/tmp/vim-lsp.log')
-let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
-
-let g:lsp_diagnostics_echo_cursor  = 1
-let g:lsp_diagnostics_float_cursor = 1
-
-" ocaml
-au User lsp_setup call lsp#register_server({
-            \ 'name': 'ocamllsp',
-            \ 'cmd': {server_info->[
-                \   &shell,
-                \   &shellcmdflag,
-                \   expand('lspd-ocaml')
-                \ ]},
-                \ 'whitelist': ['reason', 'ocaml'],
-                \ })
-
-" java
-au User lsp_setup call lsp#register_server({
-            \ 'name': 'eclipse.jdt.ls',
-            \ 'cmd': {server_info->[
-                \   &shell,
-                \   &shellcmdflag,
-                \   expand('lspd-java')
-                \ ]},
-                \ 'whitelist': ['java'],
-                \ })
-
-au User lsp_setup call lsp#register_server({
-            \ 'name': 'jedi-language-server',
-            \ 'cmd': {server_info->['jedi-language-server']},
-            \ 'allowlist': ['python'],
-            \ })
-
-" vim-lsp
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    inoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    inoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
 let g:NERDTreeWinSize   = 32
 
 let g:lua_complete_omni = 1
-let   lua_complete_omni = 1
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -535,7 +486,129 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-" debug autocomplete
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
+
+" lsp
+" " debug autocomplete
+" let g:lsp_log_verbose = 1
+" let g:lsp_log_file = expand('/tmp/vim-lsp.log')
+" let g:lsp_diagnostics_echo_cursor  = 1
+" let g:lsp_diagnostics_float_cursor = 1
+
+" " ocaml
+" au User lsp_setup call lsp#register_server({
+"             \ 'name': 'ocamllsp',
+"             \ 'cmd': {server_info->[
+"                 \   &shell,
+"                 \   &shellcmdflag,
+"                 \   expand('lspd-ocaml')
+"                 \ })
+
+" " java
+" au User lsp_setup call lsp#register_server({
+"             \ 'name': 'eclipse.jdt.ls',
+"             \ 'cmd': {server_info->[
+"                 \   &shell,
+"                 \   &shellcmdflag,
+"                 \   expand('lspd-java')
+"                 \ ]},
+"                 \ 'whitelist': ['java'],
+"                 \ })
+
+" au User lsp_setup call lsp#register_server({
+"             \ 'name': 'jedi-language-server',
+"             \ 'cmd': {server_info->['jedi-language-server']},
+"             \ 'allowlist': ['python'],
+"             \ })
+
+" " vim-lsp
+" function! s:on_lsp_buffer_enabled() abort
+"     setlocal omnifunc=lsp#complete
+"     setlocal signcolumn=yes
+"     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+"     nmap <buffer> gd <plug>(lsp-definition)
+"     nmap <buffer> gs <plug>(lsp-document-symbol-search)
+"     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+"     nmap <buffer> gr <plug>(lsp-references)
+"     nmap <buffer> gi <plug>(lsp-implementation)
+"     nmap <buffer> gt <plug>(lsp-type-definition)
+"     nmap <buffer> <leader>rn <plug>(lsp-rename)
+"     nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+"     nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+"     nmap <buffer> K <plug>(lsp-hover)
+"     inoremap <buffer> <expr><c-f> lsp#scroll(+4)
+"     inoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+"     let g:lsp_format_sync_timeout = 1000
+"     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+
+"     " refer to doc to add more commands
+" endfunction
+
+" augroup lsp_install
+"     au!
+"     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+"     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+" augroup END
+
+lua << EOF
+require('fzf-lua').setup({
+  	winopts = {
+    	border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' }
+	}
+})
+EOF
+
+lua << EOF
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+require'lspconfig'.jdtls.setup{
+   cmd = { 'jdtls' },
+   root_dir = function(fname)
+      return require'lspconfig'.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
+   end
+}
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+-- local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
+-- for _, lsp in pairs(servers) do
+--   require('lspconfig')[lsp].setup {
+--     on_attach = on_attach,
+--     flags = {
+--       -- This will be the default in neovim 0.7+
+--       debounce_text_changes = 150,
+--     }
+--   }
+-- end
+EOF
+
