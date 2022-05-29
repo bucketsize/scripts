@@ -1,3 +1,19 @@
+# generated configs
+config/Xresources/my/Xresources
+config/conky/line/conky-lemonbar.conf
+config/conky/line/conky.conf
+config/conky/simple/conky.conf
+config/dunst/my/dunstrc
+config/fontconfig/my/fonts.conf
+config/foot/my/foot.ini
+config/gtk/gtk.css
+config/gtk/settings.ini
+config/nvim/my/init.vim
+config/openbox/my/rc.xml
+config/vim/vimrc
+config/xmobar/my/xmobarrc
+
+# others
 config/emacs.d/elpa/
 config/emacs.d/private/
 config/emacs.d/.custom.el
