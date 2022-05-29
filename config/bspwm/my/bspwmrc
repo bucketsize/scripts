@@ -24,4 +24,4 @@ bspc rule -a Conky state=floating
 bspc rule -a *:Popeye state=floating focus=on
 bspc rule -a Popeye:* state=floating focus=on
 
-. $HOME/scripts/config/autostart.sh
+. $HOME/scripts/config/autostart

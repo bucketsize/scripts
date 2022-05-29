@@ -64,7 +64,7 @@ local config_group = {
         ["sysctl.d"] = {},
         pipewire = {},
 		["qterminal.org"] = {},
-        alacritty = {state="noi"},
+        -- alacritty = {state="noi"},
     },
     wayland_weston = {
         weston = {},
@@ -103,52 +103,73 @@ function setup_bins()
             string.format("~/.local/bin/%s", k))
     end
 end
-
-function prepare_configs(cfg)
+function seek_and_destory(path, subhbs)
+    Pr.pipe()
+        .add(Sh.find(path, "*.t"))
+        .add(Sh.read())
+        .add(Sh.sed(subhbs))
+		.add(function(fline)
+			if fline == nil then return nil end
+			fline.path = fline.path:gsub("%.t", "")
+			-- print("sad>", fline.path)
+			return fline
+		end)
+        .add(Sh.write("./"))
+        .run()
+end
+function prepare_config(name)
     local subcfg = require("config-global")
 	local subhbs = {}
 	for i,v in pairs(subcfg) do
 		subhbs["{"..i.."}"] = v
 	end
-    Pr.pipe()
-        .add(Sh.find("./"))
-        .add(Sh.read())
-        .add(Sh.sed(subhbs))
-        .add(Sh.write(cfg))
-        .run()
-    Sh.sh(string.format("cd %s && chmod +x */setup", cfg))
-    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostartd.lua", cfg))
-    Sh.sh(string.format("cd %s && chmod +x autostart/my/autostart.lua", cfg))
+	seek_and_destory(string.format("%s/", name), subhbs)
 end
-
-function setup_configs(cfg, name)
+function prepare_configs()
+    local subcfg = require("config-global")
+	local subhbs = {}
+	for i,v in pairs(subcfg) do
+		subhbs["{"..i.."}"] = v
+	end
+	seek_and_destory("./", subhbs)
+end
+function setup_config(name)
+	print("deploying config", name)
+	Sh.sh(string.format([[%s/setup]], name))
+    return 0
+end
+function setup_configs(name)
     print("deploying config_group", name)
     for k, v in pairs(config_group[name]) do
         if v.state == "noi" then
             print("> " .. k .. " :noi")
         else
             print("> " .. k)
-            Sh.sh(string.format([[
-                cd %s && %s/setup
-                ]], cfg, k))
+            Sh.sh(string.format([[%s/setup]], k))
         end
     end
     return 0
 end
 
-local _cfg_dir = _CFG_DIR
-if arg[1] then
-	_cfg_dir = arg[1]
+if arg[1] == nil then
+	print("> *")
+	-- common
+	setup_dirs()
+	setup_bins()
+	setup_path()
+	setup_pcbell()
+	prepare_configs()
+	-- groups
+	setup_configs("openbox")
+	setup_configs("xmonad")
+	setup_configs("common")
+else
+	print("> " .. arg[1])
+	-- common
+	setup_dirs()
+	setup_bins()
+	setup_path()
+	setup_pcbell()
+	prepare_config(arg[1])
+	setup_config(arg[1])
 end
-print("> setup in", _cfg_dir)
-
--- common
-setup_dirs()
-setup_bins()
-setup_path()
-setup_pcbell()
-prepare_configs(_cfg_dir)
-
-setup_configs(_cfg_dir, "openbox")
-setup_configs(_cfg_dir, "xmonad")
-setup_configs(_cfg_dir, "common")

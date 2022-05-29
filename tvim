@@ -1,7 +1,7 @@
 #!/bin/sh
 
 icons="/usr/share/icons/locolor/32x32/apps/gvim.png"
-terms="qterminal urxvt gnome-terminal"
+terms="urxvt gnome-terminal"
 ivims="nvim vim"
 
 for ivim in $ivims; do

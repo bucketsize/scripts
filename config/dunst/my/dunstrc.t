@@ -1,5 +1,5 @@
 [global]
-    #font = DejaVu Sans 9 #use system fonts
+    font = {font_monospace} {font_monospace_size} #use system fonts
 
     # Allow a small subset of html markup:
     #   <b>bold</b>

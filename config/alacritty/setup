@@ -25,25 +25,11 @@ function build_pack()
 end
 
 function setup_prebuilt()
-    Shell.sh([[
-        if [ -f ~/.local/bin/alacritty ]; then
-            exit 0
-        fi
+	Shell.assert_file_exists("alacritty")
+	Shell.wget("https://github.com/bucketsize/alacritty/releases/download/20220211/alacritty."..Shell.arch()..".tar.gz"
+		, "/tmp/alacritty.tgz")
         
-        pkg-config alacritty
-        if [ $? = 0 ]; then
-            exit 0
-        fi
-
-        sudo apt install alacritty -y
-        if [ $? = 0 ]; then
-            exit 0 ;
-        fi
-
-        cd /tmp
-        rm alacritty*gz*
-        wget https://github.com/bucketsize/alacritty/releases/download/20220211/alacritty.aarch64.tar.gz
-        [ $? = 0 ] || die "prebuilt not found, build from src: pack"
+    Shell.sh([[
         tar -xvzf /tmp/alacritty.$(arch).tar.gz
         if [ "$(arch)" = "aarch64" ]; then
             mv /tmp/target/release/alacritty ~/.local/bin/_alacritty
@@ -58,6 +44,6 @@ EOF
         ]])
 end
 
-Shell.ln ("$(pwd)/alacritty/my", "~/.config/alacrittiy")
+Shell.ln ("$(pwd)/alacritty/my", "~/.config/alacritty")
 setup_prebuilt()
 

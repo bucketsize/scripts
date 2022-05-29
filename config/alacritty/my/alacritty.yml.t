@@ -117,7 +117,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: Tamzen 
+    family: {font_monospace} 
 
     # The `style` can be specified to pick a specific face.
     #style: Book
@@ -156,7 +156,7 @@ font:
     #style: Bold Italic
 
   # Point size
-  size: 13
+  size: {font_monospace_size}
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
