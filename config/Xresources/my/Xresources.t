@@ -1,9 +1,9 @@
-#include "{home}/.config/xresources.d/colors-terminal.sexy-4"
+#include "{home}/.config/xresources.d/colors-terminal.breeze"
 
 !#define FONTMONO -*-{font_monospace}-*-*-*-*-{font_monospace_size}-*-*-*-*-*-iso8859-*
 
 #define FONT 	 xft:{font}:size={font_size}
-#define FONTMONO xft:{font_monospace}:size={font_monospace_size}
+#define FONTMONO xft:{font_monospace}:size={font_monospace_size},xft:cozette:size=13
 
 !global Font
 *font:         FONT
@@ -30,10 +30,7 @@ dunst.font: FONT
 xterm*faceName: FONTMONO
 
 !urxvt
-URxvt.depth: 24
-URxvt*transparent: false
-URxvt.background: #000000
-URxvt*foreground: #cabaaa
+URxvt.depth: 32
 URxvt*scrollBar: false
 URxvt*font: FONTMONO
 URxvt*buffered: false
