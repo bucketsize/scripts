@@ -12,6 +12,7 @@ config/nvim/my/init.vim
 config/openbox/my/rc.xml
 config/vim/vimrc
 config/xmobar/my/xmobarrc
+config/gtk/gtkrc-2.0
 
 # others
 config/emacs.d/elpa/

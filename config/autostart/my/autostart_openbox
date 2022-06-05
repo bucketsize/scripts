@@ -18,9 +18,8 @@ function autostart()
 		dbus-update-activation-environment --systemd --all
 	]])
 
-
     -- sys key binder
-	Sh.forkonce("thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.forkonce("thd --triggers", "~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 	Sh.forkonce("mpd")
     Sh.forkonce("dunst")
 	Sh.forkonce("urxvtd", "-q -o -f")
@@ -35,8 +34,8 @@ function autostart()
 	Sh.forkonce("conky") -- xmobar or conky or lemonbar
     Sh.forkonce("lxqt-policykit-agent")
     Sh.forkonce("lxqt-powermanagement")
-    Sh.forkonce("flatpak run com.valvesoftware.Steam")
-    Sh.forkonce("VBoxClient-all")
+    Sh.forkonce("VBoxClient --vmsvga")
+    Sh.forkonce("VBoxClient --clipboard")
 end
 
 return autostart

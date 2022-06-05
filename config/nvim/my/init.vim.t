@@ -44,7 +44,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'frazrepo/vim-rainbow'
 Plug 'godlygeek/csapprox'
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() }, 'dir': '~/.fzf' }
 Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
 Plug 'kyazdani42/nvim-web-devicons'
 

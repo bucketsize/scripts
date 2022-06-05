@@ -5,8 +5,8 @@ local Shell = require('minilib.shell')
 local Util = require('minilib.util')
 --
 
-Shell.cp("$(pwd)/gtk/.gtkrc-2.0", "~/.gtkrc-2.0")
+Shell.ln("$(pwd)/gtk/gtkrc-2.0", "~/.gtkrc-2.0")
 
 Shell.mkdir("~/.config/gtk-3.0")
-Shell.cp("$(pwd)/gtk/gtk.css", "~/.config/gtk-3.0/gtk.css")
-Shell.cp("$(pwd)/gtk/settings.ini", "~/.config/gtk-3.0/settings.ini")
+Shell.ln("$(pwd)/gtk/gtk.css", "~/.config/gtk-3.0/gtk.css")
+Shell.ln("$(pwd)/gtk/settings.ini", "~/.config/gtk-3.0/settings.ini")
