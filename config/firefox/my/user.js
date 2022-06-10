@@ -854,7 +854,7 @@ user_pref("browser.download.manager.retention",			0);
 
 // PREF: Disable password manager (use an external password manager!)
 // CIS Version 1.2.0 October 21st, 2011 2.5.2
-user_pref("signon.rememberSignons",				false);
+user_pref("signon.rememberSignons",				true);
 
 // PREF: Disable form autofill, don't save information entered in web page forms and the Search Bar
 user_pref("browser.formfill.enable",				false);
@@ -870,7 +870,7 @@ user_pref("signon.autofillForms",				false);
 
 // PREF: Disable formless login capture
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1166947
-user_pref("signon.formlessCapture.enabled",			false);
+user_pref("signon.formlessCapture.enabled",			true);
 
 // PREF: When username/password autofill is enabled, still disable it on non-HTTPS sites
 // https://hg.mozilla.org/integration/mozilla-inbound/rev/f0d146fe7317
@@ -1100,8 +1100,11 @@ user_pref("security.tls.version.fallback-limit",		4);
 // PREF: Enforce Public Key Pinning
 // https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning
 // https://wiki.mozilla.org/SecurityEngineering/Public_Key_Pinning
-// "2. Strict. Pinning is always enforced."
-user_pref("security.cert_pinning.enforcement_level",		2);
+// 0. Pinning disabled
+// 1. Allow User MITM (pinning not enforced if the trust anchor is a user inserted CA, default)
+// 2. Strict. Pinning is always enforced.
+// 3. Enforce test mode.
+user_pref("security.cert_pinning.enforcement_level",		1);
 
 // PREF: Disallow SHA-1
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1302140

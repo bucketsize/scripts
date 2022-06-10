@@ -6,7 +6,7 @@ local Ut = require('minilib.util')
 local Pr = require('minilib.process')
 
 Pr.pipe()
-	.add(Sh.exec("find -L ~/.mozilla/  -name \"xulstore.json\" | grep -v backup"))
+	.add(Sh.exec("find -L ~/.mozilla/ ~/snap -name \"xulstore.json\" | grep -v backup"))
 	.add(Sh.echo())
 	.add(function (x)
 		if x then
