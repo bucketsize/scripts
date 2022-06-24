@@ -13,6 +13,7 @@ config/openbox/my/rc.xml
 config/vim/vimrc
 config/xmobar/my/xmobarrc
 config/gtk/gtkrc-2.0
+config/alacritty/my/alacritty.yml
 
 # others
 config/emacs.d/elpa/
