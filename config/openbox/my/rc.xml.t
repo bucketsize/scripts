@@ -161,7 +161,7 @@
     <right>0</right>
   </margins>
   <dock>
-    <position>Right</position>
+	<position>{dock_position}</position>
     <!-- (Top|Bottom)(Left|Right|)|Top|Bottom|Left|Right|Floating -->
     <floatingX>0</floatingX>
     <floatingY>0</floatingY>
@@ -200,22 +200,10 @@
       </action>
     </keybind>
     <keybind key="W-S-Up">
-      <action name="Unmaximize"/>
-      <action name="MoveResizeTo">
-        <x>0</x>
-        <y>0</y>
-        <width>100%</width>
-        <height>50%</height>
-      </action>
+      <action name="Maximize"/>
     </keybind>
     <keybind key="W-S-Down">
       <action name="Unmaximize"/>
-      <action name="MoveResizeTo">
-        <x>0</x>
-        <y>-0</y>
-        <width>100%</width>
-        <height>50%</height>
-      </action>
     </keybind>
     <keybind key="W-C-Up">
       <action name="Maximize"/>

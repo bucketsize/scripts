@@ -17,6 +17,9 @@ function autostart()
 		dbus-launch --sh-syntax --exit-with-session
 		dbus-update-activation-environment --systemd --all
 	]])
+    
+	-- needed on VBox for proper display scaling
+	Sh.forkonce("VBoxClient --vmsvga")
 
     -- sys key binder
 	Sh.forkonce("thd --triggers", "~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
@@ -34,7 +37,6 @@ function autostart()
 	Sh.forkonce("conky") -- xmobar or conky or lemonbar
     Sh.forkonce("lxqt-policykit-agent")
     Sh.forkonce("lxqt-powermanagement")
-    Sh.forkonce("VBoxClient --vmsvga")
     Sh.forkonce("VBoxClient --clipboard")
 end
 

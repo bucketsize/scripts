@@ -5,27 +5,26 @@
 conky.config = {
 	-- Various settings
 	background = false, 							-- forked to background
-	cpu_avg_samples = 2,
-	diskio_avg_samples = 5,
+	cpu_avg_samples = 4,
+	diskio_avg_samples = 4,
 	double_buffer = true,
 	if_up_strictness = 'address',
-	net_avg_samples = 3,
+	net_avg_samples = 4,
 	no_buffers = true,
 	temperature_unit = 'celsius',
-	text_buffer_size = 128,
+	text_buffer_size = 512,
 	update_interval = 1,
-	imlib_cache_size = 1024,                       --spotify cover
-	minimum_width = 2000,
-	maximum_width = 2000,
+	imlib_cache_size = 512,                       --spotify cover
 	out_to_console = false,
 
 
 	--Placement
-	alignment = 'top_middle',
-	gap_x = 16,
-	gap_y = 8,
-	minimum_height = 5,
-	minimum_width = 10,
+	alignment = 'tr',
+	gap_x = 0,
+	gap_y = 2,
+	minimum_height = 8,
+	minimum_width = 1280,
+	maximum_width = 1280,
 
 	--Graphical
 	border_inner_margin = 1, 					-- margin between border and text
@@ -58,17 +57,24 @@ conky.config = {
 	use_spacer = 'none',
 	use_xft = true,
 	xftalpha = 1,
+	pad_percents = 0,
 
 	--Windows
 	own_window = true,
-	own_window_argb_value = 98,
-	own_window_argb_visual = true,
-	own_window_class = 'Conky',
+	
+	-- #options: normal/override/dock/desktop/panel
+	own_window_type = 'dock',
+	
+	-- #options: 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	-- no minimize -> override, desktop
+	own_window_hints = 'undecorated,above,skip_taskbar',
+	
 	own_window_colour = '#010101',
-	own_window_hints = 'undecorated,above', 	-- #options: 'undecorated,below,sticky,skip_taskbar,skip_pager',
-	own_window_transparent = no,
+	own_window_transparent = false,
+	own_window_argb_visual = true,
+	own_window_argb_value = 184,
 	own_window_title = 'system_conky',
-	own_window_type = 'override',										-- #options: normal/override/dock/desktop/panel
+	own_window_class = 'Conky',
 
 	--Colours
 	default_color = '#111111',  									-- default color and border color
@@ -84,19 +90,14 @@ conky.config = {
 };
 
 
--- using cozette font glyphs --
 conky.text = [[
-${font {font_monospace}:size={font_monospace_size}}\
 ${color1}\
+${font {font_conky}:pixelsize={font_conky_size}}\
+${time %H:%M:%S %Y-%m-%d}\
 ${alignr}\
- ${time %H:%M:%S %Y-%m-%d}\
- ${cpu}% \
- ${acpitemp}T \
- ${memperc}% \
- ${battery} \
- ${fs_used_perc} \
-墳 ${mixer Spkr} \
-ﯱ \
-${upspeedf eth0}^ \
-${downspeedf eth0},\
+cpu ${cpu}% ${acpitemp}T\
+ | mem ${memperc}%\
+ | fs ${fs_used_perc}% ${diskio}\
+ | net ${upspeedf {net_if}} ${downspeedf {net_if}}\
+ | bat ${battery_percent}%\
 ]]
