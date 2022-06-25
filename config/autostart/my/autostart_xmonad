@@ -17,20 +17,27 @@ function autostart()
 		dbus-launch --sh-syntax --exit-with-session
 		dbus-update-activation-environment --systemd --all
 	]])
-	
+    
+	-- needed on VBox for proper display scaling
+	Sh.forkonce("VBoxClient --vmsvga")
+
     -- sys key binder
-	Sh.forkonce("/usr/sbin/thd", "--triggers ~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
+	Sh.forkonce("thd --triggers", "~/.config/triggerhappy/th.conf --deviceglob /dev/input/event*")
 	Sh.forkonce("mpd")
-    Sh.forkonce("lxpolkit")
     Sh.forkonce("dunst")
-    Sh.forkonce("VBoxClient", "--clipboard")
 	Sh.forkonce("urxvtd", "-q -o -f")
+	Ut.sleep(1)
+	Sh.forkonce("urxvtc")  -- to be safe
 	Sh.forkonce("picom")
 	Ut.sleep(1)
 	Sh.sh("~/.luarocks/bin/mxctl.control fun setup_video")
 	Ut.sleep(1)
 	Sh.sh("~/.luarocks/bin/mxctl.control fun applywallpaper")
-    Sh.forkonce("flatpak run com.valvesoftware.Steam")
+    Sh.forkonce("tint2")
+	Sh.forkonce("conky") -- xmobar or conky or lemonbar
+    Sh.forkonce("lxqt-policykit-agent")
+    Sh.forkonce("lxqt-powermanagement")
+    Sh.forkonce("VBoxClient --clipboard")
 
 end
 

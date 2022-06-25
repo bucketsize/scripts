@@ -39,7 +39,7 @@ URxvt.letterSpace: 0
 URxvt*borderless: 1
 URxvt*underlineColor: pink
 URxvt*colorUL: pink
-URxvt*iconFile: __home/.icons/terminal.png 
+URxvt*iconFile: {term_icon} 
 URxvt.geometry: 96x24
 URxvt*skipBuiltinGlyphs: true
 URxvt.urgentOnBell: false
