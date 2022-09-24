@@ -1,7 +1,0 @@
-#!/bin/sh
-#/usr/bin/xinitrc
-
-if [ -f $HOME/.xinitrc ]; then
-    exec $HOME/.xinitrc
-end
-

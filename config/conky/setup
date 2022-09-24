@@ -1,9 +1,0 @@
-#!/usr/bin/env lua
-require "luarocks.loader"
-
-local Shell = require('minilib.shell')
-local Util = require('minilib.util')
-
-Shell.file_exists("conky")
-Shell.ln("$(pwd)/conky/line", "~/.config/conky")
-Shell.sh("chmod +x $(pwd)/conky/line/conky-lemonbar.sh")

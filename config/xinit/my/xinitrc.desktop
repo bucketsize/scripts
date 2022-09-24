@@ -1,6 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Xinitrc
-Comment=Launch a desktop session using ~/.xinitrc
-Exec=xinitrc
-Type=XSession

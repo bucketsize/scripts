@@ -1,7 +1,0 @@
-#!/usr/bin/env lua
-require "luarocks.loader"
-
-local Shell = require('minilib.shell')
-local Util = require('minilib.util')
-
-Shell.ln ("~/scripts/config/compton/my", "~/.config/compton")
