@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=URxvtc
-Comment=URxvt client
-TryExec=$HOME/scripts/launch_urxvtc.sh
-Exec=$HOME/scripts/launch_urxvtc.sh
-Icon=terminal
-Type=Application

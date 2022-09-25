@@ -1,23 +1,22 @@
 #!/bin/sh
 
-icons="/usr/share/icons/locolor/32x32/apps/gvim.png"
 terms="alacritty kitty qterminal urxvtc urxvt gnome-terminal"
 ivims="nvim vim"
 
-for ivim in $ivims; do
-    if [ -f /usr/bin/$ivim ] || [ -f $HOME/.local/bin/$ivim ]; then
-        for icon in $icons; do
-            if [ -f $i]; then
-                for term in $terms; do
-                    if [ -f /usr/bin/$term ]; then
-                        cmd="$term -icon $icon -e $ivim $*"
-                        echo "$cmd"
-                        $cmd
-                        exit 0
-                    fi
-                done
-            fi
-        done
-    fi
-done
-x-terminal-emulator -name tvim -e vim $*
+getPath() {
+	fs=$1
+	for f in $fs; do
+		if [ -f /usr/bin/$f ] || [ -f $HOME/.local/bin/$f ]; then
+			echo $f
+			break
+		fi
+	done
+}
+
+ivim=$(getPath $ivims)
+term=$(getPath $terms)
+
+cmd="$term -e $ivim $*"
+echo ">> $cmd"
+$cmd
+exit 0
