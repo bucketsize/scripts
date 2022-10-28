@@ -1,22 +1,43 @@
-#!/bin/sh
+#!/usr/bin/env lua
+require "luarocks.loader"
 
-terms="alacritty kitty qterminal urxvtc urxvt gnome-terminal"
-ivims="nvim vim"
+local Sh = require('minilib.shell')
 
-getPath() {
-	fs=$1
-	for f in $fs; do
-		if [ -f /usr/bin/$f ] || [ -f $HOME/.local/bin/$f ]; then
-			echo $f
-			break
-		fi
-	done
+local cfg = {
+	terms = {
+		"stterm",
+		"urxvt",
+		"alacritty",
+		"qterminal",
+		"gnome-terminal",
+		"xterm"
+	},
+	terms_cmd = {
+		stterm = "stterm -f 'monospace:pixelsize=16' -g 96x40",
+		urxvt = "urxvt",
+		alacritty = "alacritty",
+		qterminal = "qterminal",
+		gnometerminal = "gnome-terminal",
+		xterm = "xterm"
+	},
+	ivims = {
+		"nvim",
+		"vim"
+	}
 }
 
-ivim=$(getPath $ivims)
-term=$(getPath $terms)
+function select(fs)
+	for _,f in ipairs(fs) do
+		if Sh.file_exists(f) then
+			return f
+		end
+	end
+end
 
-cmd="$term -e $ivim $*"
-echo ">> $cmd"
-$cmd
-exit 0
+local ivim=select(cfg.ivims)
+local term=select(cfg.terms)
+
+local icmd=string.format("%s -e %s %s", cfg.terms_cmd[term], ivim, arg[1])
+print(">>", icmd)
+
+io.popen(icmd)
