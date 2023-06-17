@@ -1,8 +1,8 @@
 #!/bin/sh
 
-rm -rf /var/tmp/smmf/
-mkdir /var/tmp/smmf/
-cd /var/tmp/smmf/
+tmpd="/var$(mktemp)"
+mkdir $tmpd
+cd $tmpd
 wget https://codeload.github.com/bucketsize/minilib/zip/refs/heads/main -O mi.zip
 wget https://codeload.github.com/bucketsize/mxctl/zip/refs/heads/main -O mx.zip
 wget https://codeload.github.com/bucketsize/frmad/zip/refs/heads/main -O fr.zip
@@ -27,3 +27,5 @@ cd ..
 
 [ -d ~/conf-m/ ] || mv conf-m-main ~/conf-m/
 [ -d ~/scripts/ ] || mv scripts-master ~/scripts/
+
+echo "please cleanup $tmpd"
