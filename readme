@@ -1,7 +1,8 @@
-git config user.email "bucket.size@gmail.com"
-git config user.name "Herr bucketsize"
+git config --global user.email "bucket.size@gmail.com"
+git config --global user.name "Herr bucketsize"
 
 ssh-keygen -t rsa -b 4096 -C "bucket.size@gmail.com"
+eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 
 git remote set-url origin ssh://git@github.com/bucketsize/scripts.git
@@ -18,7 +19,6 @@ $HOME/.config/gtk-3.0/settings.ini
   [Settings]
   gtk-theme-name = oxygen-gtk
 ----- end of file -----
-
 
 mtpfs
 First edit your /etc/fuse.conf and uncomment the following line:

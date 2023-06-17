@@ -5,9 +5,9 @@ local Sh = require('minilib.shell')
 
 local cfg = {
 	terms = {
+		"alacritty",
 		"stterm",
 		"urxvt",
-		"alacritty",
 		"qterminal",
 		"gnome-terminal",
 		"xterm"

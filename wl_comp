@@ -1,0 +1,36 @@
+#!/bin/sh
+
+wl_comp=$1
+
+if [ -z "${wl_comp}" ]; then
+	echo "1 arg required"
+	exit 1
+fi
+ 
+# Session
+if [ -z "${XDG_RUNTIME_DIR}" ]; then
+	export XDG_RUNTIME_DIR=/tmp/xdgrd-${UID}
+fi
+
+if [ ! -d "${XDG_RUNTIME_DIR}" ]; then
+	mkdir ${XDG_RUNTIME_DIR}
+fi
+
+chmod 0700 ${XDG_RUNTIME_DIR}
+
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=$wl_comp
+export XDG_CURRENT_DESKTOP=$wl_comp
+
+# Wayland stuff
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM=wayland
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export MOZ_ENABLE_WAYLAND=1
+
+gsettings set org.gnome.desktop.interface gtk-theme 	'Breeze'
+gsettings set org.gnome.desktop.interface color-scheme 	'prefer-dark'
+
+echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR, compositor=$wl_comp"
+exec systemd-cat --identifier=$wl_comp $wl_comp
