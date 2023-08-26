@@ -1,50 +1,93 @@
 #!/usr/bin/env lua
 
-require "luarocks.loader"
-package.path = '/?.lua;' .. package.path
+require("luarocks.loader")
+package.path = "/?.lua;" .. package.path
 
-local Ut = require('minilib.util')
-local Sh = require('minilib.shell')
-local Pr = require('minilib.process')
+local Ut = require("minilib.util")
 
 local fn = {
-  disc = function (ip)
-	local neti = {}
-	Pr.pipe()
-      .add(Sh.exec(string.format("nmap -v -n  %s", ip)))
-      .add(Sh.grep("Discovered open port ([%w%p]+) on (.*)"))
-      .add(Sh.echo())
-	  .add(function(m)
-		  if m == nil then return m end
-		  if neti[m[2]] == nil then
-			  neti[m[2]] = {m[1]}
-		  else
-			  table.insert(neti[m[2]], m[1])
-		  end
-		  return m
-	  end)
-      .run()
-  	Ut:printOTable(neti)
-  end,
+	disc = function(ip)
+		print("#discover network of", ip)
+		local neti, rptip, ipup = {}, nil, false
+		Ut:stream_exec(
+			string.format("sudo nmap -v -O --osscan-guess --osscan-limit --host-timeout 8 %s", ip),
+			function(x)
+				print(">", x)
+				local port, host = x:match("Discovered open port ([%w%p]+) on (.*)")
+				if host ~= nil and port ~= nil then
+					if neti[host] == nil then
+						neti[host] = { ports = {}, info = {} }
+					else
+						table.insert(neti[host].ports, port)
+					end
+				end
 
-  scan = function (ip)
-    Pr.pipe()
-      .add(Sh.exec(string.format("nmap -T5 -A  %s", ip)))
-      .add(Sh.echo())
-      .run()
-  end,
+				local rpts, s = x:match("Nmap scan report for (%d+.%d+.%d+.%d+) (.*)")
+				if rpts ~= nil and s:find("host down") == nil then
+					rptip, ipup = rpts, true
+					if neti[rptip] == nil then
+						neti[rptip] = { ports = {}, info = {} }
+					end
+				end
 
-  help = function ()
-    print ([[
-    net_scan help       -  displayes this help
+				if rptip and ipup then
+					-- MAC Address: AE:72:4B:8B:DE:1C (Unknown)
+					-- Device type: general purpose
+					-- Running: Microsoft Windows 10
+					-- OS CPE: cpe:/o:microsoft:windows_10
+					-- OS details: Microsoft Windows 10 1709 - 1909
+					-- Network Distance: 1 hop
+					-- TCP Sequence Prediction: Difficulty=263 (Good luck!)
+					local mac = x:match("MAC Address: (.*)")
+					if mac then
+						table.insert(neti[rptip].info, mac)
+					end
+					local dev = x:match("Device type: (.*)")
+					if dev then
+						table.insert(neti[rptip].info, dev)
+					end
+					local os_run = x:match("Running: (.*)")
+					if os_run then
+						table.insert(neti[rptip].info, os_run)
+					end
+					local os_cpe = x:match("OS CPE: (.*)")
+					if os_cpe then
+						table.insert(neti[rptip].info, os_cpe)
+					end
+				end
+			end
+		)
+		for i, j in pairs(neti) do
+			print(i)
+			print("ports: ")
+			for _, k in ipairs(j.ports) do
+				print("- ", k)
+			end
+			print("info: ")
+			for _, k in ipairs(j.info) do
+				print("- ", k)
+			end
+		end
+		return neti
+	end,
+
+	scan = function(ip)
+		print("#scanning")
+		Ut:stream_exec(string.format("nmap -T5 -A  %s", ip), function(x)
+			print(x)
+		end)
+	end,
+
+	help = function()
+		print([[
+    net_scan help       - displayes this help
     net_scan disc <ip>  - discovers network
     net_scan scan <ip>  - deepscan the <ip>
     ]])
-  end
+	end,
 }
 
-if arg[1] == nil or arg[2] == nil
-then 
+if arg[1] == nil or arg[2] == nil then
 	fn["help"]()
 else
 	fn[arg[1]](arg[2])
