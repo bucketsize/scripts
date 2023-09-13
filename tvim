@@ -2,6 +2,7 @@
 require "luarocks.loader"
 
 local Sh = require('minilib.shell')
+local Pr = require('minilib.process')
 
 local cfg = {
 	terms = {
@@ -21,6 +22,7 @@ local cfg = {
 		xterm = "xterm"
 	},
 	ivims = {
+		"flatpak run io.neovim.nvim",
 		"nvim",
 		"vim"
 	}
@@ -28,6 +30,12 @@ local cfg = {
 
 function select(fs)
 	for _,f in ipairs(fs) do
+		local flatpak = f:match('flatpak run ([%w.]+)')
+		if flatpak then
+			if Sh.path_exists("/var/lib/flatpak/app/"..flatpak) then
+				return f
+			end
+		end
 		if Sh.file_exists(f) then
 			return f
 		end
@@ -37,7 +45,10 @@ end
 local ivim=select(cfg.ivims)
 local term=select(cfg.terms)
 
-local icmd=string.format("%s -e %s %s", cfg.terms_cmd[term], ivim, arg[1])
-print(">>", icmd)
+local icmd=string.format("%s -e %s", cfg.terms_cmd[term], ivim)
+if arg[1] then
+	icmd=string.format("%s -e %s %s", cfg.terms_cmd[term], ivim, arg[1])
+end
+print("# ", icmd)
 
 io.popen(icmd)
