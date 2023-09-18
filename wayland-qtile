@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Session
+# export XDG_RUNTIME_DIR=/tmp/wayland
+# [ -d $XDG_RUNTIME_DIR ] \
+# 	|| mkdir $XDG_RUNTIME_DIR \
+# 	&& chmod 0700 $XDG_RUNTIME_DIR
+# export XDG_SESSION_TYPE=wayland
+# export XDG_SESSION_DESKTOP=qtile
+# export XDG_CURRENT_DESKTOP=qtile
+
+# Wayland stuff
+export MOZ_ENABLE_WAYLAND=1
+export QT_QPA_PLATFORM=wayland
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+export PYTHONTRACEMALLOC=1
+
+dbus-launch --sh-syntax --exit-with-session
+dbus-update-activation-environment --systemd --all
+
+#exec qtile start $@
+exec systemd-cat --identifier=qtile qtile start -b wayland $@
+
+# If you use systemd and want sway output to go to the journal, use this
+# instead of the `exec sway $@` above:
+#
+#    exec systemd-cat --identifier=sway sway $@
