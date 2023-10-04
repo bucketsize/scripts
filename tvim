@@ -1,8 +1,7 @@
 #!/usr/bin/env lua
-require "luarocks.loader"
+require("luarocks.loader")
 
-local Sh = require('minilib.shell')
-local Pr = require('minilib.process')
+local Sh = require("minilib.shell")
 
 local cfg = {
 	terms = {
@@ -11,7 +10,7 @@ local cfg = {
 		"urxvt",
 		"qterminal",
 		"gnome-terminal",
-		"xterm"
+		"xterm",
 	},
 	terms_cmd = {
 		stterm = "stterm -f 'monospace:pixelsize=16' -g 96x40",
@@ -19,20 +18,20 @@ local cfg = {
 		alacritty = "alacritty",
 		qterminal = "qterminal",
 		gnometerminal = "gnome-terminal",
-		xterm = "xterm"
+		xterm = "xterm",
 	},
 	ivims = {
 		"flatpak run io.neovim.nvim",
 		"nvim",
-		"vim"
-	}
+		"vim",
+	},
 }
 
 function select(fs)
-	for _,f in ipairs(fs) do
-		local flatpak = f:match('flatpak run ([%w.]+)')
+	for _, f in ipairs(fs) do
+		local flatpak = f:match("flatpak run ([%w.]+)")
 		if flatpak then
-			if Sh.path_exists("/var/lib/flatpak/app/"..flatpak) then
+			if Sh.path_exists("/var/lib/flatpak/app/" .. flatpak) then
 				return f
 			end
 		end
@@ -42,13 +41,13 @@ function select(fs)
 	end
 end
 
-local ivim=select(cfg.ivims)
-local term=select(cfg.terms)
+local ivim = select(cfg.ivims)
+local term = select(cfg.terms)
 
-local icmd=string.format("%s -e %s", cfg.terms_cmd[term], ivim)
+local icmd = string.format("nohup %s -e %s &", cfg.terms_cmd[term], ivim)
 if arg[1] then
-	icmd=string.format("%s -e %s %s", cfg.terms_cmd[term], ivim, arg[1])
+	icmd = string.format("nohup %s -e %s %s &", cfg.terms_cmd[term], ivim, arg[1])
 end
-print("# ", icmd)
+-- print("# ", icmd)
 
 io.popen(icmd)

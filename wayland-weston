@@ -6,13 +6,11 @@
 # [ -d $XDG_RUNTIME_DIR ] \
 # 	|| mkdir $XDG_RUNTIME_DIR \
 # 	&& chmod 0700 $XDG_RUNTIME_DIR
-# export XDG_SESSION_TYPE=wayland
-# export XDG_SESSION_DESKTOP=weston
-# export XDG_CURRENT_DESKTOP=weston
 
 # Wayland stuff
+export XDG_CURRENT_DESKTOP=weston
+export XDG_SESSION_DESKTOP=weston
 export MOZ_ENABLE_WAYLAND=1
-export GDK_BACKEND=wayland
 export QT_QPA_PLATFORM=wayland
 export SDL_VIDEODRIVER=wayland
 export _JAVA_AWT_WM_NONREPARENTING=1

@@ -1,2 +1,32 @@
 # scripts
 stuff n scripts
+
+
+FA:EC:02:3D:6D:41
+public
+Mi Smart Band 5
+Mi Smart Band 5
+0x000000
+0x03c1
+input-keyboard
+yes
+no
+no
+no
+-85 dBm (0x-55)
+yes
+00001530-0000-3512-2118-0009af100700 Proprietary
+00001800-0000-1000-8000-00805f9b34fb Generic Access
+00001801-0000-1000-8000-00805f9b34fb Generic Attribute
+00001802-0000-1000-8000-00805f9b34fb Immediate Alert
+0000180a-0000-1000-8000-00805f9b34fb Device Information
+0000180d-0000-1000-8000-00805f9b34fb Heart Rate
+0000180f-0000-1000-8000-00805f9b34fb Battery Service
+00001811-0000-1000-8000-00805f9b34fb Alert Notification Service
+00001812-0000-1000-8000-00805f9b34fb Human Interface Device
+00003802-0000-1000-8000-00805f9b34fb Unknown
+0000fee0-0000-1000-8000-00805f9b34fb Unknown
+0000fee1-0000-1000-8000-00805f9b34fb Unknown
+bluetooth:v0157p003Dd0101
+/org/bluez/hci0
+{343: [2, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 3, 250, 236, 2, 61, 109, 65]}
