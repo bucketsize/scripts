@@ -5,5 +5,6 @@ if [ -f $tmprc ]; then
 	startx $tmprc
 else
 	echo "exec bspwm" >$tmprc
-	sleep 1 && startx $tmprc
+	sleep 1
+	startx $tmprc
 fi

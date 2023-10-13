@@ -1,7 +1,5 @@
 #!/bin/sh
 
-svr_inst=/home/jb/.local/share/Steam/steamapps/common/SteamVR
-svr_dest=/mnt/f1aa/data/SteamLibrary/steamapps/common/SteamVR
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib/
 
 sudo dnf install git python311 ImageMagick glew \
@@ -85,6 +83,8 @@ pip3 install wand frame-generator evdev
 python3 main.py &
 
 # steam
-mkdir -p $HOME/.steam/steam/common/SteamVR
+svr_inst= $HOME/.steam/debian-installation/steamapps/common/SteamVR
+svr_dest=$HOME/.steam/steam/common/SteamVR
+mkdir -p $svr_dest
 mount --bind $svr_inst $svr_dest
 steam &

@@ -4,6 +4,7 @@ tmprc=~/.xinitrc-openbox
 if [ -f $tmprc ]; then
 	startx $tmprc
 else
-	echo "exec openbox-session" > $tmprc
-	sleep 1 && startx $tmprc
+	echo "exec openbox-session" >$tmprc
+	sleep 1
+	startx $tmprc
 fi
