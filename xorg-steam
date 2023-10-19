@@ -1,0 +1,10 @@
+#!/bin/sh
+
+tmprc=/tmp/.xinitrc-steam
+if [ -f $tmprc ]; then
+	startx $tmprc
+else
+	echo "exec steam-session" >$tmprc
+	sleep 1
+	startx $tmprc
+fi

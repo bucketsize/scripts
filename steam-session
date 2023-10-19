@@ -1,0 +1,4 @@
+#!/bin/sh 
+
+xrandr --output eDP-1 --mode 1280x720 --rotate normal --pos 0x0
+exec /usr/games/steam steam://open/bigpicture

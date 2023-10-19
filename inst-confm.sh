@@ -1,31 +1,26 @@
 #!/bin/sh
 
-tmpd="/var$(mktemp)"
-mkdir $tmpd
-cd $tmpd
-wget https://codeload.github.com/bucketsize/minilib/zip/refs/heads/main -O mi.zip
-wget https://codeload.github.com/bucketsize/mxctl/zip/refs/heads/main -O mx.zip
-wget https://codeload.github.com/bucketsize/frmad/zip/refs/heads/main -O fr.zip
-wget https://codeload.github.com/bucketsize/conf-m/zip/refs/heads/main -O co.zip
-wget https://codeload.github.com/bucketsize/scripts/zip/refs/heads/master -O sc.zip
+gh_get() {
+	echo ">> getting [$1]"
 
-unzip mi.zip
-unzip mx.zip
-unzip fr.zip
-unzip co.zip
-unzip sc.zip
+	cd /var/tmp
+	lf=$(basename $1)
 
-cd minilib-main
-luarocks make --local
-cd ..
-cd mxctl-main
-luarocks make --local
-cd ..
-cd frmad-main
-luarocks make --local
-cd ..
+	[ -f $lf.zip ] && rm -v $lf.zip
+	curl -L https://codeload.github.com/$1/zip/refs/heads/main -o $lf.zip
 
-[ -d ~/conf-m/ ] || mv conf-m-main ~/conf-m/
-[ -d ~/scripts/ ] || mv scripts-master ~/scripts/
+	[ -d $lf-main ] && rm -rfv $lf-main
+	unzip $lf.zip
 
-echo "please cleanup $tmpd"
+	[ -d $lf ] && mv $lf $lf.1
+	mv $lf-main $lf
+
+}
+
+gh_get bucketsize/scripts
+gh_get bucketsize/conf-m
+gh_get bucketsize/minilib
+gh_get bucketsize/ictl
+gh_get bucketsize/m360
+
+echo "\nexport PATH=$PATH:$(pwd)/scripts" >>~/.profile
