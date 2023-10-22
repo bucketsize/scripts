@@ -1,0 +1,10 @@
+#!/bin/sh
+
+pgrep -la $1
+if [ "$?" -eq "0" ]; then
+  echo "already running ..."
+else
+  echo "$@"
+  $@
+fi
+

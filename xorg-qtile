@@ -1,5 +1,6 @@
 #!/bin/sh
 
-echo "exec qtile start" >/tmp/99-xinitrc
+tmprc=~/.xinitrc-openbox
+echo "exec qtile" >$tmprc
 sleep 1
-startx
+startx $tmprc
