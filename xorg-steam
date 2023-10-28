@@ -2,6 +2,7 @@
 
 tmprc=/tmp/.xinitrc-steam
 cat >$tmprc <<EOF
+. ~/.profile
 /usr/games/steam steam://open/bigpicture &
 exec openbox-session
 EOF

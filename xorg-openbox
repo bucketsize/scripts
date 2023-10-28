@@ -2,6 +2,7 @@
 
 tmprc=/tmp/.xinitrc-openbox
 cat >$tmprc <<EOF
+. ~/.profile
 export XDG_CURRENT_DESKTOP=openbox
 ~/.config/autostart/sbin/autostart_openbox
 exec openbox-session
