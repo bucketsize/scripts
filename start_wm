@@ -1,5 +1,32 @@
 #!/bin/sh
 
+force=$1
+
+echo "start_wm - $(date) <- here" >>/tmp/start_wm.log
+echo "start_wm - $PATH" >>/tmp/start_wm.log
+echo "start_wm - $(env)" >>/tmp/start_wm.log
+echo "start_wm - $(tty)" >>/tmp/start_wm.log
+
+run() {
+	case $START_WM in
+	openbox)
+		xorg-openbox >>/tmp/start_wm.log 2>&1
+		;;
+	steam)
+		xorg-steam >>/tmp/start_wm.log 2>&1
+		;;
+	*)
+		echo "specify START_WM=openbox|steam on login, i.e. in ~/.profile"
+		;;
+	esac
+}
+
+if [ "$force" = "-f" ]; then
+	run
+fi
+
 if [ "$(tty)" = "/dev/tty1" ]; then
-	xorg-openbox
+	run
+else
+	echo "not tty1, ignoring" >>/tmp/start_wm.log
 fi

@@ -5,8 +5,6 @@ cat >$tmprc <<EOF
 . ~/.profile
 export XDG_CURRENT_DESKTOP=openbox
 export XDG_MAJOR_MODE=steam
-~/.config/autostart/sbin/autostart_openbox
-/usr/games/steam steam://open/bigpicture &
 exec openbox-session
 EOF
 sleep 1 && startx $tmprc
