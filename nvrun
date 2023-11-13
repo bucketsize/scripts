@@ -1,11 +1,21 @@
 #!/bin/sh
+
+# main
 export __NV_PRIME_RENDER_OFFLOAD=1
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __VK_LAYER_NV_optimus=NVIDIA_only
-# export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
-# export PROTON_ENABLE_NVAPI=1
+
+# others
+export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd.json
+
+export DXVK_ASYNC=1
+
+export PROTON_LOG=1
+export PROTON_ENABLE_NVAPI=1
 # export VKD3D_CONFIG=dxr11
-# export DXVK_ASYNC=1
 # export RADV_PERFTEST=rt
-mangohud "$@"
-# gamemoderun "$@"
+
+# mangohud gamemoderun "$@"
+# mangohud "$@"
+
+gamemoderun "$@"
