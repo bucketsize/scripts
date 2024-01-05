@@ -1,21 +1,26 @@
 #!/bin/sh
 
-# main
+# use nvgpu
 export __NV_PRIME_RENDER_OFFLOAD=1
+
+# use nvapis
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __VK_LAYER_NV_optimus=NVIDIA_only
+export PROTON_ENABLE_NVAPI=1
 
-# others
-export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd.json
+# use icd
+# export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 
+# dxr: direct x ray tracing
+# dxr11 deprecated; dxr => 1.1 default if safe
+# https://github.com/HansKristian-Work/vkd3d-proton/blob/master/CHANGELOG.md
+# force dxr
+# export VKD3D_CONFIG=dxr
+
+# dxvk async: better perf
 export DXVK_ASYNC=1
 
-export PROTON_LOG=1
-export PROTON_ENABLE_NVAPI=1
-# export VKD3D_CONFIG=dxr11
+# radv: valve shader compiler
 # export RADV_PERFTEST=rt
 
-# mangohud gamemoderun "$@"
-# mangohud "$@"
-
-gamemoderun "$@"
+mangohud gamemoderun "$@"
